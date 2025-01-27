@@ -53,6 +53,9 @@
                         <button wire:click="ver({{ $despacho->id }})" class="bg-yellow-500 text-white px-2 py-1 rounded">
                             Ver
                         </button>
+                        <button wire:click="eliminar({{ $despacho->id }})" class="bg-red-500 text-white px-2 py-1 rounded">
+                            Eliminar
+                        </button>
                     </td>
                 </tr>
             @endforeach
@@ -75,16 +78,27 @@
                 <div class="space-y-4">
                     <div>
                         <span class="font-medium text-gray-700 dark:text-gray-300">Código:</span>
-                        <span class="text-gray-800 dark:text-gray-200">{{ $DespachoSeleccionado->codigo }}</span>
+                        <span class="text-gray-800 dark:text-gray-200">{{ $DespachoSeleccionado->id }}</span>
                     </div>
-                    <div>
+                    {{-- lista de medicamentos --}}
+                    {{-- <div>
                         <span class="font-medium text-gray-700 dark:text-gray-300">Medicamento:</span>
-                        <span class="text-gray-800 dark:text-gray-200">{{ $DespachoSeleccionado->medicamento->nombre }}</span>
+                        <span class="text-gray-800 dark:text-gray-200">{{ $DespachoSeleccionado->medicamentos[0]->nombre }}</span>
                     </div>
                     <div>
                         <span class="font-medium text-gray-700 dark:text-gray-300">Cantidad:</span>
-                        <span class="text-gray-800 dark:text-gray-200">{{ $DespachoSeleccionado->cantidad }}</span>
-                    </div>
+                        <span class="text-gray-800 dark:text-gray-200">{{ $DespachoSeleccionado->despachosMedicamentos->cantidad }}</span>
+                    </div> --}}
+                    {{--  fin de la lista--}}
+                    @foreach($DespachoSeleccionado->medicamentos as $medicamento)
+                        <div>
+                            <span class="font-medium text-gray-700 dark:text-gray-300">Medicamento:</span>
+                            <span class="text-gray-800 dark:text-gray-200">{{ $medicamento->nombre }}</span>
+                            <span class="font-medium text-gray-700 dark:text-gray-300">Cantidad:</span>
+                            <span class="text-gray-800 dark:text-gray-200">{{ $medicamento->pivot->cantidad }}</span>
+                        </div>
+                    @endforeach
+
                     <div>
                         <span class="font-medium text-gray-700 dark:text-gray-300">Fecha:</span>
                         <span class="text-gray-800 dark:text-gray-200">{{ $DespachoSeleccionado->created_at->format('d/m/Y') }}</span>

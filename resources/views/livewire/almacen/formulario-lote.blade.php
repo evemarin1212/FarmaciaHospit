@@ -1,5 +1,4 @@
 <!-- Formulario de lote -->
-
 <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div class="bg-white dark:bg-gray-800 p-6 rounded-lg w-3/4 shadow-lg overflow-y-auto max-h-3/4">
         <h3 class="text-3xl font-bold text-center mb-6 text-gray-800 dark:text-gray-200">
@@ -41,11 +40,13 @@
                             </label>
                             <select id="presentacion" wire:model.live="presentacion"
                                 class="block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
-                                <option value="">Seleccionar Presentación</option>
-                                <option value="encapsulado">Encapsulado</option>
-                                <option value="intravenoso">Intravenoso</option>
-                                <option value="jarabe">Jarabe</option>
-                                <option value="otro">Otro</option>
+                                @foreach (  as )
+                                    <option value="">Seleccionar Presentación</option>
+                                    <option value="encapsulado">Encapsulado</option>
+                                    <option value="intravenoso">Intravenoso</option>
+                                    <option value="jarabe">Jarabe</option>
+                                    <option value="otro">Otro</option>
+                                @endforeach
                             </select>
                             @error('presentacion') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                         </div>

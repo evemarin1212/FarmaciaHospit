@@ -21,7 +21,7 @@ class DespachoTable extends Component
 
     public function ver($id)
     {
-        $this->DespachoSeleccionado = DespachoMedicamento::findOrFail($id);
+        $this->DespachoSeleccionado = Despacho::findOrFail($id);
         $this->modal = true;
         $this->editar = false;
     }
@@ -30,6 +30,31 @@ class DespachoTable extends Component
     {
         $this->modal = false;
         $this->DespachoSeleccionado = null;
+    }
+
+    public function eliminar($id)
+    {
+        try {
+            // Buscar el despacho por ID
+            $despacho = Despacho::findOrFail($id);
+
+            // Incrementar la cantidad de los medicamentos en la tabla 'medicamentos'
+            foreach ($despacho->medicamentos as $medicamento) {
+                $medicamento->cantidad_disponible += $medicamento->pivot->cantidad; // Incrementar la cantidad
+                $medicamento->save(); // Guardar el cambio en la base de datos
+            }
+
+            // Eliminar el despacho y sus relaciones
+            $despacho->medicamentos()->detach(); // Eliminar registros de la tabla pivote
+            $despacho->delete(); // Eliminar el despacho
+
+            // Emitir un mensaje de éxito
+            $this->dispatch('alert', 'Despacho eliminado con éxito.');
+
+        } catch (\Exception $e) {
+            // Emitir un mensaje de error en caso de excepción
+            $this->dispatch('alert', 'Error al eliminar el despacho: ' . $e->getMessage());
+        }
     }
 
     public function render()

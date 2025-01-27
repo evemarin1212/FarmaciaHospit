@@ -12,7 +12,7 @@ class Medicamento extends Model
 
     protected $fillable = [
         'nombre',
-        'presentacion',
+        'presentacion_id',
         'medida',
         'unidad',
         'cantidad_disponible',
@@ -22,6 +22,11 @@ class Medicamento extends Model
     public function lotes()
     {
         return $this->hasMany(Lote::class);
+    }
+
+    public function presentacion()
+    {
+        return $this->belongsTo(Presentacion::class);
     }
     
     public function despachos()

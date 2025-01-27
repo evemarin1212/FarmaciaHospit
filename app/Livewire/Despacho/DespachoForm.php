@@ -169,11 +169,23 @@ class DespachoForm extends Component
             ]);
             if ($this->tipo_despacho != 'quirofano') {
                 $pacienteId = $this->obtenerPacienteId();
-                $despacho = Despacho::create([
-                    'tipo' => $this->tipo_despacho,
-                    'paciente_id' => $pacienteId,
-                    'fecha_pedido' => now(),
-                ]);
+
+                // ingresar observacion
+                if ($this->tipo_despacho == 'emergencia') {
+                    $despacho = Despacho::create([
+                        'tipo' => $this->tipo_despacho,
+                        'paciente_id' => $pacienteId,
+                        'observacion' => $this->observacion,
+                        'fecha_pedido' => now(),
+                    ]);
+                } else {
+                    $despacho = Despacho::create([
+                        'tipo' => $this->tipo_despacho,
+                        'paciente_id' => $pacienteId,
+                        'fecha_pedido' => now(),
+                    ]);
+                }
+
                 foreach ($this->medicamentos_seleccionados as $medicamento) {
                     DespachoMedicamento::create([
                         'despacho_id' => $despacho->id,
@@ -182,8 +194,9 @@ class DespachoForm extends Component
                     ]);
                     $medicamentoModel = Medicamento::find($medicamento['id']);
                     $medicamentoModel->decrement('cantidad_disponible', $medicamento['cantidad']);
-                    $this->actualizarLote($medicamento['id'], $medicamento['cantidad']);
+                    // $this->actualizarLote($medicamento['id'], $medicamento['cantidad']);
                 }
+
             } else {
                 $despacho = Despacho::create([
                     'tipo' => $this->tipo_despacho,
