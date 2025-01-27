@@ -23,7 +23,7 @@ class Almacen extends Component
     public $nombre;
     public $formView = false;
     public $lote = null;
-    public $medicamento_busqueda = null;
+    // public $medicamento_busqueda = null;
     
 
     public $medicamento_select = null;
@@ -53,19 +53,19 @@ class Almacen extends Component
         $this->formView = true;
     }
 
-    public function editDetails($id)
-    {
-        $this->formView = true;
-        $this->lote = Lote::with('medicamento')->findOrFail($id);
-        $this->medicamento_busqueda = $this->lote->medicamento;
-    }
+    // public function editDetails($id)
+    // {
+    //     $this->formView = true;
+    //     $this->lote = Lote::with('medicamento')->findOrFail($id);
+    //     $this->medicamento_busqueda = $this->lote->medicamento;
+    // }
 
     public function updatedSearch()
     {
         $this->medicamento_select = null;
         $this->medicamentos = Medicamento::where('nombre', 'like', "%{$this->search}%")
-                                         ->limit(5)
-                                         ->get(); // Esto devuelve una colección
+                                        ->limit(5)
+                                        ->get(); // Esto devuelve una colección
     }
     
     public function selectSearch($id)
@@ -126,8 +126,6 @@ class Almacen extends Component
             $medicamento->increment('cantidad_disponible', $this->cantidad);
         }
 
-        return $this->medicamento_select;
-
         Lote::create([
             'medicamento_id' => $medicamento->id,
             'cantidad' => $this->cantidad,
@@ -142,11 +140,14 @@ class Almacen extends Component
         $this->dispatch('render'); // ... POR ESTO SE RECARGA TODA LA VISTA
         $this->dispatch('alert', "¡El medicamento se creó satisfactoriamente!");
         $this->cancelar();
+        // return $this->medicamento_select;
         // session()->flash('message', 'Lote agregado con éxito.');
     }
 
     public function render()
     {
-        return view('livewire.almacen.almacen');
+        return view('livewire.almacen.almacen', [
+        'medicamentos' => Medicamento::where('nombre', 'like', "%{$this->search}%")->limit(3)->get(),
+        ]);
     }
 }

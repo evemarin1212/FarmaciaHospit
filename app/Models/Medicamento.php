@@ -26,7 +26,7 @@ class Medicamento extends Model
     
     public function despachos()
     {
-        return $this->belongsToMany(Despacho::class, 'despacho_medicamento')->withPivot('cantidad');
+        return $this->belongsToMany(Despacho::class, 'despacho_medicamentos')->withPivot('cantidad');
     }
 
     public function despachosMedicamentos()

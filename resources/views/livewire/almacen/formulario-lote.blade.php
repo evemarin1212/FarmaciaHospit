@@ -82,13 +82,13 @@
                         <!-- Campo de búsqueda -->
                         <div>
                             <input
-                            type="text" id="search" wire:model.debounce.300ms="search"
+                            type="text" id="search" wire:model.live="search"
                                 class="mt-2 block border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                                 placeholder="Buscar por nombre"
                             >
                             <!-- Lista de resultados -->
                             @if ($medicamentos->isNotEmpty())
-                                <ul class="mt-2 border border-gray-300 rounded-md shadow-sm max-h-48 overflow-y-auto dark:bg-gray-700 dark:text-gray-200">>
+                                <ul class="mt-2 border border-gray-300 rounded-md shadow-sm max-h-48 overflow-y-auto dark:bg-gray-700 dark:text-gray-200">
                                     @foreach ($medicamentos as $medicamento)
                                         <li wire:click="selectSearch({{ $medicamento->id }})"
                                             class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 px-4 p-2">
@@ -119,7 +119,7 @@
                         <label for="codigo_lote" class="mt-3 block text-sm font-medium text-gray-700 dark:text-gray-300">
                             Código del Lote:
                         </label>
-                        <input type="text" id="codigo_lote" wire:model="codigo_lote" 
+                        <input type="text" id="codigo_lote" wire:model="codigo_lote"
                             class="block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
                         @error('codigo_lote') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                     </div>
@@ -153,7 +153,7 @@
                 </div>
             </div>
             <!-- Botones -->
-            <div class="flex justify-end mt-6 ">
+            <div class="flex justify-end mt-6 gap-4">
                 <button type="button" wire:click="cancelar" 
                     class="bg-red-500 hover:bg-red-600 text-white my-2 px-4 py-2 rounded-md shadow-sm">
                     Cancelar

@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->enum('presentacion', ['encapsulado', 'intravenoso', 'jarabe', 'otro']);
-            $table->integer('medida');
-            $table->string('unidad');
+            $table->integer('unidad');
+            $table->string('medida');
             $table->integer('cantidad_disponible');
             $table->enum('estatus', ['Disponible', 'Agotado']);
             $table->timestamps();

@@ -4,6 +4,7 @@ namespace App\Livewire\Despacho;
 
 use Livewire\Component;
 use App\Models\Despacho;
+use App\Models\Lote;
 use App\Models\Paciente;
 use App\Models\Medicamento;
 use App\Models\DespachoSolicitado;
@@ -33,15 +34,13 @@ class DespachoForm extends Component
 
     public $formView = false;
 
-    protected function rules()
-    {
-        return [
-            'medicamento_id' => 'required',
-            'cantidad_medicamento' => 'required|integer|min:1',
-            'tipo_despacho' => 'required',
-            'paciente_opcion' => 'required',
-        ];
-    }
+    protected $rules = [
+        'tipo_despacho' => 'required',
+        'paciente_opcion' => 'required',
+        'medicamento_id' => 'required',
+        'cantidad_medicamento' => 'required|integer|min:1',
+        'observacion' => 'nullable|string',
+    ];
 
     public function updatedSearch()
     {
@@ -59,15 +58,42 @@ class DespachoForm extends Component
     {
         $this->formView = true;
     }
-    
+
     public function cancelar()
     {
         $this->formView = false;
+        $this->resetForm();
+    }
+
+    private function resetForm()
+    {
+        $this->tipo_despacho = '';
+        $this->paciente_opcion = '';
+        $this->observacion = '';
+        $this->search = '';
+        $this->selectedPacienteId = null;
+        $this->paciente_data_nombre = '';
+        $this->paciente_data_apellido = '';
+        $this->paciente_data_dni = '';
+        $this->paciente_data_estatus = '';
+        $this->medicamentos_seleccionados = [];
+        $this->medicamentos_solicitados = [];
+        $this->medicamento_id = null;
+        $this->cantidad_medicamento = '';
+        $this->medicamento_solicitado_id = null;
+        $this->cantidad_medicamento_solicitado = '';
     }
 
     private function obtenerPacienteId()
     {
         if ($this->paciente_opcion === 'nuevo') {
+            // Verificar si el DNI ya existe en la base de datos
+            $existingPaciente = Paciente::where('dni', $this->paciente_data_dni)->first();
+            if ($existingPaciente) {
+                session()->flash('error', 'El paciente con este DNI ya existe.');
+                return null;
+            }
+
             return Paciente::create([
                 'nombre' => $this->paciente_data_nombre,
                 'apellido' => $this->paciente_data_apellido,
@@ -75,6 +101,7 @@ class DespachoForm extends Component
                 'estatus' => $this->paciente_data_estatus,
             ])->id;
         }
+
         return $this->selectedPacienteId;
     }
 
@@ -104,7 +131,6 @@ class DespachoForm extends Component
         $this->validate([
             'medicamento_solicitado_id' => 'required',
             'cantidad_medicamento_solicitado' => 'required|integer|min:1',
-            'cantidad_medicamento' => 'required|integer|min:1',
         ]);
 
         $medicamentoSolicitado = Medicamento::find($this->medicamento_solicitado_id);
@@ -136,89 +162,83 @@ class DespachoForm extends Component
 
     public function guardarDespacho()
     {
-
         DB::beginTransaction();
-
         try {
-            if($this->tipo_despacho != 'quirofano') {
-                $this->validate([
-                    'tipo_despacho' => 'required',
-                    'pacienteId' => 'required',
-                ]);
-            
-                $pacienteId = $this->paciente_opcion === 'nuevo'
-                    ? Paciente::create([
-                        'nombre' => $this->paciente_data_nombre,
-                        'apellido' => $this->paciente_data_apellido,
-                        'dni' => $this->paciente_data_dni,
-                        'estatus' => $this->paciente_data_estatus,
-                    ])->id
-                    : $this->selectedPacienteId;
-
+            $this->validate([
+                'tipo_despacho' => 'required',
+            ]);
+            if ($this->tipo_despacho != 'quirofano') {
+                $pacienteId = $this->obtenerPacienteId();
                 $despacho = Despacho::create([
                     'tipo' => $this->tipo_despacho,
                     'paciente_id' => $pacienteId,
                     'fecha_pedido' => now(),
                 ]);
-
                 foreach ($this->medicamentos_seleccionados as $medicamento) {
                     DespachoMedicamento::create([
                         'despacho_id' => $despacho->id,
                         'medicamento_id' => $medicamento['id'],
                         'cantidad' => $medicamento['cantidad'],
                     ]);
-
-                    // Si el tipo de despacho es "Emergencia", se agrega observación
-                    if ($this->tipo_despacho === 'emergencia') {
-                        $despacho->update(['observacion' => $this->observacion]);
-                    }
+                    $medicamentoModel = Medicamento::find($medicamento['id']);
+                    $medicamentoModel->decrement('cantidad_disponible', $medicamento['cantidad']);
+                    $this->actualizarLote($medicamento['id'], $medicamento['cantidad']);
                 }
-
-            // Si hay medicamentos solicitados (Quirófano)
-            }else {
-                $this->validate([
-                    'tipo_despacho' => 'required',
-                ]);
-
+            } else {
                 $despacho = Despacho::create([
                     'tipo' => $this->tipo_despacho,
                     'fecha_pedido' => now(),
                 ]);
 
-                foreach ($this->medicamentos_solicitados as $medicamentoSolicitado) {
-                    $despachoMedicamento = DespachoMedicamento::create([
-                        'despacho_id' => $despacho->id,
-                        'medicamento_id' => $medicamentoSolicitado['id'],
-                        'cantidad' => $medicamentoSolicitado['cantidad'],
-                    ]);    
-                    
-                    DespachoSolicitado::create([
-                        'despacho_id' => $despacho->id,
-                        'medicamento_id' => $medicamentoSolicitado['id'],
-                        'cantidad' => $medicamentoSolicitado['cantidad_despacho'],
-                        'despacho_medicamento_id' => $despachoMedicamento->id,
-                    ]);
-                }
+            foreach ($this->medicamentos_solicitados as $medicamentoSolicitado) {
+                $despachoMedicamento = DespachoMedicamento::create([
+                    'despacho_id' => $despacho->id,
+                    'medicamento_id' => $medicamentoSolicitado['id'],
+                    'cantidad' => $medicamentoSolicitado['cantidad'],
+                ]);
+                DespachoSolicitado::create([
+                    'despacho_id' => $despacho->id,
+                    'medicamento_id' => $medicamentoSolicitado['id'],
+                    'cantidad' => $medicamentoSolicitado['cantidad_despacho'],
+                    'despacho_medicamento_id' => $despachoMedicamento->id,
+                ]);
+                $medicamentoModel = Medicamento::find($medicamentoSolicitado['id']);
+                $medicamentoModel->decrement('cantidad_disponible', $medicamentoSolicitado['cantidad_despacho']);
+                $this->actualizarLote($medicamentoSolicitado['id'], $medicamentoSolicitado['cantidad_despacho']);
             }
-
-            DB::commit();
-
-            session()->flash('message', 'Despacho guardado exitosamente.');
-            $this->formView = false;
-            $this->reset();
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Error al guardar el despacho: ' . $e->getMessage());
-            session()->flash('error', 'Ocurrió un error al guardar el despacho.'. $e->getMessage());
         }
-
+        DB::commit();
+        session()->flash('message', 'Despacho guardado exitosamente.');
+        $this->formView = false;
+    } catch (\Exception $e) {
+        DB::rollBack();
+        Log::error('Error al guardar el despacho: ' . $e->getMessage());
+        session()->flash('error', 'Ocurrió un error al guardar el despacho.' . $e->getMessage());
+    }
         $this->dispatch('render');
+        $this->cancelar();
+        $this->resetForm();
+    }
+
+    private function actualizarLote($medicamentoId, $cantidad)
+    {
+        $lotes = Lote::where('medicamento_id', $medicamentoId)
+            ->where('cantidad', '>', 0)
+            ->orderBy('fecha_vencimiento', 'asc')
+            ->get();
+        foreach ($lotes as $lote) {
+            if ($cantidad <= 0) break;
+            $cantidadDecrementar = min($cantidad, $lote->cantidad);
+            $lote->decrement('cantidad', $cantidadDecrementar);
+            $cantidad -= $cantidadDecrementar;
+        }
     }
 
     public function render()
     {
         return view('livewire.despacho.despacho-form', [
             'pacientes' => Paciente::where('dni', 'like', "%{$this->search}%")->limit(3)->get(),
+            // dd($this->search),
             'medicamentos' => Medicamento::all(),
         ]);
     }

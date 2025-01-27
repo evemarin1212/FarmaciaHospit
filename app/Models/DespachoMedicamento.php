@@ -10,7 +10,7 @@ class DespachoMedicamento extends Model
     use HasFactory;
 
     // Definir la tabla asociada (opcional si el nombre sigue la convención)
-    protected $table = 'despacho_medicamento';
+    protected $table = 'despacho_medicamentos';
 
     // Definir los campos que pueden ser asignados en masa
     protected $fillable = [

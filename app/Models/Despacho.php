@@ -15,7 +15,7 @@ class Despacho extends Model
         'fecha_pedido',
         'paciente_id',
     ];
-    
+
     public function paciente()
     {
         return $this->belongsTo(Paciente::class);
@@ -23,14 +23,14 @@ class Despacho extends Model
 
     public function medicamentos()
     {
-        return $this->belongsToMany(Medicamento::class, 'despacho_medicamento')->withPivot('cantidad');
+        return $this->belongsToMany(Medicamento::class, 'despacho_medicamentos')->withPivot('cantidad');
     }
-    
+
     public function despachosMedicamentos()
     {
         return $this->hasMany(DespachoMedicamento::class);
     }
-    
+
     public function medicamentosSolicitados() {
         return $this->belongsToMany(DespachoSolicitado::class);
     }
