@@ -34,54 +34,48 @@
                             @error('nombre') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                         </div>
 
-                        {{-- Presentación --}}
+                        <!-- Presentación -->
                         <div class="mb-4">
-                            <!-- Etiqueta del campo -->
-                            <label for="tipo_medicamento" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                            <!-- Etiqueta del Campo -->
+                            <label for="tipo_medicamento" 
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-200">
                                 Tipo de Medicamento:
                             </label>
 
-                            <!-- Selector con buscador integrado -->
-                            <select 
-                                id="tipo_medicamento" 
-                                wire:model="tipo_medicamento"
+                            <!-- Campo de Búsqueda -->
+                            <input type="text" id="tipo_medicamento_busqueda" wire:model.live="tipo_medicamento_busqueda"
                                 class="w-full mt-2 border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
-                            >
-                                <option value="">Seleccione un tipo</option>
-                                
-                                <!-- Campo de búsqueda como una opción dinámica -->
-                                <optgroup label="Buscar">
-                                    <option disabled>Escriba para buscar...</option>
-                                    @if (!empty($tipo_medicamento_busqueda))
-                                        @foreach ($tipos_medicamento as $id => $tipo)
-                                            <option value="{{ $id }}">{{ $tipo }}</option>
-                                        @endforeach
-                                    @else
-                                        <option disabled>No se encontraron resultados</option>
-                                    @endif
-                                </optgroup>
-                                
-                                <!-- Opciones predefinidas -->
-                                <optgroup label="Tipos Comunes">
+                                placeholder="Buscar tipo de medicamento">
+                            
+                            <!-- Selector de Resultados -->
+                            @if (!empty($tipos_medicamento))
+                                <select id="tipo_medicamento" wire:model="tipo_medicamento"
+                                    class="w-full mt-2 border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
+                                    <option value="">Seleccione un tipo</option>
                                     @foreach ($tipos_medicamento as $id => $tipo)
                                         <option value="{{ $id }}">{{ $tipo }}</option>
                                     @endforeach
-                                </optgroup>
-                            </select>
-                            
-                            <!-- Tipo seleccionado -->
+                                </select>
+                            @else
+                                <!-- Mensaje de Resultados Vacíos -->
+                                <p class="mt-2 text-gray-500 dark:text-gray-400">
+                                    No se encontraron resultados.
+                                </p>
+                            @endif
+
+                            <!-- Mensaje de Tipo Seleccionado -->
                             @if ($tipo_medicamento)
                                 <div class="mt-2 p-2 border border-green-500 rounded-md bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">
-                                    Tipo seleccionado: {{ $tipos_medicamento[$tipo_medicamento] ?? 'Ninguno' }}
+                                    Tipo seleccionado: {{ $tipos_medicamento[$tipo] ?? 'Ninguno' }}
                                 </div>
                             @endif
 
-                            <!-- Mensaje de error -->
+                            <!-- Validación de Errores -->
                             @error('tipo_medicamento') 
                                 <span class="text-red-500 text-sm">{{ $message }}</span> 
                             @enderror
                         </div>
-                        {{-- Fin presentación --}}
+                        <!-- Fin Presentación -->
 
                         <div>
                             <label for="unidad" class="mt-3 block text-sm font-medium text-gray-700 dark:text-gray-300">
