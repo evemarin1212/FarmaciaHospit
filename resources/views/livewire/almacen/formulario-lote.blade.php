@@ -63,13 +63,6 @@
                                 </p>
                             @endif
 
-                            <!-- Mensaje de Tipo Seleccionado -->
-                            @if ($tipo_medicamento)
-                                <div class="mt-2 p-2 border border-green-500 rounded-md bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">
-                                    Tipo seleccionado: {{ $tipos_medicamento[$tipo] ?? 'Ninguno' }}
-                                </div>
-                            @endif
-
                             <!-- Validación de Errores -->
                             @error('tipo_medicamento') 
                                 <span class="text-red-500 text-sm">{{ $message }}</span> 
