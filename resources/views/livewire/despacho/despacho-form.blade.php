@@ -128,6 +128,7 @@
                                                     @endif
                                                 </div>
                                             @endif
+
                                             <!-- Medicamentos Asociados -->
                                             <div class="mb-4">
                                                 <label for="medicamento_id"

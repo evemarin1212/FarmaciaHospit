@@ -28,7 +28,7 @@
             @foreach($medicamentos as $medicamento)
             <tr class="border-t last:border-b hover:bg-blue-100 transition dark:border-gray-600 dark:hover:bg-gray-600">
                 <td class="px-4 py-2">{{ $medicamento->nombre }}</td>
-                <td class="px-4 py-2">{{ $medicamento->presentacion }}</td>
+                <td class="px-4 py-2">{{ $medicamento->presentacion->tipo }}</td>
                 <td class="px-4 py-2">{{ $medicamento->unidad }}</td>
                 <td class="px-4 py-2">{{ $medicamento->medida }}</td>
                 <td class="px-4 py-2">{{ $medicamento->cantidad_disponible }}</td>

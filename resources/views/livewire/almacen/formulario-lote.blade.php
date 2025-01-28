@@ -34,34 +34,42 @@
                             @error('nombre') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                         </div>
 
+                        {{-- presentacion --}}
                         <div>
-                            <label for="presentacion" class="mt-3 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                Presentación:
+                            <label for="tipo_medicamento" class="mt-3 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                Tipo de Medicamento:
                             </label>
-                            <select id="presentacion" wire:model.live="presentacion"
-                                class="block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
-                                @foreach (  as )
-                                    <option value="">Seleccionar Presentación</option>
-                                    <option value="encapsulado">Encapsulado</option>
-                                    <option value="intravenoso">Intravenoso</option>
-                                    <option value="jarabe">Jarabe</option>
-                                    <option value="otro">Otro</option>
-                                @endforeach
-                            </select>
-                            @error('presentacion') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            <!-- Campo de búsqueda -->
+                            <input type="text" id="tipo_medicamento_busqueda" wire:model.live="tipo_medicamento_busqueda"
+                                class="mt-2 block border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                                placeholder="Buscar tipo de medicamento">
+                            
+                            <!-- Selector de resultados -->
+                            @if (!empty($tipos_medicamento))
+                                <select id="tipo_medicamento" wire:model="tipo_medicamento"
+                                    class="mt-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
+                                    <option value="">Seleccione un tipo</option>
+                                    @foreach ($tipos_medicamento as $id => $tipo)
+                                        <option value="{{ $id }}">{{ $tipo }}</option>
+                                    @endforeach
+                                </select>
+                            @else
+                                <div class="text-gray-500 dark:text-gray-400 mt-2">
+                                    No se encontraron resultados.
+                                </div>
+                            @endif
+                        
+                            @if ($tipo_medicamento)
+                                <div class="mt-2 p-2 border border-green-500 rounded-md bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">
+                                    Tipo seleccionado: {{ $tipos_medicamento[$tipo_medicamento] ?? 'Ninguno' }}
+                                </div>
+                            @endif
+                        
+                            @error('tipo_medicamento') 
+                                <span class="text-red-500 text-sm">{{ $message }}</span> 
+                            @enderror
                         </div>
-
-                        @if($presentacion === 'otro')
-                            <div>
-                                <label for="nueva_presentacion" class="mt-3 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    Especificar Presentación:
-                                </label>
-                                <input type="text" id="nueva_presentacion" wire:model="nueva_presentacion"
-                                    class="block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
-                                @error('nueva_presentacion') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            </div>
-                        @endif
-
+                        {{-- fin presentacion --}}
                         <div>
                             <label for="unidad" class="mt-3 block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 Unidad:

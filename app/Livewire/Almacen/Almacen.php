@@ -3,6 +3,7 @@ namespace App\Livewire\Almacen;
 
 use App\Models\Lote;
 use App\Models\Medicamento;
+use App\Models\Presentacion;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -37,11 +38,21 @@ class Almacen extends Component
         'codigo_lote' => 'required|string',
     ];
 
+    public $tipo_medicamento = '';
+    public $tipos_medicamento = [];
+    public $tipo_medicamento_busqueda = '';
+    
     public function mount()
     {
         $this->medicamentos = collect();
+        $this->tipos_medicamento = Presentacion::pluck('tipo', 'id'); // Recuperar tipos de medicamento desde el modelo Presentacion
     }
-
+    
+    public function updatedTipoMedicamentoBusqueda()
+    {
+        $this->tipos_medicamento = Presentacion::where('tipo', 'like', "%{$this->tipo_medicamento_busqueda}%")
+                                               ->pluck('tipo', 'id');
+    }
 
     public function updated($propertyName)
     {
@@ -101,7 +112,6 @@ class Almacen extends Component
             $this->select_medicamento === "nuevo"
             ? array_merge($this->rules, [
                 'nombre' => 'required|string',
-                'presentacion' => 'required|string',
                 'unidad' => 'required|numeric',
                 'medida' => 'required|string',
                 ])
@@ -109,12 +119,18 @@ class Almacen extends Component
                     'search' => 'required|exists:medicamentos,nombre',
                     ])
                 );
+            $this->validate(
+                array_merge($this->rules, [
+                    'tipo_medicamento' => 'required|exists:presentacions,id',
+                ])
+            );
+                
 
-                // dd($this->medicamento_id, $this->codigo_lote, $this->nombre, $this->presentacion, $this->medida, $this->unidad,  $this->cantidad, $this->fecha_vencimiento, $this->origen);
+        // dd($this->medicamento_id, $this->codigo_lote, $this->nombre, $this->presentacion, $this->medida, $this->unidad,  $this->cantidad, $this->fecha_vencimiento, $this->origen);
         if ($this->select_medicamento === "nuevo") {
             $medicamento = Medicamento::create([
                 'nombre' => $this->nombre,
-                'presentacion' => $this->presentacion,
+                'presentacion_id' => $this->tipo_medicamento,
                 'unidad' => $this->unidad,
                 'medida' => $this->medida,
                 'cantidad_disponible' => $this->cantidad,
