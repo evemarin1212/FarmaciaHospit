@@ -37,38 +37,68 @@
                         <!-- Presentación -->
                         <div class="mb-4">
                             <!-- Etiqueta del Campo -->
-                            <label for="tipo_medicamento" 
+                            <label for="select_presentacion" 
                                 class="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                                Tipo de Medicamento:
+                                Presentación:
                             </label>
 
-                            <!-- Campo de Búsqueda -->
-                            <input type="text" id="tipo_medicamento_busqueda" wire:model.live="tipo_medicamento_busqueda"
-                                class="w-full mt-2 border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
-                                placeholder="Buscar tipo de medicamento">
-                            
-                            <!-- Selector de Resultados -->
-                            @if (!empty($tipos_medicamento))
-                                <select id="tipo_medicamento" wire:model="tipo_medicamento"
-                                    class="w-full mt-2 border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
-                                    <option value="">Seleccione un tipo</option>
-                                    @foreach ($tipos_medicamento as $id => $tipo)
-                                        <option value="{{ $id }}">{{ $tipo }}</option>
-                                    @endforeach
-                                </select>
-                            @else
-                                <!-- Mensaje de Resultados Vacíos -->
-                                <p class="mt-2 text-gray-500 dark:text-gray-400">
-                                    No se encontraron resultados.
-                                </p>
-                            @endif
+                            <!-- Selector de Opciones -->
+                            <select id="select_presentacion" wire:model.live="select_presentacion"
+                                class="w-full mt-2 border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
+                                <option value="search">Seleccionar Presentación</option>
+                                <option value="search">Buscar existente</option>
+                                <option value="nuevo">Nueva Presentación</option>
+                            </select>
 
                             <!-- Validación de Errores -->
-                            @error('tipo_medicamento') 
+                            @error('select_presentacion') 
                                 <span class="text-red-500 text-sm">{{ $message }}</span> 
                             @enderror
                         </div>
-                        <!-- Fin Presentación -->
+
+                        <!-- Campos para Nueva Presentación -->
+                        @if ($select_presentacion === 'nuevo')
+                            <div class="mb-4">
+                                <label for="nueva_presentacion" 
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                                    Nueva Presentación:
+                                </label>
+                                <input type="text" id="nueva_presentacion" wire:model="nueva_presentacion"
+                                    class="w-full mt-2 border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                                    placeholder="Ingrese la nueva presentación">
+                                @error('nueva_presentacion') 
+                                    <span class="text-red-500 text-sm">{{ $message }}</span> 
+                                @enderror
+                            </div>
+                        @else
+                            <!-- Campo de Búsqueda para Presentación Existente -->
+                            <div class="mb-4">
+                                <label for="tipo_medicamento_busqueda" 
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                                    Buscar Presentación:
+                                </label>
+                                <input type="text" id="tipo_medicamento_busqueda" wire:model.live="tipo_medicamento_busqueda"
+                                    class="w-full mt-2 border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                                    placeholder="Buscar tipo de medicamento">
+
+                                <!-- Selector de Resultados -->
+                                @if (!empty($tipos_medicamento))
+                                    <select id="tipo_medicamento" wire:model="tipo_medicamento"
+                                        class="w-full mt-2 border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
+                                        <option value="">Seleccione un tipo</option>
+                                        @foreach ($tipos_medicamento as $id => $tipo)
+                                            <option value="{{ $id }}">{{ $tipo }}</option>
+                                        @endforeach
+                                    </select>
+                                @else
+                                    <!-- Mensaje de Resultados Vacíos -->
+                                    <p class="mt-2 text-gray-500 dark:text-gray-400">
+                                        No se encontraron resultados.
+                                    </p>
+                                @endif
+                            </div>
+                        @endif
+                        <!-- Final Presentación -->
 
                         <div>
                             <label for="unidad" class="mt-3 block text-sm font-medium text-gray-700 dark:text-gray-300">

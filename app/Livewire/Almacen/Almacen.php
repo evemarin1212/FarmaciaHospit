@@ -25,22 +25,27 @@ class Almacen extends Component
     public $formView = false;
     public $lote = null;
     // public $medicamento_busqueda = null;
-    
 
     public $medicamento_select = null;
     public $search = '';
     public $filter = 'todos';
 
+    public $tipo_medicamento = '';
+    public $tipos_medicamento = [];
+    public $tipo_medicamento_busqueda = '';
+    public $select_presentacion = ''; // Controla si es "nuevo" o "search"
+    public $nueva_presentacion = ''; // Almacena el nombre de la nueva presentación
+    
     protected $rules = [
         'cantidad' => 'required|integer|min:1',
         'fecha_vencimiento' => 'required|date',
         'origen' => 'required|string',
         'codigo_lote' => 'required|string',
+        'select_presentacion' => 'required|in:search,nuevo',
+        'nueva_presentacion' => 'required_if:select_presentacion,nuevo|string|max:255',
+        'tipo_medicamento' => 'required_if:select_presentacion,search|exists:presentacions,id',
     ];
 
-    public $tipo_medicamento = '';
-    public $tipos_medicamento = [];
-    public $tipo_medicamento_busqueda = '';
     
     public function mount()
     {
@@ -51,8 +56,9 @@ class Almacen extends Component
     public function updatedTipoMedicamentoBusqueda()
     {
         $this->tipos_medicamento = Presentacion::where('tipo', 'like', "%{$this->tipo_medicamento_busqueda}%")
-                                               ->pluck('tipo', 'id');
+                                            ->pluck('tipo', 'id');
     }
+
 
     public function updated($propertyName)
     {
@@ -93,55 +99,56 @@ class Almacen extends Component
     public function cancelar()
     {
         $this->formView = false;
-        $this->reset([
-            'medicamento_id',
-            'cantidad',
-            'fecha_vencimiento',
-            'origen',
-            'codigo_lote',
-            'presentacion',
-            'unidad',
-            'medida',
-            'nombre',
-        ]);
+        $this->resetalm();
+    }
+
+    private function resetalm(){
+        $this->medicamento_id = null;
+        $this->medicamentos = '';
+        $this->select_medicamento = '';
+        $this->cantidad = '';
+        $this->fecha_vencimiento = '';
+        $this->origen = '';
+        $this->codigo_lote = '';
+        $this->presentacion = '';
+        $this->unidad = '';
+        $this->medida = '';
+        $this->nombre = '';
+        $this->lote = null;
+        $this->medicamento_select = '';
+        $this->search = '';
+        $this->tipo_medicamento = '';
+        $this->tipos_medicamento = [];
+        $this->tipo_medicamento_busqueda = '';
+        $this->select_presentacion = 'search';
+        $this->nueva_presentacion = '';
     }
 
     public function save()
     {
-        $this->validate(
-            $this->select_medicamento === "nuevo"
-            ? array_merge($this->rules, [
-                'nombre' => 'required|string',
-                'unidad' => 'required|numeric',
-                'medida' => 'required|string',
-                ])
-                : array_merge($this->rules, [
-                    'search' => 'required|exists:medicamentos,nombre',
-                    ])
-                );
-            $this->validate(
-                array_merge($this->rules, [
-                    'tipo_medicamento' => 'required|exists:presentacions,id',
-                ])
-            );
-                
+        $this->validate();
 
-        // dd($this->medicamento_id, $this->codigo_lote, $this->nombre, $this->presentacion, $this->medida, $this->unidad,  $this->cantidad, $this->fecha_vencimiento, $this->origen);
-        if ($this->select_medicamento === "nuevo") {
-            $medicamento = Medicamento::create([
-                'nombre' => $this->nombre,
-                'presentacion_id' => $this->tipo_medicamento,
-                'unidad' => $this->unidad,
-                'medida' => $this->medida,
-                'cantidad_disponible' => $this->cantidad,
-                'estatus' => 'Disponible',
+        // Si la opción es "nuevo", crea una nueva presentación
+        if ($this->select_presentacion === 'nuevo') {
+            $presentacion = Presentacion::create([
+                'tipo' => $this->nueva_presentacion,
             ]);
-        } else {
 
-            $medicamento = Medicamento::findOrFail($this->medicamento_id);
-            $medicamento->increment('cantidad_disponible', $this->cantidad);
+            // Asigna la nueva presentación al medicamento
+            $this->tipo_medicamento = $presentacion->id;
         }
 
+        // Continúa con el flujo de guardado de medicamentos
+        $medicamento = Medicamento::create([
+            'nombre' => $this->nombre,
+            'presentacion_id' => $this->tipo_medicamento,
+            'unidad' => $this->unidad,
+            'medida' => $this->medida,
+            'cantidad_disponible' => $this->cantidad,
+            'estatus' => 'Disponible',
+        ]);
+
+        // Crea el lote
         Lote::create([
             'medicamento_id' => $medicamento->id,
             'cantidad' => $this->cantidad,
@@ -151,14 +158,12 @@ class Almacen extends Component
             'estatus' => 'disponible',
             'codigo_lote' => $this->codigo_lote,
         ]);
-        // $this->formView = false;
 
-        $this->dispatch('render'); // ... POR ESTO SE RECARGA TODA LA VISTA
         $this->dispatch('alert', "¡El medicamento se creó satisfactoriamente!");
         $this->cancelar();
-        // return $this->medicamento_select;
-        // session()->flash('message', 'Lote agregado con éxito.');
+        $this->dispatch('render');
     }
+
 
     public function render()
     {
