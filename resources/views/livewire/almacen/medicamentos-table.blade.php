@@ -4,14 +4,21 @@
     </h2>
 
     <!-- Campo de búsqueda -->
-    <input 
-        type="text" 
-        wire:model.live="search" 
+    <input
+        type="text"
+        wire:model.live="search"
         class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
         placeholder="Buscar medicamentos..."
     >
+    <select
+    wire:model.live="filter"
+    class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+    >
+        <option value="todos">Todos</option>
+        <option value="por_agotar">Por Agotar (30 cantidades)</option>
+        <option value="agotados">Agotados</option>
+    </select>
 
-    
     <!-- Tabla -->
     <table class="table-auto w-full border-collapse bg-gray-50 rounded-lg shadow-sm overflow-hidden dark:bg-gray-700">
         <thead class="bg-blue-500 text-white dark:bg-blue-600">
@@ -21,6 +28,7 @@
                 <th class="px-4 py-2 text-left">Unidad</th>
                 <th class="px-4 py-2 text-left">Medida</th>
                 <th class="px-4 py-2 text-left">Cantidad Disponible</th>
+                <th class="px-4 py-2 text-left">Estado</th>
                 <th class="px-4 py-2 text-left">Acciones</th>
             </tr>
         </thead>
@@ -33,10 +41,18 @@
                 <td class="px-4 py-2">{{ $medicamento->medida }}</td>
                 <td class="px-4 py-2">{{ $medicamento->cantidad_disponible }}</td>
                 <td class="px-4 py-2">
+                    @if($medicamento->cantidad_disponible <= 30)
+                        <h3 class="text-red-500  font-semibold"> Por Agotar <h3>
+                    @elseif($medicamento->cantidad_disponible == 0 )
+                        Agotado
+                    @else
+                        Disponible
+                    @endif
+                </td>
+                <td class="px-4 py-2">
                     <button wire:click="ver({{ $medicamento->id }})" class="bg-yellow-500 text-white px-2 py-1 rounded">Ver</button>
                     <button wire:click="edit({{ $medicamento->id }})" class="bg-green-500 text-white px-2 py-1 rounded">Editar</button>
                     {{-- <button wire:click="eliminar({{ $medicamento->id }})" class="bg-red-500 text-white px-2 py-1 rounded">Eliminar</button> --}}
-                    
                 </td>
             </tr>
             @endforeach
@@ -55,44 +71,43 @@
             <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
                 {{ $editar ? 'Editar Medicamento' : 'Detalles del Medicamento' }}
             </h3>
-            
+
             <div class="space-y-4">
                 <div>
                     <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1">Nombre:</label>
-                    <input 
-                    type="text" 
-                    wire:model="medicamentoSeleccionado.nombre" 
+                    <input
+                    type="text"
+                    wire:model="medicamentoSeleccionado.nombre"
                     class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200"
                     {{ $editar ? '' : 'readonly' }}>
-                    
+
                     {{-- <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1">Nombre:</label> --}}
                     {{-- <input type="text" wire:model="medicamentoSeleccionado.nombre" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200"{{ $editar ? '' : 'disabled' }}> --}}
                     {{-- <input type="text" wire:model="medicamentoSeleccionado.nombre" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200" {{ $editar ? '' : 'readonly' }}> --}}
                 </div>
-                
+
                 <div>
                     <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1">Presentación:</label>
                 {{-- <input type="text" wire:model="medicamentoSeleccionado.presentacion" value="{{ $medicamentoSeleccionado['presentacion'] ?? '' }}" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200" {{ $editar ? '' : 'disabled' }}> --}}
-                <input type="text" wire:model="medicamentoSeleccionado.presentacion" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200" {{ $editar ? '' : 'readonly' }}>
-            </div>
-            
-            <div>
-                <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1">Unidad:</label>
-                <input type="number" wire:model="medicamentoSeleccionado.unidad" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200" {{ $editar ? '' : 'readonly' }}>
+                    <input type="text" wire:model="medicamentoSeleccionado.presentacion" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200" {{ $editar ? '' : 'readonly' }}>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1">Unidad:</label>
+                    <input type="number" wire:model="medicamentoSeleccionado.unidad" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200" {{ $editar ? '' : 'readonly' }}>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1">Medida:</label>
+                    <input type="text" wire:model="medicamentoSeleccionado.medida" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200" {{ $editar ? '' : 'readonly' }}>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1">Cantidad Disponible:</label>
+                    <input type="number" wire:model="medicamentoSeleccionado.cantidad_disponible" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200" {{ 'readonly' }}>
+                </div>
             </div>
 
-            <div>
-                <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1">Medida:</label>
-                <input type="text" wire:model="medicamentoSeleccionado.medida" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200" {{ $editar ? '' : 'readonly' }}>
-            </div>
-            
-            <div>
-                <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1">Cantidad Disponible:</label>
-                <input type="number" wire:model="medicamentoSeleccionado.cantidad_disponible" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200" {{ 'readonly' }}>
-            </div>
-            
-        </div>
-        
         <!-- Botones -->
         <div class="flex justify-end">
             @if($editar)
@@ -101,7 +116,7 @@
             <button wire:click="cerrar" class="bg-gray-500 text-white px-4 py-2 rounded">Cerrar</button>
         </div>
     </div>
-    
+
     @endif
 
     <div wire:ignore>

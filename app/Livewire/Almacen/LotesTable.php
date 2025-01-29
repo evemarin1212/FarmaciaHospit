@@ -14,6 +14,8 @@ class LotesTable extends Component
     use WithPagination;
 
     public $filter = 'todos';
+    public $search = '';
+
     public $cantidad;
     public $fecha_vencimiento;
     public $fecha_registro;
@@ -31,7 +33,7 @@ class LotesTable extends Component
     public $LoteSeleccionado; // Para almacenar el medicamento seleccionado
     public $medicamentos; // Para almacenar el medicamento seleccionado
     public $editar = false;         // Para alternar entre los modos de edición y vista
-    public $modal = false;  
+    public $modal = false;
 
     protected $listeners = ['render', 'loteEliminado' => 'reder']; // PARA REGACAR LA TABLA
 
@@ -54,9 +56,7 @@ class LotesTable extends Component
 
     public function edit($id)
     {
-        session()->flash('error', 'si');
         try {
-            session()->flash('error', 'si try');
             $this->LoteSeleccionado = Lote::findOrFail($id)->toArray();
             $this->medicamentoSeleccionado = Medicamento::findOrFail($this->LoteSeleccionado['medicamento_id'])->toArray();
             $this->medicamentos = Medicamento::all();
@@ -66,7 +66,7 @@ class LotesTable extends Component
             dd($id);
             session()->flash('error', 'El medicamento no fue encontrado.');
         }
-    }   
+    }
 
     public function abrirModal()
     {
@@ -91,7 +91,7 @@ class LotesTable extends Component
             'medicamentoSeleccionado.medida' => 'nullable|string|max:255',
             'medicamentoSeleccionado.cantidad_disponible' => 'required|integer|min:0',
         ]);
-        
+
         if (isset($this->medicamentoSeleccionado['id'])) {
             // Actualizar un medicamento existente
             $medicamento = Medicamento::find($this->medicamentoSeleccionado['id']);
@@ -115,13 +115,13 @@ class LotesTable extends Component
         try {
             // Buscamos el lote por su ID
             $lote = Lote::findOrFail($id);
-    
+
             // Eliminamos el lote
             $lote->delete();
-    
+
             // Enviamos un mensaje de éxito
             session()->flash('message', 'Lote eliminado exitosamente.');
-    
+
             // Emitimos un evento para actualizar la tabla en la vista
             $this->dispatch('loteEliminado');
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
@@ -132,52 +132,33 @@ class LotesTable extends Component
             session()->flash('error', 'Ocurrió un error al intentar eliminar el lote.');
         }
     }
-    
-    
+
     public function render()
     {
         $query = Lote::query();
-        
+
         // Filtro por estatus
-        switch ($this->filter) 
+        switch ($this->filter)
         {
             case 'vencidos':
                 $query->where('fecha_vencimiento', '<', Carbon::now());
                 break;
-            
+
             case 'por_vencer':
                 $query->whereBetween('fecha_vencimiento', [Carbon::now(), Carbon::now()->addDays(30)]);
                 break;
-                
-            case 'agotados':
-            $query->where('cantidad', '=', 0);
-            break;
-            
-            case 'por_agotar':
-                $query->whereBetween('cantidad', [1, 30]);
-                break;
         }
 
+        // Filtro por nombre de medicamento
+    if (!empty($this->search)) {
+        $query->whereHas('medicamento', function ($query) {
+            $query->where('nombre', 'like', "%{$this->search}%");
+        });
+    }
         $lotes = $query->paginate(10);
-            
+
         return view('livewire.almacen.lotes-table', [
             'lotes' => $lotes,
         ]);
     }
 }
- 
-    // protected $listeners = ['confirmDelete']; // Listener para manejar confirmación de eliminación
-    
-    // public function render()
-    // {
-    //     $query = Lote::query();
-
-    //     if ($this->filter === 'vencidos') {
-    //         $query->where('estatus', 'vencido');
-    //     }
-
-    //     $lotes = $query->paginate(10);
-
-    //     return view('livewire.almacen.lotes-table', [
-    //         'lotes' => $lotes,
-    //     ]);

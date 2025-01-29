@@ -8,9 +8,16 @@
         @endif
     </h2>
 
+    <!-- Campo de búsqueda -->
+    <input
+        type="text"
+        wire:model.live="search"
+        class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+        placeholder="Buscar lote..."
+    >
     <!-- Filtro -->
-    <select 
-        wire:model.live="filter" 
+    <select
+        wire:model.live="filter"
         class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
     >
         <option value="todos">Todos</option>
@@ -49,21 +56,21 @@
                         @elseif($lote->fecha_vencimiento < now())
                             Vencido
                         @elseif($lote->fecha_vencimiento <= now()->addDays(30))
-                            Por Vencer
+                            <h3 class="text-red-500  font-semibold"> Por Vencer <h3>
                         @else
                             Disponible
                         @endif
-                        </td>
-                        <td class="px-4 py-2">
-                            <button wire:click="ver({{ $lote->id }})" class="bg-yellow-500 text-white px-2 py-1 rounded">
-                                Ver
-                            </button>
-                            <button wire:click="edit({{ $lote->id }})" class="bg-green-500 text-white px-2 py-1 rounded">
-                                Editar
-                            </button>
-                            <button wire:click="eliminar({{ $lote->id }})" class="bg-red-500 text-white px-2 py-1 rounded">
-                                Eliminar
-                            </button>
+                    </td>
+                    <td class="px-4 py-2">
+                        <button wire:click="ver({{ $lote->id }})" class="bg-yellow-500 text-white px-2 py-1 rounded">
+                            Ver
+                        </button>
+                        <button wire:click="edit({{ $lote->id }})" class="bg-green-500 text-white px-2 py-1 rounded">
+                            Editar
+                        </button>
+                        <button wire:click="eliminar({{ $lote->id }})" class="bg-red-500 text-white px-2 py-1 rounded">
+                            Eliminar
+                        </button>
                         
                     </td>
                 </tr>

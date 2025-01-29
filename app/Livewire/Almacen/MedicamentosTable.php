@@ -2,14 +2,15 @@
 
 namespace App\Livewire\Almacen;
 
-use App\Models\Medicamento;
 use Livewire\Component;
+use App\Models\Medicamento;
 use Livewire\WithPagination;
 
 class MedicamentosTable extends Component
 {
     use WithPagination;
 
+    public $filter = 'todos';
     public $search = '';
     public $medicamentoSeleccionado = []; // Para almacenar el medicamento seleccionado
     public $editar = false;         // Para alternar entre los modos de edición y vista
@@ -102,70 +103,31 @@ class MedicamentosTable extends Component
 
     public function render()
     {
-        // ... lógica para obtener los medicamentos ...
-        $medicamentos = Medicamento::all(); // Obtener todos los medicamentos
+        $query = Medicamento::query();
+
+        // Filtro por estatus
+        switch ($this->filter)
+        {
+            case 'todos':
+                $query->where('cantidad_disponible', '>', 0);
+                break;
+
+            case 'por_agotar':
+                $query->whereBetween('cantidad_disponible', [1, 30]);
+                break;
+
+            case 'agotados':
+                $query->where('cantidad_disponible', '=', 0);
+                break;
+        }
+        // Aplicar búsqueda y paginación
+        $medicamentos = $query
+            ->where('nombre', 'like', "%{$this->search}%")
+            ->paginate(5);
+
         return view('livewire.almacen.medicamentos-table', [
-            'medicamentos' => Medicamento::where('nombre', 'like', "%{$this->search}%")->paginate(5),
-            
+            'medicamentos' => $medicamentos
         ]);
 
     }
 }
-    // return view('livewire.almacen.almacen', [
-    //     'medicamentos' => Medicamento::where('nombre', 'like', "%{$this->search}%")->paginate(10),
-    //     'lotes' => Lote::with('medicamento')
-    //         ->when($this->filter === 'vencidos', fn ($query) => $query->where('fecha_vencimiento', '<', now()))
-    //         ->paginate(10),
-    // ]);
-    //     public function eliminar($id)
-    // {
-    //     // Mostrar un modal de confirmación en lugar de un simple alert
-    //     $this->dispatchBrowserEvent('showModal', ['id' => $id]); // Solicita confirmación al usuario
-    // }
-  
-    // public function eliminar($id)
-    // {
-    //     $this->dispatch('confirmDelete', ['id' => $id]);
-    //     // $this->dispatch('nombre-del-evento', ['datos' => $datos]); 
-    // }
-
-    // //Función que se ejecuta tras la confirmación del usuario
-    // public function confirmDelete($id)
-    // {
-    //     Medicamento::find($id)?->delete();
-    //     session()->flash('message', 'Medicamento eliminado exitosamente.');
-    // }
-
-    // // Función para disparar el evento de confirmación
-    // // public function confirmDelete($id)
-    // // {
-    // //     Medicamento::find($id)?->delete();
-    // //     session()->flash('message', 'Medicamento eliminado exitosamente.');
-    // //     $this->emit('refreshComponent'); // Refrescar el componente después de la eliminación
-    // // }  
-
-    // // // Función para cerrar el modal de vista/edición
-    // // public function cerrar()
-    // // {
-    // //     $this->modal = false; // Asegurarse de que esté en modo vista
-    // //     $this->editar = false;
-    // // }
-
-
-    // // Función que se ejecuta tras la confirmación del usuario
-    // // public function confirmDelete($id)
-    // // {
-    // //     if (Medicamento::find($id)) {
-    // //         Medicamento::find($id)->delete();
-    // //         session()->flash('message', 'Medicamento eliminado exitosamente.');
-    // //     } else {
-    // //         session()->flash('message', 'El medicamento no se encontró.');
-    // //     }
-    // // }
-
-    // public function render()
-    // {
-    //     return view('livewire.almacen.medicamentos-table', [
-    //         'medicamentos' => Medicamento::where('nombre', 'like', "%{$this->search}%")->paginate(10),
-    //     ]);
-    // }
