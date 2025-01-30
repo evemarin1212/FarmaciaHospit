@@ -55,7 +55,7 @@ class DespachoQuirofano extends Component
         $this->modal = false;
         $this->reset(['accion', 'DespachoSeleccionado', 'MedicamentosSeleccionados']);
         session()->flash('message', 'Cambios guardados exitosamente.');
-        $this->emit('render');
+        $this->dispach('render');
     }
 
     // // Eliminar un despacho

@@ -73,20 +73,20 @@
                         @else
                             <!-- Campo de Búsqueda para Presentación Existente -->
                             <div class="mb-4">
-                                <label for="tipo_medicamento_busqueda" 
+                                <label for="tipo_presentacion_busqueda" 
                                     class="block text-sm font-medium text-gray-700 dark:text-gray-200">
                                     Buscar Presentación:
                                 </label>
-                                <input type="text" id="tipo_medicamento_busqueda" wire:model.live="tipo_medicamento_busqueda"
+                                <input type="text" id="tipo_presentacion_busqueda" wire:model.live="tipo_presentacion_busqueda"
                                     class="w-full mt-2 border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                                     placeholder="Buscar tipo de medicamento">
 
                                 <!-- Selector de Resultados -->
-                                @if (!empty($tipos_medicamento))
-                                    <select id="tipo_medicamento" wire:model="tipo_medicamento"
+                                @if (!empty($tipos_presentacion))
+                                    <select id="tipo_presentacion" wire:model.live="tipo_presentacion"
                                         class="w-full mt-2 border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
                                         <option value="">Seleccione un tipo</option>
-                                        @foreach ($tipos_medicamento as $id => $tipo)
+                                        @foreach ($tipos_presentacion as $id => $tipo)
                                             <option value="{{ $id }}">{{ $tipo }}</option>
                                         @endforeach
                                     </select>

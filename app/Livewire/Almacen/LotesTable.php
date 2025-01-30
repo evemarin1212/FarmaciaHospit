@@ -5,6 +5,7 @@ namespace App\Livewire\Almacen;
 use App\Models\Lote;
 use Livewire\Component;
 use App\Models\Medicamento;
+use App\Models\presentacion;
 use Livewire\WithPagination;
 use Illuminate\Support\Carbon;
 
@@ -16,22 +17,17 @@ class LotesTable extends Component
     public $filter = 'todos';
     public $search = '';
 
-    public $cantidad;
-    public $fecha_vencimiento;
-    public $fecha_registro;
-    public $origen;
-    public $codigo_lote;
-    public $presentacion;
-    public $estatus;
-    public $unidad;
-    public $medida;
-    public $nombre_medicamento;
+    public $cantidad, $fecha_vencimiento, $fecha_registro, $origen, $codigo_lote;
+    public $presentacion, $estatus, $unidad, $medida, $nombre_medicamento;
+
     public $formView = false;
     public $lote = null;
+
     public $medicamento_busqueda = null;
     public $medicamentoSeleccionado; // Para almacenar el medicamento seleccionado
     public $LoteSeleccionado; // Para almacenar el medicamento seleccionado
     public $medicamentos; // Para almacenar el medicamento seleccionado
+
     public $editar = false;         // Para alternar entre los modos de edición y vista
     public $modal = false;
 
@@ -40,16 +36,14 @@ class LotesTable extends Component
     // Función para ver un medicamento
     public function ver($id)
     {
-        session()->flash('error', 'si');
         try {
-            session()->flash('error', 'si try');
             $this->LoteSeleccionado = Lote::findOrFail($id)->toArray();
             $this->medicamentoSeleccionado = Medicamento::findOrFail($this->LoteSeleccionado['medicamento_id'])->toArray();
+            $this->presentacion = presentacion::findOrFail($this->medicamentoSeleccionado['presentacion_id']);
             $this->medicamentos = Medicamento::all();
             $this->editar = false;
             $this->modal = true;
         } catch (\Exception $e) {
-            dd($id);
             session()->flash('error', 'El medicamento no fue encontrado.');
         }
     }
@@ -59,6 +53,7 @@ class LotesTable extends Component
         try {
             $this->LoteSeleccionado = Lote::findOrFail($id)->toArray();
             $this->medicamentoSeleccionado = Medicamento::findOrFail($this->LoteSeleccionado['medicamento_id'])->toArray();
+            $this->presentacion = presentacion::findOrFail($this->medicamentoSeleccionado['presentacion_id']);
             $this->medicamentos = Medicamento::all();
             $this->editar = true;
             $this->modal = true;
@@ -86,10 +81,11 @@ class LotesTable extends Component
     {
         $this->validate([
             'medicamentoSeleccionado.nombre' => 'required|string|max:255',
-            'medicamentoSeleccionado.presentacion' => 'nullable|string|max:255',
             'medicamentoSeleccionado.unidad' => 'nullable|numeric|max:255',
             'medicamentoSeleccionado.medida' => 'nullable|string|max:255',
+            'LoteSeleccionado.presentacion' => 'nullable|string|max:255',
             'medicamentoSeleccionado.cantidad_disponible' => 'required|integer|min:0',
+            'LoteSeleccionado.fecha_vencimiento' => 'required|date|after:today',
         ]);
 
         if (isset($this->medicamentoSeleccionado['id'])) {
@@ -103,18 +99,28 @@ class LotesTable extends Component
 
         session()->flash('message', 'Medicamento guardado exitosamente.');
         $this->cerrar();
+        $this->dispatch('render');
     }
 
-    public function confirmDelete($id)
-    {
-        $this->dispatch('confirmDelete', $id); // Simplificamos el envío del id
-    }
-
+    // 1. Obtener el medicamento relacionado al lote, lote->medicamento->ID
+    // 2. Buscar el medicamento, Medicamento::findOrFail($id_Medicamento).
+    // 3. Hacer un decremento en medicamento en cantidad_disponible con respecto a la cantidad del lote.
+    // 4. Realizar el delete
     public function eliminar($id)
     {
         try {
             // Buscamos el lote por su ID
             $lote = Lote::findOrFail($id);
+
+            // Obtenemos el medicamento relacionado al lote y su ID
+            $medicamento_id = $lote->medicamento->id;
+
+            // Buscamos el medicamento
+            $medicamento = Medicamento::findOrFail($medicamento_id);
+
+            // Restamos la cantidad del lote al medicamento
+            $medicamento->cantidad_disponible -= $lote->cantidad;
+            $medicamento->save();
 
             // Eliminamos el lote
             $lote->delete();
@@ -125,12 +131,18 @@ class LotesTable extends Component
             // Emitimos un evento para actualizar la tabla en la vista
             $this->dispatch('loteEliminado');
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            // Si el lote no existe, mostramos un error
-            session()->flash('error', 'No se encontró el lote.');
+            // Si el lote o el medicamento no existe, mostramos un error
+            session()->flash('error', 'No se encontró el lote o el medicamento.');
         } catch (\Exception $e) {
             // Capturamos cualquier otro error
             session()->flash('error', 'Ocurrió un error al intentar eliminar el lote.');
         }
+    }
+
+    public function confirmDelete($id)
+    {
+        $this->dispatch('confirmDelete', $id); // Simplificamos el envío del id
+        $this->dispach('render');
     }
 
     public function render()
@@ -149,7 +161,7 @@ class LotesTable extends Component
                 break;
         }
 
-        // Filtro por nombre de medicamento
+        // Busqueda por nombre de medicamento
     if (!empty($this->search)) {
         $query->whereHas('medicamento', function ($query) {
             $query->where('nombre', 'like', "%{$this->search}%");

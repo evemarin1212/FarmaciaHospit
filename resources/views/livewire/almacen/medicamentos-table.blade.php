@@ -41,10 +41,10 @@
                 <td class="px-4 py-2">{{ $medicamento->medida }}</td>
                 <td class="px-4 py-2">{{ $medicamento->cantidad_disponible }}</td>
                 <td class="px-4 py-2">
-                    @if($medicamento->cantidad_disponible <= 30)
-                        <h3 class="text-red-500  font-semibold"> Por Agotar <h3>
-                    @elseif($medicamento->cantidad_disponible == 0 )
-                        Agotado
+                    @if($medicamento->cantidad_disponible == 0)
+                        <h3 class="font-semibold"> Agotado </h3>
+                    @elseif($medicamento->cantidad_disponible <= 30)
+                        <h3 class="text-red-500  font-semibold"> Por Agotar </h3>
                     @else
                         Disponible
                     @endif
@@ -58,12 +58,12 @@
             @endforeach
         </tbody>
     </table>
-    
+
     <!-- Paginación -->
     <div class="mt-4">
         {{ $medicamentos->links() }}
     </div>
-    
+
     <!-- Modal para Ver/Editar Medicamento -->
     @if($modal)
     <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

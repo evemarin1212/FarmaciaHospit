@@ -99,6 +99,7 @@ class MedicamentosTable extends Component
         } else {
             session()->flash('error', 'No se encontró el medicamento.');
         }
+        $this->dispatch('render');
     }
 
     public function render()
@@ -112,13 +113,14 @@ class MedicamentosTable extends Component
                 $query->where('cantidad_disponible', '>', 0);
                 break;
 
+            case 'agotados':
+                $query->where('cantidad_disponible', '=', 0);
+                break;
+
             case 'por_agotar':
                 $query->whereBetween('cantidad_disponible', [1, 30]);
                 break;
 
-            case 'agotados':
-                $query->where('cantidad_disponible', '=', 0);
-                break;
         }
         // Aplicar búsqueda y paginación
         $medicamentos = $query
