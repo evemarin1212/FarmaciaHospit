@@ -39,7 +39,7 @@ class LotesTable extends Component
         try {
             $this->LoteSeleccionado = Lote::findOrFail($id)->toArray();
             $this->medicamentoSeleccionado = Medicamento::findOrFail($this->LoteSeleccionado['medicamento_id'])->toArray();
-            $this->presentacion = presentacion::findOrFail($this->medicamentoSeleccionado['presentacion_id']);
+            $this->presentacion = presentacion::findOrFail($this->medicamentoSeleccionado['presentacion_id'])->toArray();
             $this->medicamentos = Medicamento::all();
             $this->editar = false;
             $this->modal = true;
@@ -53,7 +53,7 @@ class LotesTable extends Component
         try {
             $this->LoteSeleccionado = Lote::findOrFail($id)->toArray();
             $this->medicamentoSeleccionado = Medicamento::findOrFail($this->LoteSeleccionado['medicamento_id'])->toArray();
-            $this->presentacion = presentacion::findOrFail($this->medicamentoSeleccionado['presentacion_id']);
+            $this->presentacion = presentacion::findOrFail($this->medicamentoSeleccionado['presentacion_id'])->toArray();
             $this->medicamentos = Medicamento::all();
             $this->editar = true;
             $this->modal = true;

@@ -4,7 +4,7 @@
         <h3 class="text-3xl font-bold text-center mb-6 text-gray-800 dark:text-gray-200">
             Registrar Nuevo Lote
         </h3>
-        
+
         <form wire:submit.prevent="save" class="w-full flex flex-col justify-center">
             <div class="flex flex-row-2 w-full h-full space-x-2 justify-between ">
                 <!-- Medicamento -->
@@ -35,23 +35,22 @@
                         </div>
 
                         <!-- Presentación -->
-                        <div class="mb-4">
+                        <div class="">
                             <!-- Etiqueta del Campo -->
                             <label for="select_presentacion" 
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                                class="mt-6  block text-sm font-medium text-gray-700 dark:text-gray-200">
                                 Presentación:
                             </label>
 
                             <!-- Selector de Opciones -->
                             <select id="select_presentacion" wire:model.live="select_presentacion"
-                                class="w-full mt-2 border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
-                                <option value="search">Seleccionar Presentación</option>
+                                class="w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
                                 <option value="search">Buscar existente</option>
                                 <option value="nuevo">Nueva Presentación</option>
                             </select>
 
                             <!-- Validación de Errores -->
-                            @error('select_presentacion') 
+                            @error('select_presentacion')
                                 <span class="text-red-500 text-sm">{{ $message }}</span> 
                             @enderror
                         </div>
@@ -59,27 +58,27 @@
                         <!-- Campos para Nueva Presentación -->
                         @if ($select_presentacion === 'nuevo')
                             <div class="mb-4">
-                                <label for="nueva_presentacion" 
-                                    class="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                                <label for="nueva_presentacion"
+                                    class="mt-3 block text-sm font-medium text-gray-700 dark:text-gray-200">
                                     Nueva Presentación:
                                 </label>
                                 <input type="text" id="nueva_presentacion" wire:model="nueva_presentacion"
-                                    class="w-full mt-2 border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                                    class="w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                                     placeholder="Ingrese la nueva presentación">
-                                @error('nueva_presentacion') 
-                                    <span class="text-red-500 text-sm">{{ $message }}</span> 
+                                @error('nueva_presentacion')
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
                                 @enderror
                             </div>
                         @else
                             <!-- Campo de Búsqueda para Presentación Existente -->
                             <div class="mb-4">
-                                <label for="tipo_presentacion_busqueda" 
+                                {{-- <label for="tipo_presentacion_busqueda"
                                     class="block text-sm font-medium text-gray-700 dark:text-gray-200">
                                     Buscar Presentación:
-                                </label>
+                                </label> --}}
                                 <input type="text" id="tipo_presentacion_busqueda" wire:model.live="tipo_presentacion_busqueda"
                                     class="w-full mt-2 border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
-                                    placeholder="Buscar tipo de medicamento">
+                                    placeholder="Buscar tipo de presentación">
 
                                 <!-- Selector de Resultados -->
                                 @if (!empty($tipos_presentacion))
@@ -96,6 +95,9 @@
                                         No se encontraron resultados.
                                     </p>
                                 @endif
+                                @error('tipo_presentacion')
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                @enderror
                             </div>
                         @endif
                         <!-- Final Presentación -->
@@ -131,7 +133,7 @@
                                     @foreach ($medicamentos as $medicamento)
                                         <li wire:click="selectSearch({{ $medicamento->id }})"
                                             class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 px-4 p-2">
-                                            <span>{{ $medicamento->nombre }} - {{ $medicamento->medida }}{{ $medicamento->unidad }}</span>
+                                            <span>{{ $medicamento->nombre }} - {{ $medicamento->unidad }}{{ $medicamento->medida }}</span>
                                         </li>
                                     @endforeach
                                 </ul>

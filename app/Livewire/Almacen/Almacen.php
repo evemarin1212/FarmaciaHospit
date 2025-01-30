@@ -10,7 +10,7 @@ use Livewire\WithPagination;
 class Almacen extends Component
 {
     use WithPagination;
-    
+
     public $medicamento_id;
     public $medicamentos;
     public $select_medicamento;
@@ -99,20 +99,20 @@ class Almacen extends Component
 
     public function save()
     {
-        if( $this->medicamento_id === "nuevo" ){
+        if( $this->select_medicamento === "nuevo" ){
             $this->validate([
                 'cantidad' => 'required|integer|min:1',
                 'fecha_vencimiento' => 'required|date|after:today',
                 'origen' => 'required|string',
                 'codigo_lote' => 'required|string',
-                'nombre' => 'required|string',
-                'presentacion' => 'required|string','select_presentacion' => 'required|in:search,nuevo',
+                'nombre' => 'required|string', 
+                'select_presentacion' => 'required|in:search,nuevo',
                 'nueva_presentacion' => 'required_if:select_presentacion,nuevo|string|max:255',
-                'tipo_presentacion' => 'required_if:select_presentacion,search|exists:presentacions,id',
-                'medida' => 'required|numeric',
-                'unidad' => 'required|string',
+                'tipo_presentacion' => 'required_if:select_presentacion,search|nullable|exists:presentacions,id',
+                'medida' => 'required|string',
+                'unidad' => 'required|numeric',
             ]);
-            
+
         } else {
             $this->validate([
                 'medicamento_id' => 'required|exists:medicamentos,id',
@@ -123,7 +123,7 @@ class Almacen extends Component
             ]);
         }
 
-        if( $this->medicamento_id === "nuevo" ){
+        if( $this->select_medicamento === "nuevo" ){
             // Si la opción es "nuevo", crea una nueva presentación
             if ($this->select_presentacion === 'nuevo') {
                 $presentacion = Presentacion::create([
@@ -133,7 +133,7 @@ class Almacen extends Component
                 $this->tipo_presentacion = $presentacion->id;
             }
             $this->ultimo_id = Medicamento::create([
-                'nombre' => $this->nombre_medicamento,
+                'nombre' => $this->nombre,
                 'presentacion_id' => $this->tipo_presentacion,
                 'unidad' => $this->unidad,
                 'medida' => $this->medida,

@@ -137,7 +137,7 @@
                         <label for="presentacion" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                             Presentación
                         </label>
-                        <input type="text" id="presentacion" wire:model="LoteSeleccionado.presentacion"
+                        <input type="text" id="presentacion" wire:model="presentacion.tipo"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                             {{ $editar ? '' : 'readonly' }}>
                         @error('presentacion') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
