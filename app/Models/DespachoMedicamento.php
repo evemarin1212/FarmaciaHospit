@@ -33,7 +33,7 @@ class DespachoMedicamento extends Model
 
     public function solicitudes() // Nombre descriptivo para la relación
     {
-        return $this->hasMany(DespachoSolicitado::class, 'despacho_medicamento_id');
+        return $this->hasOne(DespachoSolicitado::class, 'despacho_medicamento_id');
     }
 
 } 

@@ -26,12 +26,17 @@ class Despacho extends Model
         return $this->belongsToMany(Medicamento::class, 'despacho_medicamentos')->withPivot('cantidad');
     }
 
+    public function medicamentosSolicitados()
+    {
+        return $this->belongsToMany(Medicamento::class, 'despacho_solicitados')->withPivot('cantidad');
+    }
+
     public function despachosMedicamentos()
     {
         return $this->hasMany(DespachoMedicamento::class);
     }
 
-    public function medicamentosSolicitados() {
+    public function despachosSolicitados() {
         return $this->belongsToMany(DespachoSolicitado::class);
     }
 

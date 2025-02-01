@@ -69,13 +69,32 @@
                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                 @enderror
                             </div>
+                             {{-- via de administracion --}}
+                            <div class="mb-4">
+                                <select id="via_administracion" wire:model.live="via_administracion"
+                                    class="w-full mt-2 border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 
+                                    dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
+                                    <option value="">Seleccione una vía de administración</option>
+                                    <option value="Oral">Oral</option>
+                                    <option value="Sublingual">Sublingual</option>
+                                    <option value="Tópica">Tópica</option>
+                                    <option value="Oftálmica">Oftálmica</option>
+                                    <option value="Ótica">Ótica</option>
+                                    <option value="Nasal">Nasal</option>
+                                    <option value="Inhalatoria">Inhalatoria</option>
+                                    <option value="Rectal">Rectal</option>
+                                    <option value="Vaginal">Vaginal</option>
+                                    <option value="Intramuscular">Intramuscular</option>
+                                    <option value="Intravenosa">Intravenosa</option>
+                                    <option value="Subcutanea">Subcutánea</option>
+                                </select>
+                                @error('via_administracion')
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                @enderror
+                            </div>
                         @else
                             <!-- Campo de Búsqueda para Presentación Existente -->
                             <div class="mb-4">
-                                {{-- <label for="tipo_presentacion_busqueda"
-                                    class="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                                    Buscar Presentación:
-                                </label> --}}
                                 <input type="text" id="tipo_presentacion_busqueda" wire:model.live="tipo_presentacion_busqueda"
                                     class="w-full mt-2 border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                                     placeholder="Buscar tipo de presentación">

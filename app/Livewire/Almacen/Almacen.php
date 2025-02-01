@@ -36,18 +36,19 @@ class Almacen extends Component
     public $tipo_presentacion_busqueda = '';
     public $select_presentacion = ''; // Controla si es "nuevo" o "search"
     public $nueva_presentacion = ''; // Almacena el nombre de la nueva presentación
+    public $via_administracion; // Almacena el nombre de la nueva presentación
 
     public function mount()
     {
         $this->medicamentos = collect();
-        $this->tipos_presentacion = Presentacion::pluck('tipo', 'id'); // Recuperar tipos de medicamento desde el modelo Presentacion
+        $this->tipos_presentacion = Presentacion::pluck('tipo', 'via_administracion', 'id'); // Recuperar tipos de medicamento desde el modelo Presentacion
     }
 
     public function updatedTipoPresentacionBusqueda()
     {
         $this->tipos_presentacion = Presentacion::where('tipo', 'like', "%{$this->tipo_presentacion_busqueda}%")
         ->limit(5)
-        ->pluck('tipo', 'id');
+        ->pluck('tipo', 'via_administracion','id');
     }
 
     public function form()
@@ -95,6 +96,7 @@ class Almacen extends Component
         $this->tipo_presentacion_busqueda = '';
         $this->select_presentacion = 'search';
         $this->nueva_presentacion = '';
+        $this->via_administracion;
     }
 
     public function save()
@@ -108,6 +110,7 @@ class Almacen extends Component
                 'nombre' => 'required|string', 
                 'select_presentacion' => 'required|in:search,nuevo',
                 'nueva_presentacion' => 'required_if:select_presentacion,nuevo|string|max:255',
+                'via_administracion' => 'required_if:select_presentacion,nuevo|required',
                 'tipo_presentacion' => 'required_if:select_presentacion,search|nullable|exists:presentacions,id',
                 'medida' => 'required|string',
                 'unidad' => 'required|numeric',
@@ -128,6 +131,7 @@ class Almacen extends Component
             if ($this->select_presentacion === 'nuevo') {
                 $presentacion = Presentacion::create([
                     'tipo' => $this->nueva_presentacion,
+                    'via_administracion' => $this->via_administracion,
                 ]);
                 // Asigna la nueva presentación al medicamento
                 $this->tipo_presentacion = $presentacion->id;

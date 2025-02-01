@@ -14,6 +14,20 @@ return new class extends Migration
         Schema::create('presentacions', function (Blueprint $table) {
             $table->id();
             $table->string('tipo');
+            $table->enum('via_administracion', [
+                'Oral',
+                'Sublingual',
+                'Tópica',
+                'Oftálmica',
+                'Ótica',
+                'Nasal',
+                'Inhalatoria',
+                'Rectal',
+                'Vaginal',
+                'Intramuscular',
+                'Intravenosa',
+                'Subcutanea'
+            ]);
             $table->timestamps();
         });
     }

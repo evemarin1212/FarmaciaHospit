@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Despacho;
 
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Despacho;
@@ -55,7 +56,7 @@ class DespachoQuirofano extends Component
         $this->modal = false;
         $this->reset(['accion', 'DespachoSeleccionado', 'MedicamentosSeleccionados']);
         session()->flash('message', 'Cambios guardados exitosamente.');
-        $this->dispach('render');
+        $this->dispatch('render');
     }
 
     // // Eliminar un despacho
@@ -66,52 +67,151 @@ class DespachoQuirofano extends Component
     //     $this->modal = true;
     // }
 
+    // public function eliminar($id)
+    // {
+    //     // Cargar el despacho seleccionado
+    //     $this->cargarDespacho($id);
+    //     // Iterar sobre los medicamentos asociados al despacho
+    //     foreach ($this->MedicamentosSeleccionados as $medicamento) {
+    //         // Recuperar el modelo del medicamento despachado
+    //         $despachoMedicamento = DespachoMedicamento::findOrFail($medicamento['id']);
+    //         if (!$despachoMedicamento) {
+    //             continue; // Evita errores si el medicamento ya fue eliminado
+    //         }
+    //         // // Incrementar la cantidad en la tabla Lote
+    //         // $lote = $despachoMedicamento->lote; // Asumiendo que el modelo DespachoMedicamento tiene relación con Lote
+    //         // $lote->cantidad_medicamento += $despachoMedicamento->cantidad;
+    //         // $lote->save();
+    //         // Incrementar la cantidad en la tabla Medicamento
+    //         // $medicamentoModel = Medicamento::findOrFail($lote->medicamento_id); // Relación con la tabla Medicamento
+    //         $despachoMedicamento->medicamento->cantidad += $despachoMedicamento->cantidad;
+    //         $despachoMedicamento->medicamento->save();
+    //     }
+    //     // Eliminar solo el despacho
+    //     $despacho = Despacho::find($this->DespachoSeleccionado->id);
+    //     if (!$despacho) {
+    //         session()->flash('error', 'El despacho ya no existe.');
+    //         return;
+    //     }
+    //     $this->DespachoSeleccionado->despachosMedicamentos()->delete();
+    //     $despacho->delete();
+    //     // Resetear variables y cerrar modal
+    //     $this->modal = false;
+    //     $this->reset(['accion', 'DespachoSeleccionado', 'MedicamentosSeleccionados']);
+    //     // Mensaje de confirmación
+    //     session()->flash('message', 'Despacho eliminado exitosamente y cantidades restauradas.');
+    //     $this->dispatch('render');
+    // }
+
+    // public function eliminar($id)
+    // {
+    //     DB::beginTransaction();
+    //     try {
+    //         $this->cargarDespacho($id);
+
+    //         foreach ($this->MedicamentosSeleccionados as $medicamento) {
+    //             $despachoMedicamento = DespachoMedicamento::find($medicamento['id']);
+
+    //             if (!$despachoMedicamento) continue;
+
+    //             $despachoMedicamento->medicamento->cantidad += $despachoMedicamento->cantidad;
+    //             $despachoMedicamento->medicamento->save();
+    //         }
+
+    //         $despacho = Despacho::find($this->DespachoSeleccionado->id);
+    //         if (!$despacho) {
+    //             throw new \Exception("El despacho ya no existe.");
+    //         }
+
+    //         $this->DespachoSeleccionado->despachosMedicamentos()->delete();
+    //         $despacho->delete();
+
+    //         DB::commit();
+
+    //         $this->modal = false;
+    //         $this->reset(['accion', 'DespachoSeleccionado', 'MedicamentosSeleccionados']);
+    //         session()->flash('message', 'Despacho eliminado exitosamente y cantidades restauradas.');
+    //         $this->dispatch('render');
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         session()->flash('error', 'Error al eliminar el despacho: ' . $e->getMessage());
+    //     }
+    // }
     public function eliminar($id)
     {
-        // Cargar el despacho seleccionado
-        $this->cargarDespacho($id);
+        DB::beginTransaction();
+        try {
+            $this->cargarDespacho($id);
+            
+            if (!$this->DespachoSeleccionado) {
+                throw new \Exception("El despacho no fue encontrado.");
+            }
+            // dd($id);
+            foreach ($this->MedicamentosSeleccionados as $medicamento) {
+                $despachoMedicamento = DespachoMedicamento::find($medicamento['id']);
+                // dd($id);  dd($id);
+                if (!$despachoMedicamento || !$despachoMedicamento->medicamento) continue;
+                // dd($id);
+                // Restaurar stock del medicamento
+                $despachoMedicamento->medicamento->cantidad_disponible += $despachoMedicamento->cantidad;
+                // dd($id);
+                $despachoMedicamento->medicamento->save();
+                // dd($id);
+            }
+            // dd($id);
+            // Validar si el despacho aún existe antes de eliminarlo
+            $despacho = Despacho::find($this->DespachoSeleccionado->id);
+            if (!$despacho) {
+                // dd($id);
+                throw new \Exception("El despacho ya no existe.");
+                // dd($id);
+            }
 
-        // Iterar sobre los medicamentos asociados al despacho
-        foreach ($this->MedicamentosSeleccionados as $medicamento) {
-            // Recuperar el modelo del medicamento despachado
-            $despachoMedicamento = DespachoMedicamento::findOrFail($medicamento['id']);
+            // Eliminar medicamentos asociados al despacho
+            if ($this->DespachoSeleccionado) {
+                // dd($id);
+                $this->DespachoSeleccionado->despachosMedicamentos()->delete();
+                // dd($id);
+            }
 
-            // Incrementar la cantidad en la tabla Lote
-            $lote = $despachoMedicamento->lote; // Asumiendo que el modelo DespachoMedicamento tiene relación con Lote
-            $lote->cantidad_medicamento += $despachoMedicamento->cantidad;
-            $lote->save();
+            // Eliminar el despacho
+            $despacho->delete();
+            // dd($id);
+            DB::commit();
 
-            // Incrementar la cantidad en la tabla Medicamento
-            $medicamentoModel = Medicamento::findOrFail($lote->medicamento_id); // Relación con la tabla Medicamento
-            $medicamentoModel->cantidad_medicamento += $despachoMedicamento->cantidad;
-            $medicamentoModel->save();
+            // Reiniciar variables y notificar éxito
+            $this->modal = false;
+            $this->reset(['accion', 'DespachoSeleccionado', 'MedicamentosSeleccionados']);
+            session()->flash('message', 'Despacho eliminado exitosamente y cantidades restauradas.');
+            $this->emit('render');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            session()->flash('error', 'Error al eliminar el despacho: ' . $e->getMessage());
         }
-
-        // Eliminar solo el despacho
-        $despacho = Despacho::findOrFail($this->DespachoSeleccionado->id);
-        $despacho->delete();
-
-        // Resetear variables y cerrar modal
-        $this->modal = false;
-        $this->reset(['accion', 'DespachoSeleccionado', 'MedicamentosSeleccionados']);
-
-        // Mensaje de confirmación
-        session()->flash('message', 'Despacho eliminado exitosamente y cantidades restauradas.');
-        $this->emit('render');
     }
 
     // Confirmar la eliminación de un despacho y sus medicamentos
-    public function confirmarEliminacion()
+    public function confirmarEliminacion($id)
     {
-        $despacho = Despacho::findOrFail($this->DespachoSeleccionado->id);
-        $despacho->medicamentos()->delete(); // Elimina los medicamentos asociados
-        $despacho->delete(); // Elimina el despacho
+        $this->DespachoSeleccionado = Despacho::find($id);
+        if (!$this->DespachoSeleccionado) {
+            session()->flash('error', 'El despacho ya no existe.');
+            return;
+        }
 
-        $this->modal = false;
-        $this->reset(['accion', 'DespachoSeleccionado', 'MedicamentosSeleccionados']);
-        session()->flash('message', 'Despacho eliminado exitosamente.');
-        $this->dispatch('render');
+        $this->accion = 'eliminar';
+        $this->modal = true;
     }
+    // public function confirmarEliminacion()
+    // {
+    //     $despacho = Despacho::findOrFail($this->DespachoSeleccionado->id);
+    //     $despacho->medicamentos()->delete(); // Elimina los medicamentos asociados
+    //     $despacho->delete(); // Elimina el despacho
+    //     $this->modal = false;
+    //     $this->reset(['accion', 'DespachoSeleccionado', 'MedicamentosSeleccionados']);
+    //     session()->flash('message', 'Despacho eliminado exitosamente.');
+    //     $this->dispatch('render');
+    // }
 
     // Cerrar modal
     public function cerrar()
@@ -123,8 +223,11 @@ class DespachoQuirofano extends Component
     // Carga un despacho y sus medicamentos
     private function cargarDespacho($id)
     {
-        $this->DespachoSeleccionado = Despacho::findOrFail($id);
-        $this->MedicamentosSeleccionados = $this->DespachoSeleccionado->despachosMedicamentos()->get()->toArray();
+        $this->DespachoSeleccionado = Despacho::with('despachosMedicamentos.medicamento')->findOrFail($id);
+        $this->MedicamentosSeleccionados = $this->DespachoSeleccionado->despachosMedicamentos;
+
+        // $this->DespachoSeleccionado = Despacho::findOrFail($id);
+        // $this->MedicamentosSeleccionados = $this->DespachoSeleccionado->despachosMedicamentos()->get()->toArray();
     }
 
     public function render()
