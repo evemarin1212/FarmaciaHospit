@@ -4,8 +4,7 @@
     </h2>
 
     <!-- Filtro -->
-    <select 
-        wire:model.live="filter" 
+    <select wire:model.live="filter"
         class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
         <option value="todos">Todos</option>
         <option value="recientes">Recientes</option>
@@ -25,39 +24,43 @@
         </thead>
         <tbody>
             @foreach($despachos as $despacho)
-                <tr class="border-t last:border-b hover:bg-blue-100 transition dark:border-gray-600 dark:hover:bg-gray-600">
-                    <td class="px-4 py-2">{{ $despacho->id }}</td>
-                    <td class="px-4 py-2">{{ $despacho->fecha_pedido }}</td>
-                    <td class="px-4 py-2">
-                        @if($despacho->paciente)
-                            {{ $despacho->paciente->nombre ?? 'Nombre no disponible' }} {{ $despacho->paciente->apellido ?? 'Apellido no disponible' }}
-                        @else
-                            No disponible
-                        @endif
-                    </td> <!-- Nombre -->
-                    <td class="px-4 py-2">
-                        @if($despacho->paciente)
-                            {{ $despacho->paciente->dni ?? 'DNI no disponible' }}
-                        @else
-                            No disponible
-                        @endif
-                    </td> <!-- Cedula -->
-                    <td class="px-4 py-2">
-                        @if($despacho->paciente)
-                            {{ $despacho->paciente->estatus ?? 'Estatus no disponible' }}
-                        @else
-                            No disponible
-                        @endif
-                    </td> <!-- Estatus -->
-                    <td class="px-4 py-2">
-                        <button wire:click="ver({{ $despacho->id }})" class="bg-yellow-500 text-white px-2 py-1 rounded">
-                            Ver
-                        </button>
-                        <button wire:click="eliminar({{ $despacho->id }})" class="bg-red-500 text-white px-2 py-1 rounded">
-                            Eliminar
-                        </button>
-                    </td>
-                </tr>
+            <tr class="border-t last:border-b hover:bg-blue-100 transition dark:border-gray-600 dark:hover:bg-gray-600">
+                <td class="px-4 py-2">{{ $despacho->id }}</td>
+                <td class="px-4 py-2">{{ $despacho->fecha_pedido }}</td>
+                <td class="px-4 py-2">
+                    @if($despacho->paciente)
+                    {{ $despacho->paciente->nombre ?? 'Nombre no disponible' }} {{ $despacho->paciente->apellido ??
+                    'Apellido no disponible' }}
+                    @else
+                    No disponible
+                    @endif
+                </td> <!-- Nombre -->
+                <td class="px-4 py-2">
+                    @if($despacho->paciente)
+                    {{ $despacho->paciente->dni ?? 'DNI no disponible' }}
+                    @else
+                    No disponible
+                    @endif
+                </td> <!-- Cedula -->
+                <td class="px-4 py-2">
+                    @if($despacho->paciente)
+                    {{ $despacho->paciente->estatus ?? 'Estatus no disponible' }}
+                    @else
+                    No disponible
+                    @endif
+                </td> <!-- Estatus -->
+                <td class="px-4 py-2">
+                    <!-- Botones en la tabla -->
+                    <button wire:click="ver({{ $despacho->id }})"
+                        class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">
+                        Ver
+                    </button>
+                    <button wire:click="eliminar({{ $despacho->id }})"
+                        class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">
+                        Eliminar
+                    </button>
+                </td>
+            </tr>
             @endforeach
         </tbody>
     </table>
@@ -69,47 +72,37 @@
 
     <!-- Modal -->
     @if($modal)
-        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg w-1/2 shadow-lg">
-                <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
-                    Detalles del Despacho
-                </h3>
-
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg w-1/3 shadow-lg">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Detalles del Despacho</h3>
+            <div class="overflow-y-auto max-h-48">
                 <div class="space-y-4">
                     <div>
                         <span class="font-medium text-gray-700 dark:text-gray-300">Código:</span>
                         <span class="text-gray-800 dark:text-gray-200">{{ $DespachoSeleccionado->id }}</span>
                     </div>
-                    {{-- lista de medicamentos --}}
-                    {{-- <div>
-                        <span class="font-medium text-gray-700 dark:text-gray-300">Medicamento:</span>
-                        <span class="text-gray-800 dark:text-gray-200">{{ $DespachoSeleccionado->medicamentos[0]->nombre }}</span>
-                    </div>
-                    <div>
-                        <span class="font-medium text-gray-700 dark:text-gray-300">Cantidad:</span>
-                        <span class="text-gray-800 dark:text-gray-200">{{ $DespachoSeleccionado->despachosMedicamentos->cantidad }}</span>
-                    </div> --}}
-                    {{--  fin de la lista--}}
                     @foreach($DespachoSeleccionado->medicamentos as $medicamento)
-                        <div>
-                            <span class="font-medium text-gray-700 dark:text-gray-300">Medicamento:</span>
-                            <span class="text-gray-800 dark:text-gray-200">{{ $medicamento->nombre }}</span>
-                            <span class="font-medium text-gray-700 dark:text-gray-300">Cantidad:</span>
-                            <span class="text-gray-800 dark:text-gray-200">{{ $medicamento->pivot->cantidad }}</span>
-                        </div>
+                    <div class="border-b border-gray-200 dark:border-gray-700 pb-2">
+                        <span class="font-medium text-gray-700 dark:text-gray-300">Medicamento:</span>
+                        <span class="text-gray-800 dark:text-gray-200">{{ $medicamento->nombre }}</span>
+                        <span class="font-medium text-gray-700 dark:text-gray-300 ml-4">Cantidad:</span>
+                        <span class="text-gray-800 dark:text-gray-200">{{ $medicamento->pivot->cantidad }}</span>
+                    </div>
                     @endforeach
-
                     <div>
                         <span class="font-medium text-gray-700 dark:text-gray-300">Fecha:</span>
-                        <span class="text-gray-800 dark:text-gray-200">{{ $DespachoSeleccionado->created_at->format('d/m/Y') }}</span>
+                        <span class="text-gray-800 dark:text-gray-200">{{ $DespachoSeleccionado->created_at->format('d/m/Y')
+                            }}</span>
                     </div>
                 </div>
-
-                <div class="flex justify-end mt-4">
-                    <button wire:click="cerrar" class="bg-gray-500 text-white px-4 py-2 rounded">Cerrar</button>
-                </div>
+            </div>
+            <div class="flex justify-end mt-4">
+                <button wire:click="cerrar" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                    Cerrar
+                </button>
             </div>
         </div>
+    </div>
     @endif
 </div>
 
@@ -120,8 +113,7 @@
     </h2>
 
     <!-- Filtro -->
-    <select 
-        wire:model.live="filter" 
+    <select wire:model.live="filter"
         class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
         <option value="todos">Todos</option>
         <option value="recientes">Recientes</option>
@@ -141,18 +133,19 @@
         </thead>
         <tbody>
             @foreach($despachos as $despacho)
-                <tr class="border-t last:border-b hover:bg-blue-100 transition dark:border-gray-600 dark:hover:bg-gray-600">
-                    <td class="px-4 py-2">{{ $despacho->id }}</td>
-                    <td class="px-4 py-2">{{ $despacho->fecha_pedido }}</td>
-                    <td class="px-4 py-2">{{ $despacho->paciente->nombre }} {{ $despacho->paciente->apellido }}</td> <!-- Nombre -->
-                    <td class="px-4 py-2">{{ $despacho->paciente->dni }}</td> <!-- Cedula -->
-                    <td class="px-4 py-2">{{ $despacho->paciente->estatus }}</td> <!-- Medicamento -->
-                    <td class="px-4 py-2">
-                        <button wire:click="ver({{ $despacho->id }})" class="bg-yellow-500 text-white px-2 py-1 rounded">
-                            Ver
-                        </button>
-                    </td>
-                </tr>
+            <tr class="border-t last:border-b hover:bg-blue-100 transition dark:border-gray-600 dark:hover:bg-gray-600">
+                <td class="px-4 py-2">{{ $despacho->id }}</td>
+                <td class="px-4 py-2">{{ $despacho->fecha_pedido }}</td>
+                <td class="px-4 py-2">{{ $despacho->paciente->nombre }} {{ $despacho->paciente->apellido }}</td>
+                <!-- Nombre -->
+                <td class="px-4 py-2">{{ $despacho->paciente->dni }}</td> <!-- Cedula -->
+                <td class="px-4 py-2">{{ $despacho->paciente->estatus }}</td> <!-- Medicamento -->
+                <td class="px-4 py-2">
+                    <button wire:click="ver({{ $despacho->id }})" class="bg-yellow-500 text-white px-2 py-1 rounded">
+                        Ver
+                    </button>
+                </td>
+            </tr>
             @endforeach
         </tbody>
     </table>
@@ -164,35 +157,37 @@
 
     <!-- Modal -->
     @if($modal)
-        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg w-1/2 shadow-lg">
-                <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
-                    Detalles del Despacho
-                </h3>
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg w-1/2 shadow-lg">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
+                Detalles del Despacho
+            </h3>
 
-                <div class="space-y-4">
-                    <div>
-                        <span class="font-medium text-gray-700 dark:text-gray-300">Código:</span>
-                        <span class="text-gray-800 dark:text-gray-200">{{ $DespachoSeleccionado->codigo }}</span>
-                    </div>
-                    <div>
-                        <span class="font-medium text-gray-700 dark:text-gray-300">Medicamento:</span>
-                        <span class="text-gray-800 dark:text-gray-200">{{ $DespachoSeleccionado->medicamento->nombre }}</span>
-                    </div>
-                    <div>
-                        <span class="font-medium text-gray-700 dark:text-gray-300">Cantidad:</span>
-                        <span class="text-gray-800 dark:text-gray-200">{{ $DespachoSeleccionado->cantidad }}</span>
-                    </div>
-                    <div>
-                        <span class="font-medium text-gray-700 dark:text-gray-300">Fecha:</span>
-                        <span class="text-gray-800 dark:text-gray-200">{{ $DespachoSeleccionado->created_at->format('d/m/Y') }}</span>
-                    </div>
+            <div class="space-y-4">
+                <div>
+                    <span class="font-medium text-gray-700 dark:text-gray-300">Código:</span>
+                    <span class="text-gray-800 dark:text-gray-200">{{ $DespachoSeleccionado->codigo }}</span>
                 </div>
-
-                <div class="flex justify-end mt-4">
-                    <button wire:click="cerrar" class="bg-gray-500 text-white px-4 py-2 rounded">Cerrar</button>
+                <div>
+                    <span class="font-medium text-gray-700 dark:text-gray-300">Medicamento:</span>
+                    <span class="text-gray-800 dark:text-gray-200">{{ $DespachoSeleccionado->medicamento->nombre
+                        }}</span>
+                </div>
+                <div>
+                    <span class="font-medium text-gray-700 dark:text-gray-300">Cantidad:</span>
+                    <span class="text-gray-800 dark:text-gray-200">{{ $DespachoSeleccionado->cantidad }}</span>
+                </div>
+                <div>
+                    <span class="font-medium text-gray-700 dark:text-gray-300">Fecha:</span>
+                    <span class="text-gray-800 dark:text-gray-200">{{ $DespachoSeleccionado->created_at->format('d/m/Y')
+                        }}</span>
                 </div>
             </div>
+
+            <div class="flex justify-end mt-4">
+                <button wire:click="cerrar" class="bg-gray-500 text-white px-4 py-2 rounded">Cerrar</button>
+            </div>
         </div>
+    </div>
     @endif
 </div> --}}

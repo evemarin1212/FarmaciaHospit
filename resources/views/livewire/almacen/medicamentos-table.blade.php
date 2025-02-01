@@ -78,15 +78,10 @@
                     wire:model="medicamentoSeleccionado.nombre"
                     class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200"
                     {{ 'readonly' }}>
-
-                    {{-- <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1">Nombre:</label> --}}
-                    {{-- <input type="text" wire:model="medicamentoSeleccionado.nombre" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200"{{ $editar ? '' : 'disabled' }}> --}}
-                    {{-- <input type="text" wire:model="medicamentoSeleccionado.nombre" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200" {{ $editar ? '' : 'readonly' }}> --}}
                 </div>
 
                 <div>
                     <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1">Presentación:</label>
-                {{-- <input type="text" wire:model="medicamentoSeleccionado.presentacion" value="{{ $medicamentoSeleccionado['presentacion'] ?? '' }}" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200" {{ $editar ? '' : 'disabled' }}> --}}
                     <input type="text" wire:model="medicamentoSeleccionado.presentacion" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200" {{ 'readonly' }}>
                 </div>
 
