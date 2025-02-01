@@ -5,12 +5,6 @@
         Gestión de Despacho
     </h1>
 
-    {{-- @if (session('error'))
-        <div class="bg-red-500 text-white p-3 rounded-lg">
-            {{ session('error') }}
-        </div>
-    @endif --}}
-
     <div class="mb-6">
         <div class="py-12 flex justify-center items-center">
             <div class="w-full max-w-4xl bg-white dark:bg-gray-800 rounded-lg p-6 relative">
@@ -40,7 +34,7 @@
                                             <span class="text-red-500 text-sm">{{ $message }}</span>
                                         @enderror
                                     </div>
-                    
+
                                     <!-- Emergencia / Hospitalizado -->
                                     <div>
                                         @if (in_array($tipo_despacho, ['emergencia', 'hospitalizado']))
@@ -58,7 +52,7 @@
                                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                                 @enderror
                                             </div>
-                    
+
                                             <!-- Registro de Nuevo Paciente -->
                                             @if ($paciente_opcion === 'nuevo')
                                                 <div class="mb-4">
@@ -152,11 +146,6 @@
                                                             <select id="medicamentos_selec_bus" wire:model.live="medicamento_id"
                                                                 class= "w-full mt-2 border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
                                                                 <option value="">Seleccione un tipo</option>
-                                                                {{-- @foreach ($medicamentos as $medicamento)
-                                                                    <option value="{{ $medicamento->id }}">
-                                                                        {{ $medicamento->nombre }} | {{ $medicamento->unidad }} {{ $medicamento->medida }}
-                                                                    </option>
-                                                                @endforeach --}}
                                                                 @foreach ($medicamentos_selec_bus as $medicamento)
                                                                     <option value="{{ $medicamento->id }} ">
                                                                         {{ $medicamento->nombre }} | {{ $medicamento->unidad }} {{ $medicamento->medida }}
@@ -232,11 +221,6 @@
                                                         <select id="medicamentos_selec_bus" wire:model.live="medicamento_solicitado_id"
                                                             class= "w-full mt-2 border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
                                                             <option value="">Seleccione un tipo</option>
-                                                            {{-- @foreach ($medicamentos as $medicamento)
-                                                                <option value="{{ $medicamento->id }}">
-                                                                    {{ $medicamento->nombre }} | {{ $medicamento->unidad }} {{ $medicamento->medida }}
-                                                                </option>
-                                                            @endforeach --}}
                                                             @foreach ($medicamentos_solicitados_bus as $medicamento)
                                                                 <option value="{{ $medicamento->id }} ">
                                                                     {{ $medicamento->nombre }} | {{ $medicamento->unidad }} {{ $medicamento->medida }}
@@ -275,7 +259,7 @@
                                                             <button type="button" wire:click="eliminarMedicamentoSolicitado({{ $index }})" class="text-red-500">
                                                                 Eliminar
                                                             </button>
-                                                        </li>                                                    
+                                                        </li>
                                                     @endforeach
                                                 </ul>
                                             @endif

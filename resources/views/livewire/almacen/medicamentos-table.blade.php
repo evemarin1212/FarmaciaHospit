@@ -51,8 +51,6 @@
                 </td>
                 <td class="px-4 py-2">
                     <button wire:click="ver({{ $medicamento->id }})" class="bg-yellow-500 text-white px-2 py-1 rounded">Ver</button>
-                    <button wire:click="edit({{ $medicamento->id }})" class="bg-green-500 text-white px-2 py-1 rounded">Editar</button>
-                    {{-- <button wire:click="eliminar({{ $medicamento->id }})" class="bg-red-500 text-white px-2 py-1 rounded">Eliminar</button> --}}
                 </td>
             </tr>
             @endforeach
@@ -64,12 +62,12 @@
         {{ $medicamentos->links() }}
     </div>
 
-    <!-- Modal para Ver/Editar Medicamento -->
+    <!-- Modal para Ver-->
     @if($modal)
     <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-lg w-1/3 shadow-lg overflow-y-auto max-h-screen">
             <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
-                {{ $editar ? 'Editar Medicamento' : 'Detalles del Medicamento' }}
+                {{ 'Detalles del Medicamento' }}
             </h3>
 
             <div class="space-y-4">
@@ -79,7 +77,7 @@
                     type="text"
                     wire:model="medicamentoSeleccionado.nombre"
                     class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200"
-                    {{ $editar ? '' : 'readonly' }}>
+                    {{ 'readonly' }}>
 
                     {{-- <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1">Nombre:</label> --}}
                     {{-- <input type="text" wire:model="medicamentoSeleccionado.nombre" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200"{{ $editar ? '' : 'disabled' }}> --}}
@@ -89,17 +87,17 @@
                 <div>
                     <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1">Presentación:</label>
                 {{-- <input type="text" wire:model="medicamentoSeleccionado.presentacion" value="{{ $medicamentoSeleccionado['presentacion'] ?? '' }}" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200" {{ $editar ? '' : 'disabled' }}> --}}
-                    <input type="text" wire:model="medicamentoSeleccionado.presentacion" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200" {{ $editar ? '' : 'readonly' }}>
+                    <input type="text" wire:model="medicamentoSeleccionado.presentacion" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200" {{ 'readonly' }}>
                 </div>
 
                 <div>
                     <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1">Unidad:</label>
-                    <input type="number" wire:model="medicamentoSeleccionado.unidad" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200" {{ $editar ? '' : 'readonly' }}>
+                    <input type="number" wire:model="medicamentoSeleccionado.unidad" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200" {{  'readonly' }}>
                 </div>
 
                 <div>
                     <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1">Medida:</label>
-                    <input type="text" wire:model="medicamentoSeleccionado.medida" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200" {{ $editar ? '' : 'readonly' }}>
+                    <input type="text" wire:model="medicamentoSeleccionado.medida" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200" {{ 'readonly' }}>
                 </div>
 
                 <div>
@@ -110,9 +108,6 @@
 
         <!-- Botones -->
         <div class="flex justify-end">
-            @if($editar)
-            <button wire:click="guardar" class="bg-blue-500 text-white px-4 py-2 rounded mr-2">Guardar</button>
-            @endif
             <button wire:click="cerrar" class="bg-gray-500 text-white px-4 py-2 rounded">Cerrar</button>
         </div>
     </div>

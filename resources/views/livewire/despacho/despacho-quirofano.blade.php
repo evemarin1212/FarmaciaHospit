@@ -29,7 +29,6 @@
                     <td class="px-4 py-2">{{ $despacho->medicamentos->count('cantidad') }}</td>
                     <td class="px-4 py-2">
                         <button wire:click="ver({{ $despacho->id }})" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Ver</button>
-                        <button wire:click="editar({{ $despacho->id }})" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">Editar</button>
                         <button wire:click="eliminar({{ $despacho->id }})" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Eliminar</button>
                     </td>
                 </tr>
