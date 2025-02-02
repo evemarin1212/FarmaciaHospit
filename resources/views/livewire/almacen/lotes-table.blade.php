@@ -29,6 +29,7 @@
     <table class="table-auto w-full border-collapse bg-gray-50 rounded-lg shadow-sm overflow-hidden dark:bg-gray-700">
         <thead class="bg-blue-500 text-white dark:bg-blue-600">
             <tr>
+                <th class="px-4 py-2 text-left">Nº</th>
                 <th class="px-4 py-2 text-left">Código de lote</th>
                 <th class="px-4 py-2 text-left">Medicamento</th>
                 <th class="px-4 py-2 text-left">Cantidad</th>
@@ -41,6 +42,7 @@
         <tbody>
             @foreach($lotes as $lote)
                 <tr class="border-t last:border-b hover:bg-blue-100 transition dark:border-gray-600 dark:hover:bg-gray-600">
+                    <td class="px-4 py-2">{{ $loop->iteration }}</td>
                     <td class="px-4 py-2">{{ $lote->codigo_lote }}</td>
                     <td class="px-4 py-2">{{ $lote->medicamento->nombre }}</td>
                     <td class="px-4 py-2">{{ $lote->cantidad }}</td>

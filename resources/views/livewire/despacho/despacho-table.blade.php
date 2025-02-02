@@ -16,6 +16,7 @@
             <tr>
                 <th class="px-4 py-2 text-left">Nº</th>
                 <th class="px-4 py-2 text-left">Fecha</th>
+                <th class="px-4 py-2 text-left">Tipo de despacho</th>
                 <th class="px-4 py-2 text-left">Nombre</th>
                 <th class="px-4 py-2 text-left">Cedula</th>
                 <th class="px-4 py-2 text-left">Estatus</th>
@@ -25,8 +26,9 @@
         <tbody>
             @foreach($despachos as $despacho)
             <tr class="border-t last:border-b hover:bg-blue-100 transition dark:border-gray-600 dark:hover:bg-gray-600">
-                <td class="px-4 py-2">{{ $despacho->id }}</td>
+                <td class="px-4 py-2">{{ $loop->iteration }}</td>
                 <td class="px-4 py-2">{{ $despacho->fecha_pedido }}</td>
+                <td class="px-4 py-2">{{ $despacho->tipo }}</td>
                 <td class="px-4 py-2">
                     @if($despacho->paciente)
                     {{ $despacho->paciente->nombre ?? 'Nombre no disponible' }} {{ $despacho->paciente->apellido ??
@@ -72,37 +74,86 @@
 
     <!-- Modal -->
     @if($modal)
-    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg w-1/3 shadow-lg">
-            <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Detalles del Despacho</h3>
-            <div class="overflow-y-auto max-h-48">
-                <div class="space-y-4">
-                    <div>
-                        <span class="font-medium text-gray-700 dark:text-gray-300">Código:</span>
-                        <span class="text-gray-800 dark:text-gray-200">{{ $DespachoSeleccionado->id }}</span>
+        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <!-- Contenedor del Modal -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl transform transition-all sm:max-w-lg sm:w-full w-1/3">
+                <!-- Encabezado del Modal -->
+                <div class="border-b pb-3 mb-4">
+                    <h3 id="modal-title" class="text-xl text-center font-bold text-gray-900 dark:text-gray-100">
+                        Detalles del Despacho
+                    </h3>
+                </div>
+
+                <!-- Contenedor de las dos columnas -->
+                <div class="grid grid-cols-2 gap-4 max-h-48 overflow-y-auto">
+                    <!-- Primera Columna: Código y Fecha -->
+                    <div class="space-y-4">
+                        <!-- Código del despacho -->
+                        <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-md shadow-sm">
+                            <div>
+                                <!-- Fecha del despacho -->
+                                <div>
+                                    <span class="font-semibold text-gray-700 dark:text-gray-300">Fecha:</span>
+                                    <span class="text-gray-900 dark:text-gray-100">{{ $DespachoSeleccionado->created_at->format('d/m/Y') }}</span>
+                                </div>
+                                <!-- Pacientes -->
+                                <div>
+                                    <span class="font-semibold text-gray-700 dark:text-gray-300">Paciente:</span>
+                                    <span class="text-gray-900 dark:text-gray-100">{{ $DespachoSeleccionado->paciente->nombre }} {{ $DespachoSeleccionado->paciente->apellido }}</span>
+                                </div>
+                                <!-- Cédula -->
+                                <div>
+                                    <span class="font-semibold text-gray-700 dark:text-gray-300">Cédula:</span>
+                                    <span class="text-gray-900 dark:text-gray-100">{{ $DespachoSeleccionado->paciente->dni}}</span>
+                                </div>
+                                <!-- Estatus -->
+                                <div>
+                                    <span class="font-semibold text-gray-700 dark:text-gray-300">Estatus:</span>
+                                    <span class="text-gray-900 dark:text-gray-100">{{ $DespachoSeleccionado->paciente->estatus}}</span>
+                                </div>
+                                @if ($DespachoSeleccionado->tipo === 'emergencia' )
+                                    <!-- Estatus -->
+                                    <div>
+                                        <span class="font-semibold text-gray-700 dark:text-gray-300">Observación:</span>
+                                        <span class="text-gray-900 dark:text-gray-100">{{ $DespachoSeleccionado->observacion}}</span>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
                     </div>
-                    @foreach($DespachoSeleccionado->medicamentos as $medicamento)
-                    <div class="border-b border-gray-200 dark:border-gray-700 pb-2">
-                        <span class="font-medium text-gray-700 dark:text-gray-300">Medicamento:</span>
-                        <span class="text-gray-800 dark:text-gray-200">{{ $medicamento->nombre }}</span>
-                        <span class="font-medium text-gray-700 dark:text-gray-300 ml-4">Cantidad:</span>
-                        <span class="text-gray-800 dark:text-gray-200">{{ $medicamento->pivot->cantidad }}</span>
-                    </div>
-                    @endforeach
-                    <div>
-                        <span class="font-medium text-gray-700 dark:text-gray-300">Fecha:</span>
-                        <span class="text-gray-800 dark:text-gray-200">{{ $DespachoSeleccionado->created_at->format('d/m/Y')
-                            }}</span>
+
+                    <!-- Segunda Columna: Medicamentos y Cantidad -->
+                    <div class="space-y-4">
+                        <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-md shadow-sm max-h-48 overflow-y-auto">
+                            @foreach($DespachoSeleccionado->medicamentos as $medicamento)
+                                <div class="mt-2">
+                                    <div>
+                                        <span class="font-semibold text-gray-700 dark:text-gray-300">Medicamento:</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-900 dark:text-gray-100">{{ $medicamento->nombre }} - 
+                                            {{ $medicamento->unidad }} 
+                                            {{ $medicamento->medida }} - 
+                                            {{ $medicamento->presentacion->via_administracion }}</span>
+                                    </div>
+                                </div>
+                                <div class="mt-1 flex justify-between">
+                                    <span class="font-semibold text-gray-700 dark:text-gray-300">Cantidad:</span>
+                                    <span class="text-gray-900 dark:text-gray-100">{{ $medicamento->pivot->cantidad }}</span>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="flex justify-end mt-4">
-                <button wire:click="cerrar" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
-                    Cerrar
-                </button>
+
+                <!-- Pie del Modal con Botón de Cierre -->
+                <div class="mt-4 flex justify-end">
+                    <button wire:click="cerrar" class="bg-blue-500 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-md transition-colors">
+                        Cerrar
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
     @endif
 </div>
 

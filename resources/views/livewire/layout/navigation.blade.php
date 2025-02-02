@@ -3,25 +3,25 @@
 use App\Livewire\Actions\Logout;
 use Livewire\Volt\Component;
 
-new class extends Component
-{
-    /**
-     * Log the current user out of the application.
-     */
-    public function logout(Logout $logout): void
-    {
-        $logout();
+// new class extends Component
+// {
+//     /**
+//      * Log the current user out of the application.
+//      */
+//     public function logout(Logout $logout): void
+//     {
+//         $logout();
 
-        $this->redirect('/', navigate: true);
-    }
-};
-
-///ORIGINAL
-// $logout = function (Logout $logout) {
-//     $logout();
-
-//     $this->redirect('/', navigate: true);
+//         $this->redirect('/', navigate: true);
+//     }
 // };
+
+//ORIGINAL
+$logout = function (Logout $logout) {
+    $logout();
+
+    $this->redirect('/', navigate: true);
+};
 
 ?>
 
@@ -45,7 +45,7 @@ new class extends Component
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('almacen')" :active="request()->routeIs('almacen')" wire:navigate>
-                        {{ __('Almacen') }}
+                        {{ __('Almacén') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
@@ -102,6 +102,16 @@ new class extends Component
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+        </div>
+        <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link :href="route('almacen')" :active="request()->routeIs('almacen')" wire:navigate>
+                {{ __('Almacén') }}
+            </x-responsive-nav-link>
+        </div>
+        <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link :href="route('despacho')" :active="request()->routeIs('despacho')" wire:navigate>
+                {{ __('Despacho') }}
             </x-responsive-nav-link>
         </div>
 

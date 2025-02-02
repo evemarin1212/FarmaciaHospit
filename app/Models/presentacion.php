@@ -12,6 +12,7 @@ class Presentacion extends Model
 
     protected $fillable = [
         'tipo',
+        'via_administracion',
     ];
     
     public function medicamentos()

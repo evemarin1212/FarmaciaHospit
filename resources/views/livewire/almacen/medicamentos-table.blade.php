@@ -23,6 +23,7 @@
     <table class="table-auto w-full border-collapse bg-gray-50 rounded-lg shadow-sm overflow-hidden dark:bg-gray-700">
         <thead class="bg-blue-500 text-white dark:bg-blue-600">
             <tr>
+                <th class="px-4 py-2 text-left">Nº</th>
                 <th class="px-4 py-2 text-left">Nombre</th>
                 <th class="px-4 py-2 text-left">Presentación</th>
                 <th class="px-4 py-2 text-left">Unidad</th>
@@ -35,6 +36,7 @@
         <tbody>
             @foreach($medicamentos as $medicamento)
             <tr class="border-t last:border-b hover:bg-blue-100 transition dark:border-gray-600 dark:hover:bg-gray-600">
+                <td class="px-4 py-2">{{ $loop->iteration }}</td>
                 <td class="px-4 py-2">{{ $medicamento->nombre }}</td>
                 <td class="px-4 py-2">{{ $medicamento->presentacion->tipo }}</td>
                 <td class="px-4 py-2">{{ $medicamento->unidad }}</td>
