@@ -33,6 +33,10 @@ class LotesTable extends Component
 
     protected $listeners = ['render', 'loteEliminado' => 'reder']; // PARA REGACAR LA TABLA
 
+    public function mount(){
+        $this->LoteSeleccionado=Lote::all(); //Traer la informacion de los lotes
+    }
+
     // Función para ver un medicamento
     public function ver($id)
     {

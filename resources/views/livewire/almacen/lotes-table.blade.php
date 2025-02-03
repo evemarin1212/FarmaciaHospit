@@ -1,12 +1,17 @@
 <div class="p-6 bg-white shadow-md dark:bg-gray-800">
-    <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
-        Lotes
-        @if (session('error'))
-            <div class="bg-red-500 text-white p-3 rounded-lg">
-                {{ session('error') }}
-            </div>
-        @endif
-    </h2>
+    <div class="flex justify-between">
+        <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+            Lotes
+            @if (session('error'))
+                <div class="bg-red-500 text-white p-3 rounded-lg">
+                    {{ session('error') }}
+                </div>
+            @endif
+        </h2>
+        <button class="bg-erde-500 text-white px-2 py-1 rounded">
+
+        </button>
+    </div>
 
     <!-- Campo de búsqueda -->
     <input
