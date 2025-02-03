@@ -48,7 +48,7 @@ class DespachoTable extends Component
             $despacho->delete(); // Eliminar el despacho
 
             // Emitir un mensaje de éxito
-            $this->dispatch('alert', 'Despacho eliminado con éxito.');
+            $this->dispatch('alert', "¡Despacho eliminado exitosamente y cantidades restauradas!");
 
         } catch (\Exception $e) {
             // Emitir un mensaje de error en caso de excepción

@@ -76,7 +76,7 @@
     @if($modal)
         <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
             <!-- Contenedor del Modal -->
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl transform transition-all sm:max-w-lg sm:w-full w-1/3">
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl transform transition-all w-3/4 max-h-3/4">
                 <!-- Encabezado del Modal -->
                 <div class="border-b pb-3 mb-4">
                     <h3 id="modal-title" class="text-xl text-center font-bold text-gray-900 dark:text-gray-100">
@@ -90,35 +90,33 @@
                     <div class="space-y-4">
                         <!-- Código del despacho -->
                         <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-md shadow-sm">
-                            <div>
-                                <!-- Fecha del despacho -->
-                                <div>
-                                    <span class="font-semibold text-gray-700 dark:text-gray-300">Fecha:</span>
-                                    <span class="text-gray-900 dark:text-gray-100">{{ $DespachoSeleccionado->created_at->format('d/m/Y') }}</span>
-                                </div>
-                                <!-- Pacientes -->
-                                <div>
-                                    <span class="font-semibold text-gray-700 dark:text-gray-300">Paciente:</span>
-                                    <span class="text-gray-900 dark:text-gray-100">{{ $DespachoSeleccionado->paciente->nombre }} {{ $DespachoSeleccionado->paciente->apellido }}</span>
-                                </div>
-                                <!-- Cédula -->
-                                <div>
-                                    <span class="font-semibold text-gray-700 dark:text-gray-300">Cédula:</span>
-                                    <span class="text-gray-900 dark:text-gray-100">{{ $DespachoSeleccionado->paciente->dni}}</span>
-                                </div>
-                                <!-- Estatus -->
-                                <div>
-                                    <span class="font-semibold text-gray-700 dark:text-gray-300">Estatus:</span>
-                                    <span class="text-gray-900 dark:text-gray-100">{{ $DespachoSeleccionado->paciente->estatus}}</span>
-                                </div>
-                                @if ($DespachoSeleccionado->tipo === 'emergencia' )
-                                    <!-- Estatus -->
-                                    <div>
-                                        <span class="font-semibold text-gray-700 dark:text-gray-300">Observación:</span>
-                                        <span class="text-gray-900 dark:text-gray-100">{{ $DespachoSeleccionado->observacion}}</span>
-                                    </div>
-                                @endif
+                            <!-- Fecha del despacho -->
+                            <div class="mt-1 flex gap-2">
+                                <span class="font-semibold text-gray-700 dark:text-gray-300">Fecha:</span>
+                                <span class="text-gray-900 dark:text-gray-100">{{ $DespachoSeleccionado->created_at->format('d/m/Y') }}</span>
                             </div>
+                            <!-- Pacientes -->
+                            <div class="mt-1 flex gap-2">
+                                <span class="font-semibold text-gray-700 dark:text-gray-300">Paciente:</span>
+                                <span class="text-gray-900 dark:text-gray-100">{{ $DespachoSeleccionado->paciente->nombre }} {{ $DespachoSeleccionado->paciente->apellido }}</span>
+                            </div>
+                            <!-- Cédula -->
+                            <div class="mt-1 flex gap-2">
+                                <span class="font-semibold text-gray-700 dark:text-gray-300">Cédula:</span>
+                                <span class="text-gray-900 dark:text-gray-100">{{ $DespachoSeleccionado->paciente->dni}}</span>
+                            </div>
+                            <!-- Estatus -->
+                            <div class="mt-1 flex gap-2">
+                                <span class="font-semibold text-gray-700 dark:text-gray-300">Estatus:</span>
+                                <span class="text-gray-900 dark:text-gray-100">{{ $DespachoSeleccionado->paciente->estatus}}</span>
+                            </div>
+                            @if ($DespachoSeleccionado->tipo === 'emergencia' )
+                                <!-- Estatus -->
+                                <div class="mt-1 flex gap-2">
+                                    <span class="font-semibold text-gray-700 dark:text-gray-300">Observación:</span>
+                                    <span class="text-gray-900 dark:text-gray-100">{{ $DespachoSeleccionado->observacion}}</span>
+                                </div>
+                            @endif
                         </div>
                     </div>
 
@@ -126,20 +124,18 @@
                     <div class="space-y-4">
                         <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-md shadow-sm max-h-48 overflow-y-auto">
                             @foreach($DespachoSeleccionado->medicamentos as $medicamento)
-                                <div class="mt-2">
-                                    <div>
+                                <div class="mb-4">
+                                    <div class="flex gap-4">
                                         <span class="font-semibold text-gray-700 dark:text-gray-300">Medicamento:</span>
-                                    </div>
-                                    <div>
                                         <span class="text-gray-900 dark:text-gray-100">{{ $medicamento->nombre }} - 
                                             {{ $medicamento->unidad }} 
                                             {{ $medicamento->medida }} - 
                                             {{ $medicamento->presentacion->via_administracion }}</span>
                                     </div>
-                                </div>
-                                <div class="mt-1 flex justify-between">
-                                    <span class="font-semibold text-gray-700 dark:text-gray-300">Cantidad:</span>
-                                    <span class="text-gray-900 dark:text-gray-100">{{ $medicamento->pivot->cantidad }}</span>
+                                    <div class="mt-1 flex gap-4">
+                                        <span class="font-semibold text-gray-700 dark:text-gray-300">Cantidad:</span>
+                                        <span class="text-gray-900 dark:text-gray-100">{{ $medicamento->pivot->cantidad }}</span>
+                                    </div>
                                 </div>
                             @endforeach
                         </div>

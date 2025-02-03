@@ -11,7 +11,8 @@
 
                 @if ($formView)
                     <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg w-1/2 shadow-lg max-h-[80vh] overflow-y-auto">
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg w-3/4 shadow-lg overflow-y-auto max-h-3/4">
+                            {{-- <div class="bg-white dark:bg-gray-800 p-6 rounded-lg w-1/2 shadow-lg max-h-[80vh] overflow-y-auto"> --}}
                             <h1 class="text-3xl font-bold text-center mb-6 text-gray-800 dark:text-gray-200">
                                 Registrar Nuevo Despacho
                             </h1>
@@ -35,10 +36,10 @@
                                         @enderror
                                     </div>
                             
-                                    <div class="flex flex-row-2 gap-4">
+                                    <div class="flex flex-row-2">
                                         <!-- Columna Izquierda: Información del Paciente -->
                                         @if (in_array($tipo_despacho, ['emergencia', 'hospitalizado']))
-                                            <div class="w-1/2">
+                                            <div class="flex flex-col w-full px-4">
                                                 <div class="mb-4">
                                                     <label for="paciente_opcion" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Paciente:</label>
                                                     <select wire:model.live="paciente_opcion" id="paciente_opcion"
@@ -100,16 +101,16 @@
                                                                 class="mt-2 p-2 border border-green-500 rounded-md bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">
                                                                 Paciente seleccionado: {{ App\Models\Paciente::find($selectedPacienteId)->nombre }}
                                                             </div>
-                                                    @endif
-                                                    @error('selectedPacienteId') 
-                                                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                                                    @enderror
+                                                        @endif
+                                                        @error('selectedPacienteId') 
+                                                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                                                        @enderror
                                                     </div>
                                                 @endif
                                             </div>
 
                                         <!-- Columna Derecha: Despacho de Medicamentos -->
-                                        <div class="w-1/2">
+                                        <div class="flex flex-col w-full">
                                             <div class="mb-4">
                                                 <label for="medicamento_id" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
                                                     Seleccionar Medicamento:
@@ -178,7 +179,7 @@
                                         </div>
                                     </div>
                             
-                                    <!-- Quirofano: Mantenimiento del estilo original -->
+                                    <!-- Quirofano: -->
                                     @if ($tipo_despacho === 'quirofano')
                                         <div class="mb-4">
                                             <label for="medicamento_solicitado"
@@ -214,7 +215,7 @@
                                                 </p>
                                             @endif
                                             @error('medicamento_id') 
-                                                <span class="text-red-500 text-sm">{{ $message }}</span> 
+                                                <span class="text-red-500 text-sm">{{ $message }}</span>
                                             @enderror
                                             @error('cantidad_medicamento') 
                                                 <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -224,7 +225,8 @@
                                                 <ul class="mt-2 p-2 max-h-48 overflow-y-auto border border-gray-300 rounded-md shadow-sm">
                                                     @foreach ($medicamentos_solicitados_selec as $index => $medicamento)
                                                         <li class="flex justify-between items-center py-2 border-b border-gray-300 dark:border-gray-600">
-                                                            <span>{{ $medicamento['nombre'] }} - {{ $medicamento['unidad'] }} {{ $medicamento['medida'] }} ({{ $medicamento['cantidad'] }}) || ({{ $medicamento['cantidad_despacho'] }})</span>
+                                                            <span>{{ $medicamento['nombre'] }} - {{ $medicamento['unidad'] }} {{ $medicamento['medida'] }}
+                                                                ({{ $medicamento['cantidad'] }}) || ({{ $medicamento['cantidad_despacho'] }})</span>
                                                             <button type="button" wire:click="eliminarMedicamentoSolicitado({{ $index }})" class="text-red-500">
                                                                 Eliminar
                                                             </button>
@@ -234,7 +236,7 @@
                                             @endif
                                         </div>
                                     @endif
-                            
+
                                     <!-- Botones -->
                                     <div class="flex justify-end gap-4">
                                         <button type="button" wire:click="cancelar"

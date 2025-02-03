@@ -116,8 +116,9 @@ class DespachoForm extends Component
         $this->paciente_dni = '';
         $this->paciente_estatus = '';
         $this->medicamento_seleccionado = '';
-        // $this->medicamentos_seleccionados = [];
-        // $this->medicamento_solicitado = '';
+        // $this->medicamentos_selec_bus = [];
+        $this->medicamentos_selec = [];
+        $this->medicamento_solicitado = '';
         // $this->medicamento_id = null;
         $this->cantidad_medicamento = '';
         // $this->medicamento_solicitado_id = null;
@@ -249,7 +250,6 @@ class DespachoForm extends Component
                 ]);
                 $medicamentoModel = Medicamento::find($medicamento['id']);
                 $medicamentoModel->decrement('cantidad_disponible', $medicamento['cantidad']);
-                // $this->actualizarLote($medicamento['id'], $medicamento['cantidad']);
             }
 
         } else {
@@ -272,7 +272,6 @@ class DespachoForm extends Component
                 ]);
                 $medicamentoModel = Medicamento::find($medicamentoSolicitado['id']);
                 $medicamentoModel->decrement('cantidad_disponible', $medicamentoSolicitado['cantidad_despacho']);
-                // $this->actualizarLote($medicamentoSolicitado['id'], $medicamentoSolicitado['cantidad_despacho']);
             }
         }
         DB::commit();
@@ -281,20 +280,6 @@ class DespachoForm extends Component
         $this->cancelar();
         $this->resetForm();
     }
-
-    // private function actualizarLote($medicamentoId, $cantidad)
-    // {
-    //     $lotes = Lote::where('medicamento_id', $medicamentoId)
-    //         ->where('cantidad', '>', 0)
-    //         ->orderBy('fecha_vencimiento', 'asc')
-    //         ->get();
-    //     foreach ($lotes as $lote) {
-    //         if ($cantidad <= 0) break;
-    //         $cantidadDecrementar = min($cantidad, $lote->cantidad);
-    //         $lote->decrement('cantidad', $cantidadDecrementar);
-    //         $cantidad -= $cantidadDecrementar;
-    //     }
-    // }
 
     public function render()
     {

@@ -95,7 +95,7 @@ class MedicamentosTable extends Component
         if ($medicamento) { // Verificamos si existe antes de eliminar
             $medicamento->delete();
             session()->flash('message', 'Medicamento eliminado exitosamente.');
-            $this->dispatch('medicamentoEliminado'); // Emitimos un evento para actualizar la tabla
+            $this->dispatch('alert','Medicamento Eliminado'); // Emitimos un evento para actualizar la tabla
         } else {
             session()->flash('error', 'No se encontró el medicamento.');
         }

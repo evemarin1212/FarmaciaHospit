@@ -53,7 +53,35 @@
                 // Código para actualizar la tabla, como recargar datos o mostrar un mensaje.
                 alert('Lote eliminado exitosamente.');
             });
-
+            document.addEventListener('livewire:load', function () {
+                try {
+                    // Ahora que Livewire ha cargado, puedes definir tu evento y manejarlo
+                    Livewire.on('ConfirmarEliminar', function(message, id) {
+                        Swal.fire({
+                            title: "¿Estás seguro?",
+                            text: message,
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Sí, eliminar!"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                Livewire.dispatch('eliminardespacho', id); // Llamamos al método de Livewire
+                                Swal.fire({
+                                    title: "Eliminado!",
+                                    text: "El despacho ha sido eliminado.",
+                                    icon: "success"
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            }
+                        });
+                    });
+                } catch (error) {
+                    console.error("Error al manejar el evento Livewire:", error);
+                }
+            });
         </script>
     </body>
 </html>

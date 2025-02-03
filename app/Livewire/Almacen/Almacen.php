@@ -79,8 +79,6 @@ class Almacen extends Component
     }
 
     private function resetalm(){
-        $this->medicamento_id = null;
-        $this->select_medicamento = '';
         $this->cantidad = '';
         $this->fecha_vencimiento = '';
         $this->origen = '';
@@ -90,6 +88,8 @@ class Almacen extends Component
         $this->medida = '';
         $this->nombre = '';
         $this->lote = null;
+        $this->medicamento_id = null;
+        $this->select_medicamento = 'search';
         $this->medicamento_select = '';
         $this->search = '';
         $this->tipo_presentacion = '';
@@ -107,7 +107,7 @@ class Almacen extends Component
                 'fecha_vencimiento' => 'required|date|after:today',
                 'origen' => 'required|string',
                 'codigo_lote' => 'required|string',
-                'nombre' => 'required|string', 
+                'nombre' => 'required|string|min:3', 
                 'select_presentacion' => 'required|in:search,nuevo',
                 'nueva_presentacion' => 'required_if:select_presentacion,nuevo|string|max:255',
                 'via_administracion' => 'required_if:select_presentacion,nuevo|required',

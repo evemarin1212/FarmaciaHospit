@@ -157,11 +157,10 @@
                                     @endforeach
                                 </ul>
                             @else
-                            <div class="text-gray-500 dark:text-gray-400 mt-2">
-                                No se encontraron resultados.
-                            </div>
+                                <div class="text-gray-500 dark:text-gray-400 mt-2">
+                                    No se encontraron resultados.
+                                </div>
                             @endif
-
                             @if($medicamento_select)
                                 <div
                                     class="mt-2 p-2 border border-green-500 rounded-md bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">
