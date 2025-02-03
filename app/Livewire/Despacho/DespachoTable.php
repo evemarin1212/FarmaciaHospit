@@ -17,7 +17,7 @@ class DespachoTable extends Component
     public $editar = false;
 
     protected $paginationTheme = 'tailwind';
-    protected $listeners = ['render'];
+    protected $listeners = ['render', 'eliminarNormal'];
 
     public function ver($id)
     {
@@ -31,11 +31,11 @@ class DespachoTable extends Component
         $this->DespachoSeleccionado = null;
     }
 
-    public function eliminar($id)
+    public function eliminarNormal($despachoId)
     {
         try {
             // Buscar el despacho por ID
-            $despacho = Despacho::findOrFail($id);
+            $despacho = Despacho::findOrFail($despachoId);
 
             // Incrementar la cantidad de los medicamentos en la tabla 'medicamentos'
             foreach ($despacho->medicamentos as $medicamento) {
@@ -48,12 +48,24 @@ class DespachoTable extends Component
             $despacho->delete(); // Eliminar el despacho
 
             // Emitir un mensaje de éxito
-            $this->dispatch('alert', "¡Despacho eliminado exitosamente y cantidades restauradas!");
+            $this->dispatch('notificacion', [
+                'mensaje' => 'despacho eliminado con exito normal.',
+                'tipo' => 'success'
+            ]);
+            $this->dispatch('render');
 
         } catch (\Exception $e) {
             // Emitir un mensaje de error en caso de excepción
             $this->dispatch('alert', 'Error al eliminar el despacho: ' . $e->getMessage());
         }
+    }
+
+    public function confirmarEliminacion($mensaje, $despachoId)
+    {
+        $this->dispatch('confirmar-eliminacion', ['menssage' => $mensaje,
+            'despachoId' => $despachoId, 
+            'metodo' => 'eliminarNormal'
+        ]);
     }
 
     public function render()

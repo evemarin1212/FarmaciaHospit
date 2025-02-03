@@ -106,13 +106,6 @@
                                 Cerrar
                             </button>
                         </div>
-                    @elseif($accion === 'eliminar')
-                        <div class="">
-                            <button wire:click="cerrar">Cancelar</button>
-                            <button wire:click="confirmarEliminacion({{ $DespachoSeleccionado->id }})" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">
-                                Aceptar
-                            </button>
-                        </div>
                     @endif
                 </div>
             </div>

@@ -88,9 +88,10 @@
     
 
             Livewire.on('confirmar-eliminacion', data => {
+                console.log("Enviando evento eliminar con ID:", data[0].metodo);
                 Swal.fire({
                     title: 'Confirmación',
-                    text: data[0].despachoId,
+                    text: data[0].menssage,
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#d33',
@@ -100,7 +101,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         console.log("Enviando evento eliminar con ID:", data[0].despachoId);
-                        Livewire.dispatch('eliminar', { despachoId: data[0].despachoId });
+                        Livewire.dispatch( data[0].metodo , { despachoId: data[0].despachoId });
                         // Livewire.emit('eliminar', data[0].despachoId);
                     }
                 });

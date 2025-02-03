@@ -31,14 +31,9 @@ class DespachoQuirofano extends Component
         $this->accion = 'ver';
         $this->modal = true;
     }
-    
+
     public function eliminar($despachoId)
-    {
-        // Notificación de éxito
-        $this->dispatch('notificacion', [
-            'mensaje' => 'Despacho id no encontrado.',
-            'tipo' => 'success'
-        ]);
+    {      
         Log::info("Intentando eliminar el despacho con ID: " . $despachoId);
         DB::beginTransaction();
         try {
@@ -66,7 +61,11 @@ class DespachoQuirofano extends Component
             // Eliminar el despacho
             $despacho->delete();
             DB::commit();
-
+                  // Notificación de éxito
+            $this->dispatch('notificacion', [
+                'mensaje' => 'despacho eliminado con exito.',
+                'tipo' => 'success'
+            ]);
             Log::info("Despacho eliminado correctamente.");
             // Reiniciar variables y notificar éxito
             $this->dispatch('render');
@@ -78,21 +77,11 @@ class DespachoQuirofano extends Component
         }
     }
 
-    // Confirmar la eliminación de un despacho y sus medicamentos
-    // public function confirmarEliminacion($message, $id)
-    // {
-    //     $this->DespachoSeleccionado = Despacho::find($id);
-    //     if (!$this->DespachoSeleccionado) {
-    //         return;
-    //     }
-    //     // En tu método Livewire, cuando despachas el evento:
-    //     $this->dispatch('ConfirmarEliminar', message: $message,id: $id);
-    // }
-
     public function confirmarEliminacion($mensaje, $despachoId)
     {
         $this->dispatch('confirmar-eliminacion', ['menssage' => $mensaje,
-            'despachoId' => $despachoId
+            'despachoId' => $despachoId,
+            'metodo' => "eliminar"
         ]);
     }
 

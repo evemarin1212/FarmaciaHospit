@@ -57,7 +57,9 @@
                         class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">
                         Ver
                     </button>
-                    <button wire:click="eliminar({{ $despacho->id }})"
+                    {{-- nueva eliminacion --}}
+                    <button wire:click="confirmarEliminacion('¿Estás seguro de eliminar este despacho?', {{ $despacho->id }})" 
+                    {{-- <button wire:click="eliminar({{ $despacho->id }})" --}}
                         class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">
                         Eliminar
                     </button>
