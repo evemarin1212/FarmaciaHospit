@@ -21,7 +21,7 @@ class DespachoQuirofano extends Component
     public $DespachoSeleccionado;
     public $MedicamentosSeleccionados = []; // Para almacenar los medicamentos asociados al despacho
     protected $paginationTheme = 'tailwind';
-    protected $listeners = ['render', 'eliminardespacho'];
+    protected $listeners = ['render', 'eliminar'];
 
 
     // Ver detalles del despacho
@@ -31,13 +31,18 @@ class DespachoQuirofano extends Component
         $this->accion = 'ver';
         $this->modal = true;
     }
-
-    public function eliminardespacho($id)
+    
+    public function eliminar($despachoId)
     {
-        Log::info("Intentando eliminar el despacho con ID: " . $id);
+        // Notificación de éxito
+        $this->dispatch('notificacion', [
+            'mensaje' => 'Despacho id no encontrado.',
+            'tipo' => 'success'
+        ]);
+        Log::info("Intentando eliminar el despacho con ID: " . $despachoId);
         DB::beginTransaction();
         try {
-            $this->cargarDespacho($id);
+            $this->cargarDespacho($despachoId);
             
             if (!$this->DespachoSeleccionado) {
                 throw new \Exception("El despacho no fue encontrado.");
@@ -69,19 +74,26 @@ class DespachoQuirofano extends Component
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("Error al eliminar el despacho: " . $e->getMessage());
-            session()->flash('error', 'Error al eliminar el despacho: ' . $e->getMessage());
+            session()->flash('alert', 'Error al eliminar el despacho: ' . $e->getMessage());
         }
     }
 
     // Confirmar la eliminación de un despacho y sus medicamentos
-    public function confirmarEliminacion($message, $id)
+    // public function confirmarEliminacion($message, $id)
+    // {
+    //     $this->DespachoSeleccionado = Despacho::find($id);
+    //     if (!$this->DespachoSeleccionado) {
+    //         return;
+    //     }
+    //     // En tu método Livewire, cuando despachas el evento:
+    //     $this->dispatch('ConfirmarEliminar', message: $message,id: $id);
+    // }
+
+    public function confirmarEliminacion($mensaje, $despachoId)
     {
-        $this->DespachoSeleccionado = Despacho::find($id);
-        if (!$this->DespachoSeleccionado) {
-            $this->dispatch('error', 'El despacho ya no existe.');
-            return;
-        }
-        $this->dispatch('ConfirmarEliminar', $message, $id);
+        $this->dispatch('confirmar-eliminacion', ['menssage' => $mensaje,
+            'despachoId' => $despachoId
+        ]);
     }
 
     // Cerrar modal

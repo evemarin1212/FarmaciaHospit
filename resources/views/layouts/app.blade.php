@@ -41,47 +41,79 @@
 
         @livewireScripts()
 
-        <script>
+    </body>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log("Livewire cargado correctamente.");
+
             Livewire.on('alert', function(message) {
                 Swal.fire({
                     title: "¡Excelente!",
                     text: message ,
                     icon: "success"
                 });
-            })
+            });
+
             Livewire.on('loteEliminado', () => {
                 // Código para actualizar la tabla, como recargar datos o mostrar un mensaje.
                 alert('Lote eliminado exitosamente.');
             });
-            document.addEventListener('livewire:load', function () {
-                try {
-                    // Ahora que Livewire ha cargado, puedes definir tu evento y manejarlo
-                    Livewire.on('ConfirmarEliminar', function(message, id) {
+
+            Livewire.on('ConfirmarEliminar', function(data) {
+                Swal.fire({
+                    title: "¿Estás seguro?",
+                    text: data.id,  // Usando 'message' desde los datos enviados
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Sí, eliminar!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $wire.dispatchTo("DespachoQuirofano", "eliminardespacho");
                         Swal.fire({
-                            title: "¿Estás seguro?",
-                            text: message,
-                            icon: "warning",
-                            showCancelButton: true,
-                            confirmButtonColor: "#3085d6",
-                            cancelButtonColor: "#d33",
-                            confirmButtonText: "Sí, eliminar!"
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                Livewire.dispatch('eliminardespacho', id); // Llamamos al método de Livewire
-                                Swal.fire({
-                                    title: "Eliminado!",
-                                    text: "El despacho ha sido eliminado.",
-                                    icon: "success"
-                                }).then(() => {
-                                    location.reload();
-                                });
-                            }
+                            title: "Eliminado!",
+                            text: "El despacho ha sido eliminado.",
+                            icon: "success"
+                        }).then(() => {
+                            Swal.fire({
+                                title: "¡Excelente!",
+                                text: "Finalizado" ,
+                                icon: "success"
+                            });
                         });
-                    });
-                } catch (error) {
-                    console.error("Error al manejar el evento Livewire:", error);
-                }
+                    }
+                });
             });
-        </script>
-    </body>
+    
+
+            Livewire.on('confirmar-eliminacion', data => {
+                Swal.fire({
+                    title: 'Confirmación',
+                    text: data[0].despachoId,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        console.log("Enviando evento eliminar con ID:", data[0].despachoId);
+                        Livewire.dispatch('eliminar', { despachoId: data[0].despachoId });
+                        // Livewire.emit('eliminar', data[0].despachoId);
+                    }
+                });
+            });
+
+            Livewire.on('notificacion', data => {
+                Swal.fire({
+                    title: 'Información',
+                    text: data.mensaje,
+                    icon: data.tipo
+                });
+            });
+        });
+
+    </script>
 </html>

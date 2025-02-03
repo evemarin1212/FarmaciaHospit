@@ -32,7 +32,7 @@
                         <button wire:click="ver({{ $despacho->id }})" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">
                             Ver
                         </button>
-                        <button wire:click="$dispatch('ConfirmarEliminar', '¿Estás seguro de eliminar este despacho?', {{ $despacho->id }})" 
+                        <button wire:click="confirmarEliminacion('¿Estás seguro de eliminar este despacho?', {{ $despacho->id }})" 
                             class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">
                             Eliminar
                         </button>
@@ -109,7 +109,7 @@
                     @elseif($accion === 'eliminar')
                         <div class="">
                             <button wire:click="cerrar">Cancelar</button>
-                            <button wire:click="ConfirmarEliminar({{ $DespachoSeleccionado->id }})" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">
+                            <button wire:click="confirmarEliminacion({{ $DespachoSeleccionado->id }})" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">
                                 Aceptar
                             </button>
                         </div>
