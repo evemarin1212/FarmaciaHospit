@@ -14,10 +14,11 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
         @livewireStyles()
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div class="min-h-screen bg-[url(/img/Picsart_25-02-05_01-02-51-216.png)] dark:bg-gray-900">
             <livewire:layout.navigation />
 
             <!-- Page Heading -->
@@ -34,8 +35,22 @@
                 {{ $slot }}
             </main>
 
-            <footer class="py-16 text-center text-sm text-black dark:text-white/70">
-                Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
+            <footer class=" pocition-fixet py-16 text-center text-sm text-black dark:text-white/70">
+                {{-- <footer class="bg-gray-900 text-white py-6"> --}}
+                    <div class="container mx-auto px-6">
+                        <div class="flex flex-col md:flex-row justify-between items-center">
+                            <div class="text-center md:text-left mb-4 md:mb-0">
+                                <h2 class="text-lg font-semibold">Farmacia Hospitalaria</h2>
+                                <p class="text-sm text-gray-400">© {{ date('Y') }} Todos los derechos reservados.</p>
+                            </div>
+                            <div class="flex space-x-4">
+                                <a href="#" class="text-gray-400 hover:text-white transition">Inicio</a>
+                                <a href="#" class="text-gray-400 hover:text-white transition">Sobre Nosotros</a>
+                                <a href="#" class="text-gray-400 hover:text-white transition">Contacto</a>
+                            </div>
+                        </div>
+                    </div>
+                {{-- </footer> --}}
             </footer>
         </div>
 

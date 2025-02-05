@@ -36,9 +36,9 @@
                                         @enderror
                                     </div>
                             
-                                    <div class="flex flex-row-2">
-                                        <!-- Columna Izquierda: Información del Paciente -->
-                                        @if (in_array($tipo_despacho, ['emergencia', 'hospitalizado']))
+                                    <!-- Columna Izquierda: Información del Paciente -->
+                                    @if (in_array($tipo_despacho, ['emergencia', 'hospitalizado']))
+                                        <div class="flex flex-row-2">
                                             <div class="flex flex-col w-full px-4">
                                                 <div class="mb-4">
                                                     <label for="paciente_opcion" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Paciente:</label>
@@ -109,64 +109,138 @@
                                                 @endif
                                             </div>
 
-                                        <!-- Columna Derecha: Despacho de Medicamentos -->
-                                        <div class="flex flex-col w-full">
-                                            <div class="mb-4">
-                                                <label for="medicamento_id" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                                                    Seleccionar Medicamento:
-                                                </label>
-                                                <input type="text" id="tipo_medicamento_busqueda" wire:model.live="tipo_medicamento_busqueda"
-                                                    class="w-full mt-2 border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
-                                                    placeholder="Buscar medicamento">
+                                            <!-- Columna Derecha: Despacho de Medicamentos -->
+                                            <div class="flex flex-col w-full">
+                                                <div class="mb-4">
+                                                    <label for="medicamento_id" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                                                        Seleccionar Medicamento:
+                                                    </label>
+                                                    <input type="text" id="tipo_medicamento_busqueda" wire:model.live="tipo_medicamento_busqueda"
+                                                        class="w-full mt-2 border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                                                        placeholder="Buscar medicamento">
 
-                                                @if (!empty($medicamentos_selec_bus))
-                                                    <div class="flex space-x-2 mt-2">
-                                                        <select id="medicamentos_selec_bus" wire:model.live="medicamento_id"
-                                                            class="w-full mt-2 border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
-                                                            <option value="">Seleccione un tipo</option>
-                                                            @foreach ($medicamentos_selec_bus as $medicamento)
-                                                                <option value="{{ $medicamento->id }}">
-                                                                    {{ $medicamento->nombre }} | {{ $medicamento->unidad }} {{ $medicamento->medida }}
-                                                                </option>
+                                                    @if (!empty($medicamentos_selec_bus))
+                                                        <div class="flex space-x-2 mt-2">
+                                                            <select id="medicamentos_selec_bus" wire:model.live="medicamento_id"
+                                                                class="w-full mt-2 border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
+                                                                <option value="">Seleccione un tipo</option>
+                                                                @foreach ($medicamentos_selec_bus as $medicamento)
+                                                                    <option value="{{ $medicamento->id }}">
+                                                                        {{ $medicamento->nombre }} | {{ $medicamento->unidad }} {{ $medicamento->medida }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                            <input type="number" wire:model="cantidad_medicamento" placeholder="Cantidad"
+                                                                class="w-1/4 border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-200">
+                                                            <button type="button" wire:click="agregarMedicamento"
+                                                                class="w-1/4 px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm">
+                                                                Agregar
+                                                            </button>
+                                                        </div>
+                                                    @else
+                                                        <!-- Mensaje de Resultados Vacíos -->
+                                                        <p class="mt-2 text-gray-500 dark:text-gray-400">
+                                                            No se encontraron resultados.
+                                                        </p>
+                                                    @endif
+                                                    @error('medicamento_id') 
+                                                        <span class="text-red-500 text-sm">{{ $message }}</span> 
+                                                    @enderror
+                                                    @error('cantidad_medicamento') 
+                                                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                                                    @enderror
+                                                    <!-- tabla sencilla -->
+                                                    @if (!empty($medicamentos_selec))
+                                                        <ul class="mt-2 p-2 max-h-48 overflow-y-auto border border-gray-300 rounded-md shadow-sm">
+                                                            @foreach ($medicamentos_selec as $index => $medicamento)
+                                                                <li class="flex justify-between items-center py-2 border-b border-gray-300 dark:border-gray-600">
+                                                                    <span>{{ $medicamento['nombre'] }} - {{ $medicamento['unidad'] }} {{ $medicamento['medida'] }} ({{ $medicamento['cantidad'] }})</span>
+                                                                    <button type="button" wire:click="eliminarMedicamento({{ $index }})" class="text-red-500">
+                                                                        Eliminar
+                                                                    </button>
+                                                                </li>
                                                             @endforeach
-                                                        </select>
-                                                        <input type="number" wire:model="cantidad_medicamento" placeholder="Cantidad"
-                                                            class="w-1/4 border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-200">
-                                                        <button type="button" wire:click="agregarMedicamento"
-                                                            class="w-1/4 px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm">
-                                                            Agregar
-                                                        </button>
+                                                        </ul>
+                                                    @endif
+                                                </div>
+                                
+                                                <!-- Observación en caso de Emergencia -->
+                                                @if ($tipo_despacho === 'emergencia')
+                                                    <div class="mb-4">
+                                                        <label for="observacion" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                                                            Observación:
+                                                        </label>
+                                                        <textarea wire:model="observacion" id="observacion" rows="3"
+                                                            class="w-full mt-1 border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-200"></textarea>
+                                                            @error('observacion') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                                                     </div>
-                                                @else
-                                                    <!-- Mensaje de Resultados Vacíos -->
-                                                    <p class="mt-2 text-gray-500 dark:text-gray-400">
-                                                        No se encontraron resultados.
-                                                    </p>
-                                                @endif
-                                                @error('medicamento_id') 
-                                                    <span class="text-red-500 text-sm">{{ $message }}</span> 
-                                                @enderror
-                                                @error('cantidad_medicamento') 
-                                                    <span class="text-red-500 text-sm">{{ $message }}</span>
-                                                @enderror
-                                                <!-- tabla sencilla -->
-                                                @if (!empty($medicamentos_selec))
-                                                    <ul class="mt-2 p-2 max-h-48 overflow-y-auto border border-gray-300 rounded-md shadow-sm">
-                                                        @foreach ($medicamentos_selec as $index => $medicamento)
-                                                            <li class="flex justify-between items-center py-2 border-b border-gray-300 dark:border-gray-600">
-                                                                <span>{{ $medicamento['nombre'] }} - {{ $medicamento['unidad'] }} {{ $medicamento['medida'] }} ({{ $medicamento['cantidad'] }})</span>
-                                                                <button type="button" wire:click="eliminarMedicamento({{ $index }})" class="text-red-500">
-                                                                    Eliminar
-                                                                </button>
-                                                            </li>
-                                                        @endforeach
-                                                    </ul>
                                                 @endif
                                             </div>
-                                            @endif
+                                        </div>
+                                    @endif
+
                             
-                                            <!-- Observación en caso de Emergencia -->
-                                            @if ($tipo_despacho === 'emergencia')
+                                    <!-- Quirofano: -->
+                                    @if ($tipo_despacho === 'quirofano')
+                                        <div class="flex flex-row-2">
+                                            <div class="flex flex-col w-full px-4">
+                                                <div class="mb-4">
+                                                    <label for="medicamento_solicitado"
+                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-200">Seleccionar Medicamento:
+                                                    </label>
+                                                    <input type="text" id="medicamento_solicitado" wire:model.live="medicamento_solicitado"
+                                                        class="w-full mt-2 border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                                                        placeholder="Buscar tipo de presentación">
+                                                    
+                                                    @if (!empty($medicamentos_solicitados_bus))
+                                                        <div class="flex space-x-2 mt-2">
+                                                            <select id="medicamentos_selec_bus" wire:model.live="medicamento_solicitado_id"
+                                                                class="w-full border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
+                                                                <option value="">Seleccione un tipo</option>
+                                                                @foreach ($medicamentos_solicitados_bus as $medicamento)
+                                                                    <option value="{{ $medicamento->id }}">
+                                                                        {{ $medicamento->nombre }} | {{ $medicamento->unidad }} {{ $medicamento->medida }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                            <input type="number" wire:model="cantidad_medicamento" placeholder="Cantidad Solicitada"
+                                                                class="w-1/4 border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-200">
+                                                            <input type="number" wire:model="cantidad_medicamento_solicitado"
+                                                                placeholder="Cantidad despachada"
+                                                                class="w-1/4 border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-200">
+                                                            <button type="button" wire:click="agregarMedicamentoSolicitado"
+                                                                class="w-1/4 px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm">Agregar</button>
+                                                        </div>
+                                                    @else
+                                                        <!-- Mensaje de Resultados Vacíos -->
+                                                        <p class="mt-2 text-gray-500 dark:text-gray-400">
+                                                            No se encontraron resultados.
+                                                        </p>
+                                                    @endif
+                                                    @error('medicamento_id') 
+                                                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                                                    @enderror
+                                                    @error('cantidad_medicamento') 
+                                                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                                                    @enderror
+                                                    <!-- tabla sencilla -->
+                                                    @if (!empty($medicamentos_solicitados_selec))
+                                                        <ul class="mt-2 p-2 max-h-48 overflow-y-auto border border-gray-300 rounded-md shadow-sm">
+                                                            @foreach ($medicamentos_solicitados_selec as $index => $medicamento)
+                                                                <li class="flex justify-between items-center py-2 border-b border-gray-300 dark:border-gray-600">
+                                                                    <span>{{ $medicamento['nombre'] }} - {{ $medicamento['unidad'] }} {{ $medicamento['medida'] }}
+                                                                        ({{ $medicamento['cantidad'] }}) || ({{ $medicamento['cantidad_despacho'] }})</span>
+                                                                    <button type="button" wire:click="eliminarMedicamentoSolicitado({{ $index }})" class="text-red-500">
+                                                                        Eliminar
+                                                                    </button>
+                                                                </li>
+                                                            @endforeach
+                                                        </ul>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                            <div class="flex flex-col w-full">
                                                 <div class="mb-4">
                                                     <label for="observacion" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
                                                         Observación:
@@ -175,65 +249,7 @@
                                                         class="w-full mt-1 border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-200"></textarea>
                                                         @error('observacion') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                                                 </div>
-                                            @endif
-                                        </div>
-                                    </div>
-                            
-                                    <!-- Quirofano: -->
-                                    @if ($tipo_despacho === 'quirofano')
-                                        <div class="mb-4">
-                                            <label for="medicamento_solicitado"
-                                                class="block text-sm font-medium text-gray-700 dark:text-gray-200">Seleccionar Medicamento:
-                                            </label>
-                                            <input type="text" id="medicamento_solicitado" wire:model.live="medicamento_solicitado"
-                                                class="w-full mt-2 border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
-                                                placeholder="Buscar tipo de presentación">
-                                            
-                                            @if (!empty($medicamentos_solicitados_bus))
-                                                <div class="flex space-x-2 mt-2">
-                                                    <select id="medicamentos_selec_bus" wire:model.live="medicamento_solicitado_id"
-                                                        class="w-full border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
-                                                        <option value="">Seleccione un tipo</option>
-                                                        @foreach ($medicamentos_solicitados_bus as $medicamento)
-                                                            <option value="{{ $medicamento->id }}">
-                                                                {{ $medicamento->nombre }} | {{ $medicamento->unidad }} {{ $medicamento->medida }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                    <input type="number" wire:model="cantidad_medicamento" placeholder="Cantidad Solicitada"
-                                                        class="w-1/4 border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-200">
-                                                    <input type="number" wire:model="cantidad_medicamento_solicitado"
-                                                        placeholder="Cantidad despachada"
-                                                        class="w-1/4 border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-200">
-                                                    <button type="button" wire:click="agregarMedicamentoSolicitado"
-                                                        class="w-1/4 px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm">Agregar</button>
-                                                </div>
-                                            @else
-                                                <!-- Mensaje de Resultados Vacíos -->
-                                                <p class="mt-2 text-gray-500 dark:text-gray-400">
-                                                    No se encontraron resultados.
-                                                </p>
-                                            @endif
-                                            @error('medicamento_id') 
-                                                <span class="text-red-500 text-sm">{{ $message }}</span>
-                                            @enderror
-                                            @error('cantidad_medicamento') 
-                                                <span class="text-red-500 text-sm">{{ $message }}</span>
-                                            @enderror
-                                            <!-- tabla sencilla -->
-                                            @if (!empty($medicamentos_solicitados_selec))
-                                                <ul class="mt-2 p-2 max-h-48 overflow-y-auto border border-gray-300 rounded-md shadow-sm">
-                                                    @foreach ($medicamentos_solicitados_selec as $index => $medicamento)
-                                                        <li class="flex justify-between items-center py-2 border-b border-gray-300 dark:border-gray-600">
-                                                            <span>{{ $medicamento['nombre'] }} - {{ $medicamento['unidad'] }} {{ $medicamento['medida'] }}
-                                                                ({{ $medicamento['cantidad'] }}) || ({{ $medicamento['cantidad_despacho'] }})</span>
-                                                            <button type="button" wire:click="eliminarMedicamentoSolicitado({{ $index }})" class="text-red-500">
-                                                                Eliminar
-                                                            </button>
-                                                        </li>
-                                                    @endforeach
-                                                </ul>
-                                            @endif
+                                            </div>
                                         </div>
                                     @endif
 

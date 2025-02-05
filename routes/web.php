@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Livewire\Almacen\LotesTable;
 
 Route::get('/almacen', function () {
     return view('almacen.index');

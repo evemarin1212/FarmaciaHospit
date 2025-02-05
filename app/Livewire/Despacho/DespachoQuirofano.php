@@ -81,7 +81,7 @@ class DespachoQuirofano extends Component
     {
         $this->dispatch('confirmar-eliminacion', ['menssage' => $mensaje,
             'despachoId' => $despachoId,
-            'metodo' => "eliminar"
+            'metodo' => 'eliminar'
         ]);
     }
 
