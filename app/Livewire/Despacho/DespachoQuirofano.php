@@ -61,7 +61,8 @@ class DespachoQuirofano extends Component
             // Eliminar el despacho
             $despacho->delete();
             DB::commit();
-                  // Notificación de éxito
+            
+            // Notificación de éxito
             $this->dispatch('notificacion', [
                 'mensaje' => 'despacho eliminado con exito.',
                 'tipo' => 'success'
