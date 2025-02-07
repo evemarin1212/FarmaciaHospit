@@ -2,15 +2,20 @@
 
 namespace App\Livewire\Reporte;
 
-use Livewire\Component;
-use Illuminate\Support\Facades\Storage;
-use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\Lote;
 use App\Models\Reporte;
+use Livewire\Component;
+use App\Models\Despacho;
+use App\Models\Medicamento;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\DespachoMedicamento;
+use Illuminate\Support\Facades\Storage;
 
 class ReporteForm extends Component
 {
     public $formView = false;
     public $tipo_reporte, $fecha_inicio, $fecha_fin;
+    PUBLIC $generarPDF ;
 
     public function form()
     {
@@ -23,7 +28,7 @@ class ReporteForm extends Component
         $this->reset(['tipo_reporte', 'fecha_inicio', 'fecha_fin']);
     }
 
-    public function guardarDespacho()
+        public function guardarDespacho()
     {
         // Validar datos
         $this->validate([
@@ -32,22 +37,46 @@ class ReporteForm extends Component
             'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
         ]);
 
-        // SELECION DE MODELO SEGUN EL TIPO DE REPORTE
-        $reporte = 0;
+        // SELECCIÓN DE MODELO SEGÚN EL TIPO DE REPORTE
+        $despachos = [];
+        $medicamentos = [];
+
+        if ($this->tipo_reporte === 'hospitalizado' || $this->tipo_reporte === 'emergencia' || $this->tipo_reporte === 'quirofano') {
+            // Consulta para hospitalizado, emergencia y quirofano
+            $despachos = $this->obtenerDatosReporte();
+        } elseif ($this->tipo_reporte === 'via_oral') {
+            // Consulta para via oral
+            $despachos = $this->obtenerDatosReporteViaOral();
+        } elseif ($this->tipo_reporte === 'general') {
+            // Consulta para reporte general de medicamentos
+            $medicamentos = $this->obtenerDatosReporteGeneral();
+        }
+
         // Generar PDF
-        $pdf = Pdf::loadView('pdf.reporte', [
-            'tipo' => $this->tipo_reporte,
-            'fecha_inicio' => $this->fecha_inicio,
-            'fecha_fin' => $this->fecha_fin,
-            'fecha_fin' => $reporte,
-        ]);
-    
-        // Guardar en almacenamiento
+        $pdf = [];
+        if ($this->tipo_reporte === 'general') {
+            $pdf = Pdf::loadView('pdf.reporte-general', [
+                'fecha_inicio' => $this->fecha_inicio,
+                'fecha_fin' => $this->fecha_fin,
+                'medicamentos' => $medicamentos,
+            ]);
+        } else {
+            $pdf = Pdf::loadView('pdf.reporte', [
+                'tipo' => $this->tipo_reporte,
+                'fecha_inicio' => $this->fecha_inicio,
+                'fecha_fin' => $this->fecha_fin,
+                'despachos' => $despachos,
+            ]);
+        }
+
+        // Guardar el PDF en almacenamiento
         $fileName = 'reporte_' . $this->tipo_reporte . '-' . time() . '.pdf';
         $filePath = 'public/reportes/' . $fileName;
-        $filePath = 'reportes/' . $fileName;
+        // $fileUrl = 'reportes/' . $fileName;
 
-        // Storage::put($filePath, $pdf->output());
+        if (!Storage::exists('public/reportes')) {
+            Storage::makeDirectory('public/reportes');
+        }
         Storage::disk('public')->put($filePath, $pdf->output());
         
         // Obtener URL pública
@@ -63,35 +92,39 @@ class ReporteForm extends Component
             'ruta_dir' => $filePath,
             'url' => $fileUrl,
         ]);
+        // 'url' => asset('storage/' . $filePath),
 
         // Notificación de éxito
         $this->dispatch('notificacion', [
-            'mensaje' => 'Reporte generado con exito.',
+            'mensaje' => 'Reporte generado con éxito.',
             'tipo' => 'success'
         ]);
-    
+
         // Cerrar formulario y resetear
         $this->formView = false;
         $this->reset(['tipo_reporte', 'fecha_inicio', 'fecha_fin']);
-        
+
         // Enviar evento a frontend con la URL del PDF
-        $this->dispatch('abrirPdf', ['fileUrl' => $fileUrl]);
-    
+        // if (Storage::exists($filePath)) {
+        //     $this->dispatch('abrirPdf', ['fileUrl' => asset('storage/' . $filePath)]);
+        // }
+        $this->dispatch('abrirPdf', ['fileUrl' => asset('storage/' . $filePath)]);
+
         session()->flash('message', 'Reporte generado con éxito.');
     }
-    
+
     // Consulta para el reporte de hospitalizado, emergencia o quirofano
     public function obtenerDatosReporte() {
         // Filtrar por tipo de despacho y rango de fechas
         $despachos = Despacho::where('tipo', $this->tipo_reporte)
-                            ->whereBetween('fecha_pedido', [$this->fecha_inicio, $this->fecha_fin])
-                            ->get();
-        
-        // Para "quirofano", obtener detalles de medicamentos solicitados y despachados
-        if ($this->tipo_reporte === 'quirofano') {
-            foreach ($despachos as $despacho) {
-                $despacho->medicamentos = DespachoMedicamento::where('despacho_id', $despacho->id)->get();
-            }
+            ->whereBetween('fecha_pedido', [$this->fecha_inicio, $this->fecha_fin])
+            ->get();
+
+            // Para "quirofano", obtener detalles de medicamentos solicitados y despachados
+            if ($this->tipo_reporte === 'quirofano') {
+                foreach ($despachos as $despacho) {
+                    $despacho->medicamentos = DespachoMedicamento::where('despacho_id', $despacho->id)->get();
+                }
         }
 
         return $despachos;
@@ -120,10 +153,11 @@ class ReporteForm extends Component
         // Filtrar medicamentos por vía de administración
         foreach ($despachos as $despacho) {
             $despacho->medicamentos = DespachoMedicamento::where('despacho_id', $despacho->id)
-                                                        ->whereHas('medicamento.presentacion', function($query) {
-                                                            $query->where('via_administracion', 'Oral'); // Filtrar por Oral
-                                                        })
-                                                        ->get();
+                ->whereHas('medicamento.presentacion', function($query)
+                {
+                    $query->where('via_administracion', 'Oral'); // Filtrar por Oral
+                })
+                ->get();
         }
 
         return $despachos;
@@ -136,8 +170,11 @@ class ReporteForm extends Component
         foreach ($medicamentos as $medicamento) {
             // Calcular la cantidad total despachada
             $cantidad_despachada = DespachoMedicamento::where('medicamento_id', $medicamento->id)
-                                                    ->whereBetween('despacho.fecha_pedido', [$this->fecha_inicio, $this->fecha_fin])
-                                                    ->sum('cantidad');
+                ->whereHas('despacho', function($query) {
+                    $query->whereBetween('fecha_pedido', [$this->fecha_inicio, $this->fecha_fin]);
+                })
+                ->sum('cantidad');
+
             
             // Calcular la cantidad de lotes ingresados
             $cantidad_lotes_ingresados = Lote::where('medicamento_id', $medicamento->id)

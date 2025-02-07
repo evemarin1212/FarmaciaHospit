@@ -1,10 +1,9 @@
-<!-- resources/views/pdf/reporte.blade.php -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte de {{ $tipo }}</title>
+    <title>Reporte General de Medicamentos</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -40,33 +39,28 @@
 <body>
 
     <div class="titulo">
-        <h2>Reporte de {{ ucfirst($tipo) }}</h2>
+        <h2>Reporte General de Medicamentos</h2>
         <p class="fecha">Rango de Fechas: {{ \Carbon\Carbon::parse($fecha_inicio)->format('d-m-Y') }} a {{ \Carbon\Carbon::parse($fecha_fin)->format('d-m-Y') }}</p>
     </div>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Fecha de Despacho</th>
-                <th>Paciente</th>
                 <th>Medicamento</th>
-                <th>Cantidad Despachada</th>
+                <th>Cantidad Total Despachada</th>
+                <th>Cantidad Inicial</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($despachos as $despacho)
-                @foreach($despacho->despachosMedicamentos as $despachomedicamento)
-                    <tr>
-                        <td>{{ \Carbon\Carbon::parse($despacho->fecha_pedido)->format('d-m-Y') }}</td>
-                        <td>{{ $despacho->paciente ? $despacho->paciente->nombre : 'N/A' }}</td>
-                        <td>{{ $despachomedicamento->medicamento->nombre }}</td>
-                        <td>{{ $despachomedicamento->cantidad }}</td>
-                    </tr>
-                @endforeach
+            @foreach($medicamentos as $medicamento)
+                <tr>
+                    <td>{{ $medicamento->nombre }}</td>
+                    <td>{{ $medicamento->cantidad_despachada }}</td>
+                    <td>{{ $medicamento->cantidad_inicial }}</td>
+                </tr>
             @endforeach
         </tbody>
     </table>
 
 </body>
 </html>
-

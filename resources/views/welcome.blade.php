@@ -15,8 +15,8 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="antialiased font-sans ">
-        <div class=" text-black/50 ">s
-            <img class="absolute w-screen h-screen bg-[url('{{asset('img/Picsart_25-02-05_01-02-51-216.png')}}')] bg-no-repeat" src=""  />
+        <div class=" text-black/50 ">
+            <img class="absolute w-screen h-screen bg-[url('{{asset('svg/2sViAPwvYhpvEIpWwI8S6SJgc7S.svg')}}')] bg-no-repeat" src=""  />
             <div class="relative min-h-screen flex flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white">
                 <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
                     <header class="grid grid-cols-2 items-center gap-2 py-10 lg:grid-cols-3">
@@ -27,7 +27,7 @@
                             <livewire:welcome.navigation />
                         @endif
                     </header>
-                            
+
                     <main class="mt-6">
                     </main>
 
