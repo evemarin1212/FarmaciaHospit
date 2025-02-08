@@ -55,9 +55,9 @@
                     <td class="px-4 py-2">{{ $lote->estatus }}</td>
                     <td class="px-4 py-2">
                         @if($lote->fecha_vencimiento < now())
-                            <h3 class="font-semibold"> Vencido </h3>
+                            <h3 class="text-red-500 font-semibold"> Vencido </h3>
                         @elseif($lote->fecha_vencimiento <= now()->addDays(30))
-                            <h3 class="text-red-500  font-semibold"> Por Vencer </h3>
+                            <h3 class="text-orange-500  font-semibold"> Por Vencer </h3>
                         @else
                             Disponible
                         @endif

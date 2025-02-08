@@ -44,9 +44,9 @@
                 <td class="px-4 py-2">{{ $medicamento->cantidad_disponible }}</td>
                 <td class="px-4 py-2">
                     @if($medicamento->cantidad_disponible == 0)
-                        <h3 class="font-semibold"> Agotado </h3>
+                        <h3 class="text-red-500 font-semibold"> Agotado </h3>
                     @elseif($medicamento->cantidad_disponible <= 30)
-                        <h3 class="text-red-500  font-semibold"> Por Agotar </h3>
+                        <h3 class="text-orange-500  font-semibold"> Por Agotar </h3>
                     @else
                         Disponible
                     @endif
