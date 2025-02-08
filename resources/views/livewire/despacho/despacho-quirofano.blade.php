@@ -24,7 +24,7 @@
             @foreach($despachos as $despacho)
                 <tr class="border-t last:border-b hover:bg-blue-100 transition dark:border-gray-600 dark:hover:bg-gray-600">
                     <td class="px-4 py-2">{{ $loop->iteration }}</td>
-                    <td class="px-4 py-2">{{ $despacho->created_at->format('d/m/Y') }}</td>
+                    <td class="px-4 py-2">{{ $despacho->fecha_pedido }}</td>
                     <td class="px-4 py-2">{{ $despacho->medicamentos->count('cantidad_solicitada') }}</td>
                     <td class="px-4 py-2">{{ $despacho->medicamentos->count('cantidad') }}</td>
                     <td class="px-4 py-2">

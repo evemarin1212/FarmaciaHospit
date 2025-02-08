@@ -1,81 +1,56 @@
-<!-- Componente de tabla Lote -->
 <div class="p-6 bg-white shadow-md dark:bg-gray-800">
-    <div class="flex justify-between">
-        <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
-            Lotes
-            @if (session('error'))
-                <div class="bg-red-500 text-white p-3 rounded-lg">
-                    {{ session('error') }}
-                </div>
-            @endif
-        </h2>
-        <button class="bg-erde-500 text-white px-2 py-1 rounded">
+    <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+        Reportes Generados
+    </h2>
 
-        </button>
-    </div>
-
-    <!-- Campo de búsqueda -->
-    <input
-        type="text"
-        wire:model.live=""
-        class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
-        placeholder="Buscar lote..."
-    >
     <!-- Filtro -->
-    <select
-        wire:model.live=""
-        class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
-    >
+    <select wire:model.live="filter" class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
         <option value="todos">Todos</option>
+        <option value="hospitalizado">Hospitalizado</option>
+        <option value="emergencia">Emergencia</option>
+        <option value="quirofano">Quirófano</option>
+        <option value="via_oral">Vía Oral</option>
+        <option value="general">General</option>
     </select>
 
     <!-- Tabla -->
     <table class="table-auto w-full border-collapse bg-gray-50 rounded-lg shadow-sm overflow-hidden dark:bg-gray-700">
         <thead class="bg-blue-500 text-white dark:bg-blue-600">
             <tr>
-                <th class="px-4 py-2 text-left">Nº</th>
-                <th class="px-4 py-2 text-left">Código de lote</th>
-                <th class="px-4 py-2 text-left">Medicamento</th>
-                <th class="px-4 py-2 text-left">Cantidad</th>
-                <th class="px-4 py-2 text-left">Fecha de Vencimiento</th>
-                <th class="px-4 py-2 text-left">Estatus</th>
-                <th class="px-4 py-2 text-left">Estado</th>
-                <th class="px-4 py-2 text-left">Acciones</th>
+                <th class="px-4 py-2 text-left">Fecha de Creación</th>
+                <th class="px-4 py-2 text-left">Tipo de Reporte</th>
+                <th class="px-4 py-2 text-left">Rango de Fechas</th>
+                <th class="px-4 py-2 text-left">Acción</th>
             </tr>
         </thead>
         <tbody>
-            {{-- @foreach($lotes as $lote) --}}
+            @forelse($reportes as $reporte)
                 <tr class="border-t last:border-b hover:bg-blue-100 transition dark:border-gray-600 dark:hover:bg-gray-600">
-                    {{-- <td class="px-4 py-2">{{ $loop->iteration }}</td>
-                    <td class="px-4 py-2">{{ $lote->codigo_lote }}</td>
-                    <td class="px-4 py-2">{{ $lote->medicamento->nombre }}</td>
-                    <td class="px-4 py-2">{{ $lote->cantidad }}</td>
-                    <td class="px-4 py-2">{{ $lote->fecha_vencimiento }}</td>
-                    <td class="px-4 py-2">{{ $lote->estatus }}</td>
+                    <td class="px-4 py-2">{{ $reporte->created_at->format('d/m/Y') }}</td>
+                    <td class="px-4 py-2 capitalize">{{ $reporte->tipo }}</td>
                     <td class="px-4 py-2">
-                        @if($lote->fecha_vencimiento < now())
-                            <h3 class="font-semibold"> Vencido </h3>
-                        @elseif($lote->fecha_vencimiento <= now()->addDays(30))
-                            <h3 class="text-red-500  font-semibold"> Por Vencer </h3>
-                        @else
-                            Disponible
-                        @endif --}}
+                        {{ $reporte->fecha_inicio }} - 
+                        {{ $reporte->fecha_fin }}
                     </td>
                     <td class="px-4 py-2">
-                        <button wire:click="" class="bg-yellow-500 text-white px-2 py-1 rounded">
-                            Ver
-                        </button>
-                        <button wire:click="" onclick="" class="bg-red-500 text-white px-2 py-1 rounded">
-                            Eliminar
-                        </button>
-                        
+                        <a href="{{ $reporte->url }}" target="_blank" 
+                           class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+                            Abrir PDF
+                        </a>
                     </td>
                 </tr>
-            {{-- @endforeach --}}
+            @empty
+                <tr>
+                    <td colspan="4" class="px-4 py-2 text-center text-gray-500 dark:text-gray-300">
+                        No hay reportes disponibles.
+                    </td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
 
     <!-- Paginación -->
     <div class="mt-4">
-
+        {{ $reportes->links() }}
     </div>
+</div>

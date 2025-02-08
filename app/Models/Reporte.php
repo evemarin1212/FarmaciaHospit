@@ -19,3 +19,4 @@ class Reporte extends Model
     ];
 
 }
+ 

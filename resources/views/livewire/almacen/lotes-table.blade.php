@@ -18,7 +18,7 @@
         type="text"
         wire:model.live="search"
         class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
-        placeholder="Buscar lote..."
+        placeholder="Buscar lote por nombre de medicamento ingresado..."
     >
     <!-- Filtro -->
     <select

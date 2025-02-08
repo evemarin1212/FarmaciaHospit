@@ -25,7 +25,7 @@
             </tr>
         </thead>
         <tbody>
-            {{-- @foreach($despachos as $despacho)
+            @foreach($despachos as $despacho)
             <tr class="border-t last:border-b hover:bg-blue-100 transition dark:border-gray-600 dark:hover:bg-gray-600">
                 <td class="px-4 py-2">{{ $loop->iteration }}</td>
                 <td class="px-4 py-2">{{ $despacho->fecha_pedido }}</td>
@@ -51,7 +51,7 @@
                     @else
                     No disponible
                     @endif
-                </td> <!-- Estatus --> --}}
+                </td> <!-- Estatus -->
                 <td class="px-4 py-2">
                     <!-- Botones en la tabla -->
                     <button wire:click=""
@@ -59,14 +59,13 @@
                         Ver
                     </button>
                     {{-- nueva eliminacion --}}
-                    <button wire:click=""
-                    {{-- <button wire:click="eliminar({{ $despacho->id }})" --}}
+                    {{-- <button wire:click="eliminar({{ $despacho->id }})"
                         class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">
                         Eliminar
-                    </button>
+                    </button> --}}
                 </td>
             </tr>
-            {{-- @endforeach --}}
+            @endforeach
         </tbody>
     </table>
 

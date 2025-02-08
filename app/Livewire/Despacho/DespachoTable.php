@@ -73,7 +73,8 @@ class DespachoTable extends Component
         // Eager Loading de la relación 'paciente' para evitar acceso a propiedades de null
         $despachos = Despacho::query()
             ->where('tipo', '!=', 'quirofano')
-            ->with('paciente');  // Eager loading de la relación 'paciente'
+            ->with('paciente')
+            ->orderBy('created_at', 'desc');  // Eager loading de la relación 'paciente'
 
         if ($this->filter === 'recientes') {
             $despachos->orderBy('created_at', 'desc');

@@ -21,7 +21,5 @@
     <!-- Componente de tabla Lote -->
     @livewire('Reporte.ReporteLote')
 
-    <!-- Componente de tabla Medicamento -->
-    @livewire('Reporte.ReporteDespacho')
 
 </x-app-layout>

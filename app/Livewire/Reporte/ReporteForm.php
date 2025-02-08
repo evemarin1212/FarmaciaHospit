@@ -17,6 +17,27 @@ class ReporteForm extends Component
     public $tipo_reporte, $fecha_inicio, $fecha_fin;
     PUBLIC $generarPDF ;
 
+    protected $rules = [
+        'tipo_reporte' => 'required|in:hospitalizado,emergencia,quirofano,via_oral,general',
+        'fecha_inicio' => 'required|date',
+        'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
+    ];
+
+    // protected $messages = [
+    //     'tipo_reporte.required' => 'El tipo de reporte es obligatorio.',
+    //     'tipo_reporte.in' => 'Seleccione un tipo de reporte válido.',
+    //     'fecha_inicio.required' => 'La fecha de inicio es obligatoria.',
+    //     'fecha_inicio.date' => 'Debe ingresar una fecha válida.',
+    //     'fecha_fin.required' => 'La fecha de fin es obligatoria.',
+    //     'fecha_fin.date' => 'Debe ingresar una fecha válida.',
+    //     'fecha_fin.after_or_equal' => 'La fecha de fin debe ser igual o posterior a la fecha de inicio.',
+    // ];
+
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
+    }
+
     public function form()
     {
         $this->formView = true;
@@ -109,8 +130,8 @@ class ReporteForm extends Component
         //     $this->dispatch('abrirPdf', ['fileUrl' => asset('storage/' . $filePath)]);
         // }
         $this->dispatch('abrirPdf', ['fileUrl' => asset('storage/' . $filePath)]);
-
-        session()->flash('message', 'Reporte generado con éxito.');
+        $this->dispatch('render');
+        // session()->flash('message', 'Reporte generado con éxito.');
     }
 
     // Consulta para el reporte de hospitalizado, emergencia o quirofano
@@ -211,3 +232,4 @@ class ReporteForm extends Component
         return view('livewire.reporte.reporte-form');
     }
 }
+

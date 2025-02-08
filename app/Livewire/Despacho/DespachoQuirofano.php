@@ -102,11 +102,11 @@ class DespachoQuirofano extends Component
 
     public function render()
     {
-        $query = Despacho::where('tipo', 'quirofano');
+        $query = Despacho::where('tipo', 'quirofano')->orderBy('created_at', 'desc');
 
-        if ($this->filter === 'recientes') {
-            $query->orderBy('created_at', 'desc');
-        }
+        // if ($this->filter !== 'recientes') {
+        //     $query->orderBy('created_at', 'desc');
+        // }
 
         return view('livewire.despacho.despacho-quirofano', [
             'despachos' => $query->paginate(10),
