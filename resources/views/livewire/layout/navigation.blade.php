@@ -34,7 +34,7 @@ $logout = function (Logout $logout) {
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('almacen') }}" wire:navigate>
                         <img src="{{asset('svg/2sViAPwvYhpvEIpWwI8S6SJgc7S.svg')}}" alt="Logo Hospimil"
-                        class="h-4">
+                        class="h-12 w-12">
                     </a>
                 </div>
 
@@ -45,13 +45,13 @@ $logout = function (Logout $logout) {
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
-                        {{ __('Resportes') }}
+                    <x-nav-link :href="route('despacho')" :active="request()->routeIs('despacho')" wire:navigate>
+                        {{ __('Despacho') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('despacho')" :active="request()->routeIs('despacho')" wire:navigate>
-                        {{ __('Despacho') }}
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+                        {{ __('Resportes') }}
                     </x-nav-link>
                 </div>
             </div>
