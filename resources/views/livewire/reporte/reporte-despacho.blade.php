@@ -6,7 +6,7 @@
 
     <!-- Filtro -->
     <select wire:model.live=""
-        class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
+        class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
         <option value="todos">Todos</option>
         <option value="recientes">Recientes</option>
     </select>

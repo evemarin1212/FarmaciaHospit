@@ -1,6 +1,6 @@
 <div>
     <!-- Formulario para registrar nuevo lote -->
-    <div class="w-full bg-white shadow-md p-6 dark:bg-gray-800">
+    <div class="w-full shadow-md p-6 dark:bg-gray-800">
 
         <h1 class="text-3xl font-bold text-center mb-6 text-gray-800 dark:text-gray-200">
             Gestión de Despacho

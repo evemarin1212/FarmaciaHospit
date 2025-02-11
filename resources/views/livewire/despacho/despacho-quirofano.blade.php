@@ -1,17 +1,17 @@
-<div class="p-6 bg-white shadow-md dark:bg-gray-800">
+<div class="p-6 m-4 rounded-lg shadow-lg bg-white/30 backdrop-blur-md dark:bg-gray-800/60">
     <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
         Despachos Quirofano Realizados
     </h2>
 
     <!-- Filtro -->
-    <select wire:model.live="filter" class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
+    <select wire:model.live="filter" class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
         <option value="todos">Todos</option>
         <option value="recientes">Recientes</option>
     </select>
 
     <!-- Tabla -->
     <table class="table-auto w-full border-collapse bg-gray-50 rounded-lg shadow-sm overflow-hidden dark:bg-gray-700">
-        <thead class="bg-blue-500 text-white dark:bg-blue-600">
+        <thead class="bg-cyan-900 text-white dark:bg-cyan-900">
             <tr>
                 <th class="px-4 py-2 text-left">Nº</th>
                 <th class="px-4 py-2 text-left">Fecha</th>
@@ -49,7 +49,7 @@
 
     <!-- Modal -->
     @if($modal)
-        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="absolute top-0 inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
             <!-- Contenedor del Modal -->
             <div class="bg-white dark:bg-gray-800 p-6 rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full ">
                 <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">

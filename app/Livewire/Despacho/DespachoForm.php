@@ -9,7 +9,7 @@ use App\Models\{Despacho, Lote, Paciente, Medicamento, DespachoSolicitado, Despa
 
 class DespachoForm extends Component
 {
-    public $tipo_despacho = '', $paciente_opcion = '', $observacion = 'N/A', $search = '';
+    public $tipo_despacho = '', $paciente_opcion = '', $observacion = '', $search = '';
     public $selectedPacienteId = null;
 
     public $paciente_nombre = '', $paciente_apellido = '', $nacionalidad = 'V', $paciente_dni = '', $paciente_estatus = '';
@@ -41,6 +41,19 @@ class DespachoForm extends Component
     {
 
         $this->medicamentos_selec_bus = $this->buscarMedicamentos($this->tipo_medicamento_busqueda);
+    }
+    //Convertir primera letra de la oracion
+    public function updatedPacienteNombre()
+    {
+        $this->paciente_nombre = ucfirst(trim($this->paciente_nombre));
+    }
+    public function updatedPacienteApellido()
+    {
+        $this->paciente_apellido = ucfirst(trim($this->paciente_apellido));
+    }
+    public function updatedObservacion()
+    {
+        $this->observacion = ucfirst(trim($this->observacion));
     }
 
     public function updatedMedicamentoSolicitado()

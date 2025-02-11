@@ -1,4 +1,4 @@
-<div class="p-6 bg-white shadow-md dark:bg-gray-800">
+<div class="p-6 m-4 rounded-lg shadow-lg bg-white/30 backdrop-blur-md dark:bg-gray-800">
     <div class="flex justify-between">
         <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
             Lotes
@@ -17,13 +17,13 @@
     <input
         type="text"
         wire:model.live="search"
-        class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+        class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
         placeholder="Buscar lote por nombre de medicamento ingresado..."
     >
     <!-- Filtro -->
     <select
         wire:model.live="filter"
-        class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+        class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
     >
         <option value="todos">Todos</option>
         <option value="por_vencer">Por Vencer (30 días)</option>
@@ -32,7 +32,7 @@
 
     <!-- Tabla -->
     <table class="table-auto w-full border-collapse bg-gray-50 rounded-lg shadow-sm overflow-hidden dark:bg-gray-700">
-        <thead class="bg-blue-500 text-white dark:bg-blue-600">
+        <thead class="bg-cyan-900 text-white dark:bg-cyan-900">
             <tr>
                 <th class="px-4 py-2 text-left">Nº</th>
                 <th class="px-4 py-2 text-left">Código de lote</th>
@@ -104,7 +104,7 @@
                             Código del Lote
                         </label>
                         <input type="text" id="codigo_lote" wire:model="LoteSeleccionado.codigo_lote" 
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                             {{ 'readonly' }}>
                         @error('codigo_lote') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                     </div>
@@ -142,7 +142,7 @@
                             Presentación
                         </label>
                         <input type="text" id="presentacion" wire:model="presentacion.tipo"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                             {{ 'readonly' }}>
                         @error('presentacion') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                     </div>
@@ -154,7 +154,7 @@
                             Cantidad
                         </label>
                         <input type="number" id="cantidad" wire:model="LoteSeleccionado.cantidad"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                             {{'readonly' }}>
                         @error('cantidad') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                     </div>
@@ -166,7 +166,7 @@
                             Fecha de Vencimiento
                         </label>
                         <input type="date" id="fecha_vencimiento" wire:model="LoteSeleccionado.fecha_vencimiento"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                             {{  'readonly' }}>
                         @error('fecha_vencimiento') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                     </div>
@@ -178,7 +178,7 @@
                             Origen
                         </label>
                         <input type="text" id="origen" wire:model="LoteSeleccionado.origen"
-                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                         {{'readonly' }}>
                         @error('origen') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                     </div>
@@ -190,7 +190,7 @@
                             Fecha de Registro
                         </label>
                         <input type="date" id="fecha_registro" wire:model="LoteSeleccionado.fecha_registro"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                             {{ 'readonly' }}>
                         @error('fecha_registro') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                     </div>

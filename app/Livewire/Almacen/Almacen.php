@@ -16,12 +16,12 @@ class Almacen extends Component
     public $select_medicamento;
     public $cantidad;
     public $fecha_vencimiento;
-    public $origen;
+    public $origen; //oracion
     public $codigo_lote;
     public $presentacion;
     public $unidad;
     public $medida;
-    public $nombre;
+    public $nombre; //Primera letra
 
     public $formView = false;
     public $lote = null;
@@ -34,8 +34,8 @@ class Almacen extends Component
     public $tipo_presentacion = '';
     public $tipos_presentacion = [];
     public $tipo_presentacion_busqueda = '';
-    public $select_presentacion = ''; // Controla si es "nuevo" o "search"
-    public $nueva_presentacion = ''; // Almacena el nombre de la nueva presentación
+    public $select_presentacion = 'search'; // Controla si es "nuevo" o "search"
+    public $nueva_presentacion = ''; // Almacena el nombre de la nueva presentación Oracion
     public $via_administracion; // Almacena el nombre de la nueva presentación
 
     public function mount()
@@ -54,6 +54,20 @@ class Almacen extends Component
     public function form()
     {
         $this->formView = true;
+    }
+
+    //Convertir primera letra de la oracion
+    public function updatedNombre()
+    {
+        $this->nombre = ucfirst(trim($this->nombre));
+    }
+    public function updatedOrigen()
+    {
+        $this->origen = ucfirst(trim($this->origen));
+    }
+    public function updatedNuevaPresentacion()
+    {
+        $this->nueva_presentacion = ucfirst(trim($this->nueva_presentacion));
     }
 
     public function updatedSearch()
@@ -106,13 +120,13 @@ class Almacen extends Component
                 'cantidad' => 'required|integer|min:1',
                 'fecha_vencimiento' => 'required|date|after:today',
                 'origen' => 'required|string',
-                'codigo_lote' => 'required|string',
+                'codigo_lote' => 'required|string|min:3',
                 'nombre' => 'required|string|min:3', 
                 'select_presentacion' => 'required|in:search,nuevo',
-                'nueva_presentacion' => 'required_if:select_presentacion,nuevo|string|max:255',
+                'nueva_presentacion' => 'required_if:select_presentacion,nuevo|string|max:255|min:3',
                 'via_administracion' => 'required_if:select_presentacion,nuevo|required',
                 'tipo_presentacion' => 'required_if:select_presentacion,search|nullable|exists:presentacions,id',
-                'medida' => 'required|string',
+                'medida' => 'required|string|min:2',
                 'unidad' => 'required|numeric',
             ]);
 
@@ -121,8 +135,8 @@ class Almacen extends Component
                 'medicamento_id' => 'required|exists:medicamentos,id',
                 'cantidad' => 'required|integer|min:1',
                 'fecha_vencimiento' => 'required|date|after:today',
-                'origen' => 'required|string',
-                'codigo_lote' => 'required|string',
+                'origen' => 'required|string|min:3',
+                'codigo_lote' => 'required|string|min:3',
             ]);
         }
 

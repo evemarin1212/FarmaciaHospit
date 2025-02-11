@@ -1,4 +1,4 @@
-<div class="p-6 bg-white shadow-md dark:bg-gray-800">
+<div class="p-6 mt-4 mx-4 rounded-lg shadow-lg bg-white/30 backdrop-blur-md dark:bg-gray-800">
     <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
         Medicamentos
     </h2>
@@ -7,12 +7,12 @@
     <input
         type="text"
         wire:model.live="search"
-        class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+        class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
         placeholder="Buscar medicamentos..."
     >
     <select
     wire:model.live="filter"
-    class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+    class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
     >
         <option value="todos">Todos</option>
         <option value="por_agotar">Por Agotar (30 cantidades)</option>
@@ -21,7 +21,7 @@
 
     <!-- Tabla -->
     <table class="table-auto w-full border-collapse bg-gray-50 rounded-lg shadow-sm overflow-hidden dark:bg-gray-700">
-        <thead class="bg-blue-500 text-white dark:bg-blue-600">
+        <thead class="bg-cyan-900 text-white dark:bg-cyan-900">
             <tr>
                 <th class="px-4 py-2 text-left">Nº</th>
                 <th class="px-4 py-2 text-left">Nombre</th>
@@ -78,28 +78,28 @@
                     <input
                     type="text"
                     wire:model="medicamentoSeleccionado.nombre"
-                    class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200"
+                    class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:text-gray-200"
                     {{ 'readonly' }}>
                 </div>
 
                 <div>
                     <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1">Presentación:</label>
-                    <input type="text" wire:model="medicamentoSeleccionado.presentacion" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200" {{ 'readonly' }}>
+                    <input type="text" wire:model="medicamentoSeleccionado.presentacion" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:text-gray-200" {{ 'readonly' }}>
                 </div>
 
                 <div>
                     <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1">Unidad:</label>
-                    <input type="number" wire:model="medicamentoSeleccionado.unidad" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200" {{  'readonly' }}>
+                    <input type="number" wire:model="medicamentoSeleccionado.unidad" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:text-gray-200" {{  'readonly' }}>
                 </div>
 
                 <div>
                     <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1">Medida:</label>
-                    <input type="text" wire:model="medicamentoSeleccionado.medida" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200" {{ 'readonly' }}>
+                    <input type="text" wire:model="medicamentoSeleccionado.medida" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:text-gray-200" {{ 'readonly' }}>
                 </div>
 
                 <div>
                     <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1">Cantidad Disponible:</label>
-                    <input type="number" wire:model="medicamentoSeleccionado.cantidad_disponible" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200" {{ 'readonly' }}>
+                    <input type="number" wire:model="medicamentoSeleccionado.cantidad_disponible" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:text-gray-200" {{ 'readonly' }}>
                 </div>
             </div>
 
