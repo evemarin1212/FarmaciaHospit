@@ -101,10 +101,10 @@ class Almacen extends Component
         $this->unidad = '';
         $this->medida = '';
         $this->nombre = '';
-        $this->lote = null;
-        $this->medicamento_id = null;
+        // $this->lote = null;
+        // $this->medicamento_id = null;
         $this->select_medicamento = 'search';
-        $this->medicamento_select = '';
+        // $this->medicamento_select = '';
         $this->search = '';
         $this->tipo_presentacion = '';
         $this->tipo_presentacion_busqueda = '';

@@ -9,7 +9,7 @@ use App\Models\{Despacho, Lote, Paciente, Medicamento, DespachoSolicitado, Despa
 
 class DespachoForm extends Component
 {
-    public $tipo_despacho = '', $paciente_opcion = '', $observacion = '', $search = '';
+    public $tipo_despacho = '', $paciente_opcion = 'search', $observacion = '', $search = '';
     public $selectedPacienteId = null;
 
     public $paciente_nombre = '', $paciente_apellido = '', $nacionalidad = 'V', $paciente_dni = '', $paciente_estatus = '';
@@ -58,9 +58,6 @@ class DespachoForm extends Component
 
     public function updatedMedicamentoSolicitado()
     {
-        // $this->validate([
-        //     'tipo_medicamento_busqueda' => 'required|exists:medicamentos,nombre',
-        // ]);
         $this->medicamentos_solicitados_bus = $this->buscarMedicamentos($this->medicamento_solicitado);
     }
 
@@ -100,14 +97,6 @@ class DespachoForm extends Component
     {
         
         $this->reset();
-        // $this->reset([
-        //     'tipo_despacho', 'paciente_opcion', 'observacion', 'search',
-        //     'selectedPacienteId', 'paciente_nombre', 'paciente_apellido',
-        //     'paciente_dni', 'paciente_estatus', 'medicamento_seleccionado',
-        //     'medicamentos_selec', 'medicamento_solicitado',
-        //     'cantidad_medicamento', 'cantidad_medicamento_solicitado',
-        //     'medicamentos_selec_bus'
-        // ]);
     }
 
     private function obtenerPacienteId()
@@ -193,15 +182,6 @@ class DespachoForm extends Component
                 'paciente_dni' => 'required|unique:pacientes,dni|numeric|max:99999999|min:99999',
             ]);
             Log::info("Intentando eliminar el despacho con ID: " . $this->nacionalidad);
-            // if ($this->nacionalidad == "v"){
-            //     $this->validate([
-            //     ]);
-
-            // } elseif ($this->nacionalidad == "E"){
-            //     $this->validate([
-            //         'paciente_dni' => 'required|unique:pacientes,dni|string|max:12|min:6',
-            //     ]);
-            // }
         } else {
             $this->validate([
                 'selectedPacienteId' => 'required|exists:pacientes,id',
@@ -220,7 +200,7 @@ class DespachoForm extends Component
             'tipo' => $this->tipo_despacho,
             'fecha_pedido' => now(),
         ];
-    
+
         if ($this->tipo_despacho !== 'quirofano') {
             $this->validatePaciente();
             $this->validate(['medicamentos_selec' => 'required']);
@@ -237,26 +217,24 @@ class DespachoForm extends Component
             $this->validate(['observacion' => 'required|string|min:5|max:150']);
             $despachoData['observacion'] = $this->observacion;
         }
-        // $this->validate();
         $despacho = Despacho::create($despachoData);
-        
+
         // Procesar medicamentos según el tipo de despacho
         if ($this->tipo_despacho === 'quirofano') {
             $this->procesarMedicamentosSolicitados($despacho);
         } else {
             $this->procesarMedicamentos($despacho);
         }
-    
+
         DB::commit();
         $this->reset();
         $this->dispatch('render');
         $this->dispatch('alert', "¡El despacho se creó satisfactoriamente!");
     }
-    
+
 
     private function procesarMedicamentos($despacho)
     {
-        // $this->validate();
         foreach ($this->medicamentos_selec as $medicamento) {
             DespachoMedicamento::create([
                 'despacho_id' => $despacho->id,
@@ -269,7 +247,6 @@ class DespachoForm extends Component
 
     private function procesarMedicamentosSolicitados($despacho)
     {
-        // $this->validate();
         foreach ($this->medicamentos_solicitados_selec as $medicamento) {
             $despachomedicamento = DespachoMedicamento::create([
                 'despacho_id' => $despacho->id,
@@ -284,12 +261,8 @@ class DespachoForm extends Component
             ]);
             Medicamento::find($medicamento['id'])->decrement('cantidad_disponible', $medicamento['cantidad_despacho']);
 
-    
-            // Actualizar inventario solo si hay stock suficiente
-            // Medicamento::find($medicamento['id'])->decrement('cantidad_disponible', $medicamento['cantidad_despacho']);
         }
     }
-    
 
     public function render()
     {

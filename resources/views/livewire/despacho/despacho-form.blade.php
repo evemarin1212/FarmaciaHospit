@@ -7,7 +7,7 @@
 
                 @if ($formView)
                     <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg w-3/4 shadow-lg overflow-y-auto max-h-3/4">
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg w-3/4 shadow-lg overflow-y-auto max-h-[78vh]">
                             {{-- <div class="bg-white dark:bg-gray-800 p-6 rounded-lg w-1/2 shadow-lg max-h-[80vh] overflow-y-auto"> --}}
                             <h1 class="text-3xl font-bold text-center mb-6 text-gray-800 dark:text-gray-200">
                                 Registrar Nuevo Despacho
@@ -34,19 +34,20 @@
 
                                     <!-- Columna Izquierda: Información del Paciente -->
                                     @if (in_array($tipo_despacho, ['emergencia', 'hospitalizado']))
-                                        <div class="flex flex-row-2">
+                                        <div class="flex flex-row-2 max-h-[36vh] overflow-y-auto">
                                             <div class="flex flex-col w-full px-4">
                                                 <div class="mb-4">
-                                                    <label for="paciente_opcion" class="block text-sm font-medium text-gray-700 focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:text-gray-200 after:content-['*'] after:text-red-500 after:ml-1">Paciente:</label>
-                                                    <select wire:model.live="paciente_opcion" id="paciente_opcion"
-                                                        class="w-full mt-1 p-2 focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-200">
-                                                        <option value="">Seleccione</option>
-                                                        <option value="search">Buscar existente</option>
-                                                        <option value="nuevo">Registrar nuevo</option>
-                                                    </select>
-                                                    @error('paciente_opcion')
-                                                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                                                    @enderror
+                                                    @if ($paciente_opcion != 'nuevo')
+                                                        <label for="paciente_opcion" class="block text-sm font-medium text-gray-700 focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:text-gray-200 after:content-['*'] after:text-red-500 after:ml-1">Paciente:</label>
+                                                        <select wire:model.live="paciente_opcion" id="paciente_opcion"
+                                                            class="w-full mt-1 p-2 focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-200">
+                                                            <option value="search">Buscar existente</option>
+                                                            <option value="nuevo">Registrar nuevo</option>
+                                                        </select>
+                                                        @error('paciente_opcion')
+                                                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                                                        @enderror
+                                                    @endif
                                                 </div>
                             
                                                 @if ($paciente_opcion === 'nuevo')
@@ -101,12 +102,12 @@
                                                         @else
                                                             <p class="mt-2 text-gray-500 dark:text-gray-400">No se encontraron pacientes</p>
                                                         @endif
-                                                        @if($selectedPacienteId)
+                                                        {{-- @if($selectedPacienteId)
                                                             <div
                                                                 class="mt-2 p-2 border focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 border-green-500 rounded-md bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">
                                                                 Paciente seleccionado: {{ App\Models\Paciente::find($selectedPacienteId)->nombre }}
                                                             </div>
-                                                        @endif
+                                                        @endif --}}
                                                         @error('selectedPacienteId') 
                                                             <span class="text-red-500 text-sm">{{ $message }}</span>
                                                         @enderror
@@ -135,7 +136,7 @@
                                                                     </option>
                                                                 @endforeach
                                                             </select>
-                                                            <input type="number" wire:model="cantidad_medicamento" placeholder="Cantidad" required
+                                                            <input type="text" wire:model="cantidad_medicamento" placeholder="Cantidad" required
                                                                 class="w-1/4 border-gray-300 focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-200">
                                                             <button type="button" wire:click="agregarMedicamento"
                                                                 class="w-1/4 px-4 py-2 bg-emerald-500 text-white rounded-md shadow-sm">
@@ -156,7 +157,7 @@
                                                     @enderror
                                                     <!-- tabla sencilla -->
                                                     @if (!empty($medicamentos_selec ))
-                                                        <ul class="mt-2 p-2 max-h-48 focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 overflow-y-auto border border-gray-300 rounded-md shadow-sm">
+                                                        <ul class="mt-2 p-2 max-h-24 focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 overflow-y-auto border border-gray-300 rounded-md shadow-sm">
                                                             @foreach ($medicamentos_selec as $index => $medicamento)
                                                                 <li class="flex justify-between items-center py-2 border-b border-gray-300 dark:border-gray-600">
                                                                     <span>{{ $medicamento['nombre'] }} - {{ $medicamento['unidad'] }} {{ $medicamento['medida'] }} ({{ $medicamento['cantidad'] }})</span>
@@ -211,9 +212,9 @@
                                                                     </option>
                                                                 @endforeach
                                                             </select>
-                                                            <input type="number" wire:model="cantidad_medicamento_solicitado" placeholder="Cantidad Solicitada" required
+                                                            <input type="text" wire:model="cantidad_medicamento_solicitado" placeholder="Cantidad Solicitada" required
                                                                 class="w-1/4 border-gray-300 rounded-md focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 shadow-sm dark:bg-gray-700 dark:text-gray-200">
-                                                            <input type="number" wire:model="cantidad_medicamento"
+                                                            <input type="text" wire:model="cantidad_medicamento"
                                                                 placeholder="Cantidad despachada" required
                                                                 class="w-1/4 border-gray-300 rounded-md focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 shadow-sm dark:bg-gray-700 dark:text-gray-200">
                                                             <button type="button" wire:click="agregarMedicamentoSolicitado"
@@ -236,7 +237,7 @@
                                                     @enderror
                                                     <!-- tabla sencilla -->
                                                     @if (!empty($medicamentos_solicitados_selec))
-                                                        <ul class="mt-2 p-2 max-h-48 overflow-y-auto border border-gray-300 focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 rounded-md shadow-sm">
+                                                        <ul class="mt-2 p-2 max-h-24 overflow-y-auto border border-gray-300 focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 rounded-md shadow-sm">
                                                             @foreach ($medicamentos_solicitados_selec as $index => $medicamento)
                                                                 <li class="flex justify-between items-center py-2 focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 border-b border-gray-300 dark:border-gray-600">
                                                                     <span>{{ $medicamento['nombre'] }} - {{ $medicamento['unidad'] }} {{ $medicamento['medida'] }}
@@ -268,7 +269,7 @@
                                     @endif
 
                                     <!-- Botones -->
-                                    <div class="flex justify-end gap-4">
+                                    <div class="flex justify-end mt-2 gap-4">
                                         <button type="button" wire:click="cancelar"
                                             class="px-4 py-2 bg-red-400 hover:bg-red-600 text-white focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 rounded-md">Cancelar</button>
                                         <button type="submit"
@@ -286,7 +287,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus-lg mr-2" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
                         </svg>
-                            Registrar nuevo lote
+                            Nuevo Despacho
                         </button>
                     </div>
                 @endif

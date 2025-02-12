@@ -5,10 +5,12 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Str;
 
 use function Livewire\Volt\layout;
 use function Livewire\Volt\rules;
 use function Livewire\Volt\state;
+use function Livewire\Volt\effect;
 
 layout('layouts.guest');
 
@@ -16,16 +18,27 @@ state([
     'name' => '',
     'email' => '',
     'password' => '',
-    'password_confirmation' => ''
+    'password_confirmation' => '',
 ]);
 
 rules([
-    'name' => ['required', 'string', 'max:255'],
-    'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+    'name' => ['required', 'string', 'max:255', function ($attribute, $value, $fail) use (&$state) {
+        $state['name'] = ucfirst(trim($value));
+    }],
+    'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
     'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
 ]);
 
+// // Aplicar efecto cuando cambia 'name'
+// effect(function ($state) {
+//     // $state['name'] = ucfirst(trim($state['name']));
+//     $string = Str::of('name')->ucfirst();
+// });
+ 
 $register = function () {
+    // Asegurar que el nombre esté formateado correctamente antes de validar
+    $this->name = ucfirst(trim($this->name));
+
     $validated = $this->validate();
 
     $validated['password'] = Hash::make($validated['password']);
@@ -36,6 +49,8 @@ $register = function () {
 
     $this->redirect(route('dashboard', absolute: false), navigate: true);
 };
+
+
 
 ?>
 
