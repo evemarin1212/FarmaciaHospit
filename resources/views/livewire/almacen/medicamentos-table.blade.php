@@ -1,4 +1,4 @@
-<div class="p-6 mt-4 mx-4 rounded-lg shadow-lg bg-white/30 backdrop-blur-md dark:bg-gray-800">
+<div class="p-6 mt-4 mx-4 rounded-lg shadow-lg bg-white/30 backdrop-blur-md dark:bg-gray-800 z-0">
     <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
         Medicamentos
     </h2>
@@ -66,7 +66,7 @@
 
     <!-- Modal para Ver-->
     @if($modal)
-    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-90">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-lg w-1/3 shadow-lg overflow-y-auto max-h-screen">
             <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
                 {{ 'Detalles del Medicamento' }}
@@ -84,7 +84,7 @@
 
                 <div>
                     <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1">Presentación:</label>
-                    <input type="text" wire:model="medicamentoSeleccionado.presentacion" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:text-gray-200" {{ 'readonly' }}>
+                    <input type="text" wire:model="presentacion.tipo" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:text-gray-200" {{ 'readonly' }}>
                 </div>
 
                 <div>

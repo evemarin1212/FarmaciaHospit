@@ -4,6 +4,7 @@ namespace App\Livewire\Almacen;
 
 use Livewire\Component;
 use App\Models\Medicamento;
+use App\Models\presentacion;
 use Livewire\WithPagination;
 
 class MedicamentosTable extends Component
@@ -12,6 +13,7 @@ class MedicamentosTable extends Component
 
     public $filter = 'todos';
     public $search = '';
+    public $presentacion = '';
     public $medicamentoSeleccionado = []; // Para almacenar el medicamento seleccionado
     public $editar = false;         // Para alternar entre los modos de edición y vista
     public $modal = false;         // Para alternar entre los modos de edición y vista
@@ -33,6 +35,7 @@ class MedicamentosTable extends Component
     public function ver($id)
     {
         $this->medicamentoSeleccionado = Medicamento::findOrFail($id)->toArray(); // Convierte el modelo en array
+        $this->presentacion = presentacion::findOrFail($this->medicamentoSeleccionado['presentacion_id'])->toArray();
         $this->editar = false; // Modo vista
         $this->modal = true;   // Mostrar el modal
     }

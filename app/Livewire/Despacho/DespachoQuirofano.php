@@ -9,6 +9,7 @@ use App\Models\DespachoSolicitado;
 use Illuminate\Support\Facades\DB;
 use App\Models\DespachoMedicamento;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 Use App\Models\Medicamento;
 
 class DespachoQuirofano extends Component
@@ -110,6 +111,7 @@ class DespachoQuirofano extends Component
 
         return view('livewire.despacho.despacho-quirofano', [
             'despachos' => $query->paginate(10),
+            'tipo' => Auth::user()->tipo,
         ]);
     }
 }

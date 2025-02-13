@@ -8,36 +8,88 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            font-size: 12px;
-            margin: 20px;
+            font-size: 14px;
+            margin: 40px;
+            color: #333;
         }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            float: left;
+            width: 80px;
+            height: 80px;
+            margin-right: 15px;
+            position: absolute;
+            z-index: 10;
+        }
+
+        .membrete {
+            text-align: center;
+            font-size: 14px;
+            line-height: 0.7;
+            margin-bottom: 10px;
+            /* position: absolute; */
+        }
+
         .titulo {
             text-align: center;
-            font-size: 16px;
-            margin-bottom: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
         }
+
         .fecha {
+            text-align: center;
             font-size: 14px;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
+
+        .table-container {
+            margin-top: 20px;
+        }
+
         .table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 10px;
         }
+
         .table, .table th, .table td {
             border: 1px solid black;
         }
+
         .table th, .table td {
-            padding: 5px;
-            text-align: left;
+            padding: 8px;
+            text-align: center;
         }
+
         .table th {
-            background-color: #f2f2f2;
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
         }
     </style>
 </head>
 <body>
+
+    <header class="header">
+        {{-- <img src=" {{asset('svg/2sViAPwvYhpvEIpWwI8S6SJgc7S.svg')}} " alt="Logo de la Institución" class="logo"> --}}
+        <div class="membrete">
+            <p>REPÚBLICA BOLIVARIANA DE VENEZUELA</p>
+            <p>MINISTERIO DEL PODER POPULAR PARA LA DEFENSA</p>
+            <p>BICENTENARIO DE SERVICIOS PARA LA DEFENSA</p>
+            <p>DIRECCIÓN GENERAL DE SALUD DE LA FANB</p>
+            <p>HOSPITAL MILITAR CNEL. NELSON SAYAGO MORA</p>
+            <p><strong>FARMACIA INTERHOSPITALARIA</strong></p>
+        </div>
+    </header>
 
     <div class="titulo">
         <h2>Reporte de {{ ucfirst($tipo) }}</h2>

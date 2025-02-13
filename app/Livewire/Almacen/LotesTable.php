@@ -8,6 +8,7 @@ use App\Models\Medicamento;
 use App\Models\presentacion;
 use Livewire\WithPagination;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 
 class LotesTable extends Component
@@ -175,6 +176,7 @@ class LotesTable extends Component
 
         return view('livewire.almacen.lotes-table', [
             'lotes' => $lotes,
+            'tipo' => Auth::user()->tipo,
         ]);
     }
 }

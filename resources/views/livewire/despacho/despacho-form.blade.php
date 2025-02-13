@@ -199,7 +199,7 @@
                                                     </label>
                                                     <input type="text" id="medicamento_solicitado" wire:model.live="medicamento_solicitado"
                                                         class="w-full mt-2 border-gray-300 rounded-md focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" 
-                                                        placeholder="Buscar tipo de presentación">
+                                                        placeholder="Buscar medicamento">
                                                 
                                                     @if (!empty($medicamentos_solicitados_bus) && count($medicamentos_solicitados_bus) > 0)
                                                         <div class="flex space-x-2 mt-2">

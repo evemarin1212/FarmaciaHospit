@@ -39,7 +39,7 @@
                 </main>
             </div>
         </div>
-        <footer class="bg-gray-200 relative botton-0 z-20 py-16 text-center text-sm text-black dark:text-white/70">
+        <footer class="bg-gray-200 relative botton-0 z-0 py-16 text-center text-sm text-black dark:text-white/70">
             <div class="container mx-auto px-6">
                 <div class="flex flex-col md:flex-row justify-between items-center">
                     <div class="text-center md:text-left mb-4 md:mb-0">
@@ -56,6 +56,7 @@
                 </div>
             </div>
         </footer>
+
         @livewireScripts()
     </body>
     <script>

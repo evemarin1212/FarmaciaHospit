@@ -1,4 +1,4 @@
-<div class="p-6 m-4 rounded-lg shadow-lg bg-white/30 backdrop-blur-md dark:bg-gray-800">
+<div class="p-6 m-4 rounded-lg shadow-lg bg-white/30 backdrop-blur-md dark:bg-gray-800 z-0">
     <div class="flex justify-between">
         <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
             Lotes
@@ -66,9 +66,11 @@
                         <button wire:click="ver({{ $lote->id }})" class="bg-yellow-500 text-white px-2 py-1 rounded">
                             Ver
                         </button>
-                        <button wire:click="eliminar({{ $lote->id }})" onclick="confirmarEliminacion({{ $lote->id }})" class="bg-red-500 text-white px-2 py-1 rounded">
-                            Eliminar
-                        </button>
+                        @if ($tipo === 'Admin')
+                            <button wire:click="eliminar({{ $lote->id }})" onclick="confirmarEliminacion({{ $lote->id }})" class="bg-red-500 text-white px-2 py-1 rounded">
+                                Eliminar
+                            </button>
+                        @endif
                         
                     </td>
                 </tr>

@@ -2,10 +2,11 @@
 namespace App\Livewire\Almacen;
 
 use App\Models\Lote;
+use Livewire\Component;
 use App\Models\Medicamento;
 use App\Models\Presentacion;
-use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Auth;
 
 class Almacen extends Component
 {
@@ -41,14 +42,14 @@ class Almacen extends Component
     public function mount()
     {
         $this->medicamentos = collect();
-        $this->tipos_presentacion = Presentacion::pluck('tipo', 'via_administracion', 'id'); // Recuperar tipos de medicamento desde el modelo Presentacion
+        $this->tipos_presentacion = Presentacion::pluck('tipo', 'id'); // Recuperar tipos de medicamento desde el modelo Presentacion
     }
 
     public function updatedTipoPresentacionBusqueda()
     {
-        $this->tipos_presentacion = Presentacion::where('tipo', 'like', "%{$this->tipo_presentacion_busqueda}%")
+        $this->tipos_presentacion = empty($this->tipo_presentacion_busqueda) ? [] : Presentacion::where('tipo', 'like', "%{$this->tipo_presentacion_busqueda}%")
         ->limit(5)
-        ->pluck('tipo', 'via_administracion','id');
+        ->pluck('tipo','id');
     }
 
     public function form()
@@ -101,10 +102,10 @@ class Almacen extends Component
         $this->unidad = '';
         $this->medida = '';
         $this->nombre = '';
-        // $this->lote = null;
+        $this->lote = null;
         // $this->medicamento_id = null;
         $this->select_medicamento = 'search';
-        // $this->medicamento_select = '';
+        $this->medicamento_select = null;
         $this->search = '';
         $this->tipo_presentacion = '';
         $this->tipo_presentacion_busqueda = '';
@@ -115,19 +116,19 @@ class Almacen extends Component
 
     public function save()
     {
-        if( $this->select_medicamento === "nuevo" ){
+        if( $this->select_medicamento === 'nuevo' ){
             $this->validate([
-                'cantidad' => 'required|integer|min:1',
-                'fecha_vencimiento' => 'required|date|after:today',
-                'origen' => 'required|string',
-                'codigo_lote' => 'required|string|min:3',
                 'nombre' => 'required|string|min:3', 
                 'select_presentacion' => 'required|in:search,nuevo',
                 'nueva_presentacion' => 'required_if:select_presentacion,nuevo|string|max:255|min:3',
-                'via_administracion' => 'required_if:select_presentacion,nuevo|required',
+                'via_administracion' => 'required_if:select_presentacion,nuevo|nullable',
                 'tipo_presentacion' => 'required_if:select_presentacion,search|nullable|exists:presentacions,id',
-                'medida' => 'required|string|min:2',
                 'unidad' => 'required|numeric',
+                'medida' => 'required|string|min:2',
+                'codigo_lote' => 'required|string|min:3',
+                'cantidad' => 'required|integer|min:1',
+                'fecha_vencimiento' => 'required|date|after:today',
+                'origen' => 'required|string',
             ]);
 
         } else {
@@ -139,6 +140,9 @@ class Almacen extends Component
                 'codigo_lote' => 'required|string|min:3',
             ]);
         }
+
+        $this->dispatch('alert', "¡El medicamento se creó satisfactoriamente!");
+
 
         if( $this->select_medicamento === "nuevo" ){
             // Si la opción es "nuevo", crea una nueva presentación
@@ -193,6 +197,7 @@ class Almacen extends Component
     {
         return view('livewire.almacen.almacen', [
         'medicamentos' => Medicamento::where('nombre', 'like', "%{$this->search}%")->limit(3)->get(),
+        'tipo' => Auth::user()->tipo,
         ]);
     }
 }

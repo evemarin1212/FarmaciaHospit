@@ -32,10 +32,12 @@
                         <button wire:click="ver({{ $despacho->id }})" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">
                             Ver
                         </button>
-                        <button wire:click="confirmarEliminacion('¿Estás seguro de eliminar este despacho?', {{ $despacho->id }})" 
-                            class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">
-                            Eliminar
-                        </button>
+                        @if ($tipo === 'Admin')
+                            <button wire:click="confirmarEliminacion('¿Estás seguro de eliminar este despacho?', {{ $despacho->id }})" 
+                                class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">
+                                Eliminar
+                            </button>
+                        @endif
                     </td>
                 </tr>
             @endforeach
@@ -49,7 +51,7 @@
 
     <!-- Modal -->
     @if($modal)
-        <div class="absolute top-0 inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="fixed top-0 inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
             <!-- Contenedor del Modal -->
             <div class="bg-white dark:bg-gray-800 p-6 rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full ">
                 <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">

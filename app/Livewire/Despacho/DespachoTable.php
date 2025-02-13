@@ -3,9 +3,10 @@
 namespace App\Livewire\Despacho;
 
 use Livewire\Component;
-use Livewire\WithPagination;
 use App\Models\Despacho;
+use Livewire\WithPagination;
 use App\Models\DespachoMedicamento;
+use Illuminate\Support\Facades\Auth;
 
 class DespachoTable extends Component
 {
@@ -82,6 +83,7 @@ class DespachoTable extends Component
 
         return view('livewire.despacho.despacho-table', [
             'despachos' => $despachos->paginate(10),
+            'tipo' => Auth::user()->tipo,
         ]);
     }
 }

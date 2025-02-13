@@ -5,6 +5,7 @@ namespace App\Livewire\Despacho;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Models\{Despacho, Lote, Paciente, Medicamento, DespachoSolicitado, DespachoMedicamento};
 
 class DespachoForm extends Component
@@ -269,6 +270,7 @@ class DespachoForm extends Component
         return view('livewire.despacho.despacho-form', [
             'pacientes' => Paciente::where('dni', 'like', "%{$this->search}%")->limit(3)->get(),
             'medicamentos' => Medicamento::all(),
+            'tipo' => Auth::user()->tipo,
         ]);
     }
 }

@@ -101,7 +101,7 @@
                                     placeholder="Buscar presentación por nombre">
 
                                 <!-- Selector de Resultados -->
-                                @if (!empty($tipos_presentacion))
+                                @if (!empty($tipos_presentacion) && count($tipos_presentacion) > 0)
                                     <select id="tipo_presentacion" wire:model.live="tipo_presentacion"
                                         class="w-full mt-2 p-2 border-gray-300 rounded-md shadow-sm focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
                                         <option value="">Seleccione un tipo</option>
@@ -116,6 +116,12 @@
                                     </p>
                                 @endif
                                 @error('tipo_presentacion')
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                @enderror
+                                @error('nueva_presentacion')
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                @enderror
+                                @error('via_administracion')
                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -139,7 +145,7 @@
                                 class="block w-full border-gray-300 rounded-md shadow-sm focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" placeholder="Unidad de medida, ej.: ml" required>
                             @error('medida') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                         </div>
-                    @elseif ($select_medicamento === 'search')
+                    @else
                         <!-- Campo de búsqueda -->
                         <div>
                             <input

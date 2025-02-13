@@ -199,13 +199,16 @@ class ReporteForm extends Component
             
             // Calcular la cantidad de lotes ingresados
             $cantidad_lotes_ingresados = Lote::where('medicamento_id', $medicamento->id)
-                                            ->sum('cantidad');
+                ->whereBetween('fecha_registro', [$this->fecha_inicio, $this->fecha_fin])
+                ->sum('cantidad');
             
             // Calcular la cantidad inicial
             $cantidad_inicial = $medicamento->cantidad_disponible + $cantidad_despachada - $cantidad_lotes_ingresados;
             
             $medicamento->cantidad_despachada = $cantidad_despachada;
             $medicamento->cantidad_inicial = $cantidad_inicial;
+            $medicamento->cantidad_lote = $cantidad_lotes_ingresados;
+            $medicamento->cantidad_final = $medicamento->cantidad_disponible;
         }
 
         return $medicamentos;

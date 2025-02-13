@@ -10,6 +10,7 @@ use function Livewire\Volt\state;
 
 state([
     'name' => fn () => auth()->user()->name,
+    'tipo' => fn () => auth()->user()->tipo,
     'email' => fn () => auth()->user()->email
 ]);
 
@@ -88,6 +89,12 @@ $sendVerification = function () {
                     @endif
                 </div>
             @endif
+        </div>
+
+        <div>
+            <label for="tipo" class="block font-medium text-gray-800 dark:text-gray-800 mt-2 text-[1.1rem] " >Tipo de usuario</label>
+            <x-text-input wire:model="tipo" id="tipo" name="tipo" type="text" class="mt-1 block w-full" readonly required autofocus autocomplete="name" />
+            <x-input-error class="mt-2" :messages="$errors->get('tipo')" />
         </div>
 
         <div class="flex items-center gap-4">

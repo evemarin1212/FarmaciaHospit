@@ -20,18 +20,26 @@
             <div class="relative min-h-screen flex flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white">
                 <img class="absolute w-full h-full bg-no-repeat" src="{{asset('img/Picsart_25-02-05_01-02-51-216.png')}}"  />
                 <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl pb-8">
-                    <header class="flex justify-center items-center gap-2 py-10 relative">
-                        <!-- logo -->
-                        <div class="flex justify-center h-28">
+                    <header class="flex flex-col items-center text-center py-10 relative rounded-lg">
+                        <!-- Logo -->
+                        <div class="h-28 w-28 flex justify-center items-center">
                             <a href="">
-                                <img src="{{asset('svg/2sViAPwvYhpvEIpWwI8S6SJgc7S.svg')}}" alt="Logo Hospimil" class="h-full w-full">
+                                <img src="{{ asset('svg/2sViAPwvYhpvEIpWwI8S6SJgc7S.svg') }}" alt="Logo Hospimil" class="h-full w-full object-contain">
                             </a>
                         </div>
+                    
+                        <!-- Título -->
+                        <p class="text-lg font-semibold text-gray-900 dark:text-gray-200 mt-3">
+                            Farmacia Hospitalaria
+                        </p>
+                    
+                        <!-- Sección para login si es necesario -->
                         {{-- @if (Route::has('login')) --}}
+                            {{-- Aquí puedes agregar un botón o enlace para iniciar sesión --}}
                         {{-- @endif --}}
                     </header>
 
-                    <main class="mt-6 flex justify-center h-[28rem]">
+                    <main class="mt-6 flex justify-center min-h-[28rem]">
                         <div class=" bg-white/30 backdrop-blur-md shadow-lg shadow-stone-400/50 p-8 rounded-lg w-[24rem]">
                             <livewire:pages.auth.login />
                         </div>

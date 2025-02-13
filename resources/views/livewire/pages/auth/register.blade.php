@@ -16,15 +16,15 @@ layout('layouts.guest');
 
 state([
     'name' => '',
+    'tipo' => '',
     'email' => '',
     'password' => '',
     'password_confirmation' => '',
 ]);
 
 rules([
-    'name' => ['required', 'string', 'max:255', function ($attribute, $value, $fail) use (&$state) {
-        $state['name'] = ucfirst(trim($value));
-    }],
+    'name' => ['required', 'string', 'max:255'],
+    'tipo' => ['required'],
     'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
     'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
 ]);
@@ -37,7 +37,7 @@ rules([
  
 $register = function () {
     // Asegurar que el nombre esté formateado correctamente antes de validar
-    $this->name = ucfirst(trim($this->name));
+    // $this->name = Str::of('name')->ucfirst();
 
     $validated = $this->validate();
 
@@ -61,6 +61,17 @@ $register = function () {
             <x-input-label for="name" :value="__('Name')" />
             <x-text-input wire:model="name" id="name" class="block mt-1 w-full" type="text" name="name" placeholder="ej.: Nombre Apellido" required autofocus autocomplete="name" />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
+        </div>
+
+        <!-- Tipo -->
+        <div>
+            <x-input-label for="tipo" :value="__('Tipo de usuario')" />
+            <select name="tipo" id="tipo" wire:model="tipo" class="border-gray-300 dark:border-gray-700 bg-gray-100/80  dark:bg-gray-900 dark:text-gray-300 focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 rounded-md shadow-sm">
+                <option value="">Seleccionar tipo de usuario</option>
+                <option value="lector">Lector</option>
+                <option value="admin">Admin</option>
+            </select>
+            <x-input-error :messages="$errors->get('tipo')" class="mt-2" />
         </div>
 
         <!-- Email Address -->
