@@ -8,9 +8,11 @@
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
+        <script src="{{ asset('css/fontbunny') }}"></script>
+        {{-- <link rel="preconnect" href="https://fonts.bunny.net"> --}}
+        {{-- <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" /> --}}
         <link rel="icon" href="{{asset('svg/2sViAPwvYhpvEIpWwI8S6SJgc7S.svg')}}">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <!-- tailwind -->
         <script src="{{ asset('css/min') }}"></script>
 
         <!-- Scripts -->
@@ -39,6 +41,7 @@
                                 <h2 class="text-lg font-semibold text-blakc ">UNEFA</h2>
                             </a>
                             <p class="text-sm text-gray-600">© {{ date('Y') }} Todos los derechos reservados.</p>
+                            <p class="text-sm text-gray-600">V 3.20 Eve Marín.</p>
                         </div>
                         <div class="flex space-x-4">
                             <a href="#" class="text-gray-600 hover:text-white transition">Inicio</a>

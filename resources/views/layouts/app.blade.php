@@ -47,6 +47,7 @@
                             <h2 class="text-lg font-semibold text-blakc ">UNEFA</h2>
                         </a>
                         <p class="text-sm text-gray-600">© {{ date('Y') }} Todos los derechos reservados.</p>
+                        <p class="text-sm text-gray-600">V 3.20 Eve Marín.</p>
                     </div>
                     <div class="flex space-x-4">
                         <a href="#" class="text-gray-600 hover:text-white transition">Inicio</a>

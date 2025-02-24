@@ -1,94 +1,96 @@
-<div class="p-6 m-4 rounded-lg shadow-lg bg-white/30 backdrop-blur-md dark:bg-gray-800 z-0">
-    <div class="flex justify-between">
-        <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
-            Lotes
-            @if (session('error'))
-                <div class="bg-red-500 text-white p-3 rounded-lg">
-                    {{ session('error') }}
-                </div>
-            @endif
-        </h2>
-        <button class="bg-erde-500 text-white px-2 py-1 rounded">
+<div>
+    <div class="p-6 m-4 rounded-lg shadow-lg bg-white/30 backdrop-blur-md dark:bg-gray-800 z-0">
+        <div class="flex justify-between">
+            <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+                Lotes
+                @if (session('error'))
+                    <div class="bg-red-500 text-white p-3 rounded-lg">
+                        {{ session('error') }}
+                    </div>
+                @endif
+            </h2>
+            <button class="bg-erde-500 text-white px-2 py-1 rounded">
 
-        </button>
-    </div>
+            </button>
+        </div>
 
-    <!-- Campo de búsqueda -->
-    <input
-        type="text"
-        wire:model.live="search"
-        class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
-        placeholder="Buscar lote por nombre de medicamento ingresado..."
-    >
-    <!-- Filtro -->
-    <select
-        wire:model.live="filter"
-        class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
-    >
-        <option value="todos">Todos</option>
-        <option value="por_vencer">Por Vencer (30 días)</option>
-        <option value="vencidos">Vencidos</option>
-    </select>
+        <!-- Campo de búsqueda -->
+        <input
+            type="text"
+            wire:model.live="search"
+            class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+            placeholder="Buscar lote por nombre de medicamento ingresado..."
+        >
+        <!-- Filtro -->
+        <select
+            wire:model.live="filter"
+            class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+        >
+            <option value="todos">Todos</option>
+            <option value="por_vencer">Por Vencer (30 días)</option>
+            <option value="vencidos">Vencidos</option>
+        </select>
 
-    <!-- Tabla -->
-    <table class="table-auto w-full border-collapse bg-gray-50 rounded-lg shadow-sm overflow-hidden dark:bg-gray-700">
-        <thead class="bg-cyan-900 text-white dark:bg-cyan-900">
-            <tr>
-                <th class="px-4 py-2 text-left">Nº</th>
-                <th class="px-4 py-2 text-left">Código de lote</th>
-                <th class="px-4 py-2 text-left">Medicamento</th>
-                <th class="px-4 py-2 text-left">Cantidad</th>
-                <th class="px-4 py-2 text-left">Fecha de Vencimiento</th>
-                <th class="px-4 py-2 text-left">Estatus</th>
-                <th class="px-4 py-2 text-left">Estado</th>
-                <th class="px-4 py-2 text-left">Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($lotes as $lote)
-                <tr class="border-t last:border-b hover:bg-blue-100 transition dark:border-gray-600 dark:hover:bg-gray-600">
-                    <td class="px-4 py-2">{{ $loop->iteration }}</td>
-                    <td class="px-4 py-2">{{ $lote->codigo_lote }}</td>
-                    <td class="px-4 py-2">{{ $lote->medicamento->nombre }}</td>
-                    <td class="px-4 py-2">{{ $lote->cantidad }}</td>
-                    <td class="px-4 py-2">{{ $lote->fecha_vencimiento }}</td>
-                    <td class="px-4 py-2">{{ $lote->estatus }}</td>
-                    <td class="px-4 py-2">
-                        @if($lote->fecha_vencimiento < now())
-                            <h3 class="text-red-500 font-semibold"> Vencido </h3>
-                        @elseif($lote->fecha_vencimiento <= now()->addDays(30))
-                            <h3 class="text-orange-500  font-semibold"> Por Vencer </h3>
-                        @else
-                            Disponible
-                        @endif
-                    </td>
-                    <td class="px-4 py-2">
-                        <button wire:click="ver({{ $lote->id }})" class="bg-yellow-500 text-white px-2 py-1 rounded">
-                            Ver
-                        </button>
-                        @if ($tipo === 'Admin')
-                            <button wire:click="eliminar({{ $lote->id }})" onclick="confirmarEliminacion({{ $lote->id }})" class="bg-red-500 text-white px-2 py-1 rounded">
-                                Eliminar
-                            </button>
-                        @endif
-                        
-                    </td>
+        <!-- Tabla -->
+        <table class="table-auto w-full border-collapse bg-gray-50 rounded-lg shadow-sm overflow-hidden dark:bg-gray-700">
+            <thead class="bg-cyan-900 text-white dark:bg-cyan-900">
+                <tr>
+                    <th class="px-4 py-2 text-left">Nº</th>
+                    <th class="px-4 py-2 text-left">Código de lote</th>
+                    <th class="px-4 py-2 text-left">Medicamento</th>
+                    <th class="px-4 py-2 text-left">Cantidad</th>
+                    <th class="px-4 py-2 text-left">Fecha de Vencimiento</th>
+                    <th class="px-4 py-2 text-left">Estatus</th>
+                    <th class="px-4 py-2 text-left">Estado</th>
+                    <th class="px-4 py-2 text-left">Acciones</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach($lotes as $lote)
+                    <tr class="border-t last:border-b hover:bg-blue-100 transition dark:border-gray-600 dark:hover:bg-gray-600">
+                        <td class="px-4 py-2">{{ $loop->iteration }}</td>
+                        <td class="px-4 py-2">{{ $lote->codigo_lote }}</td>
+                        <td class="px-4 py-2">{{ $lote->medicamento->nombre }}</td>
+                        <td class="px-4 py-2">{{ $lote->cantidad }}</td>
+                        <td class="px-4 py-2">{{ $lote->fecha_vencimiento }}</td>
+                        <td class="px-4 py-2">{{ $lote->estatus }}</td>
+                        <td class="px-4 py-2">
+                            @if($lote->fecha_vencimiento < now())
+                                <h3 class="text-red-500 font-semibold"> Vencido </h3>
+                            @elseif($lote->fecha_vencimiento <= now()->addDays(30))
+                                <h3 class="text-orange-500  font-semibold"> Por Vencer </h3>
+                            @else
+                                Disponible
+                            @endif
+                        </td>
+                        <td class="px-4 py-2">
+                            <button wire:click="ver({{ $lote->id }})" class="bg-yellow-500 text-white px-2 py-1 rounded">
+                                Ver
+                            </button>
+                            @if ($tipo === 'Admin')
+                                <button wire:click="eliminar({{ $lote->id }})" onclick="confirmarEliminacion({{ $lote->id }})" class="bg-red-500 text-white px-2 py-1 rounded">
+                                    Eliminar
+                                </button>
+                            @endif
+                            
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
 
-    <script>
-        function confirmarEliminacion(id) {
-            if (confirm('¿Estás seguro de eliminar este lote?')) {
-                Livewire.dispatch('eliminar', id);
+        <script>
+            function confirmarEliminacion(id) {
+                if (confirm('¿Estás seguro de eliminar este lote?')) {
+                    Livewire.dispatch('eliminar', id);
+                }
             }
-        }
-    </script>
+        </script>
 
-    <!-- Paginación -->
-    <div class="mt-4">
-        {{ $lotes->links() }}
+        <!-- Paginación -->
+        <div class="mt-4">
+            {{ $lotes->links() }}
+        </div>
     </div>
 
     <!-- Modal para Ver -->

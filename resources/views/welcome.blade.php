@@ -4,14 +4,15 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>Farmacia</title>
 
         <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+        <script src="{{ asset('css/fontbunny') }}"></script>
+        {{-- <link rel="preconnect" href="https://fonts.bunny.net">
+        <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" /> --}}
+        <!-- tailwind -->
         <script src="{{ asset('css/min') }}"></script>
-        {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
-
+        
         <!-- Styles -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
@@ -27,18 +28,13 @@
                                 <img src="{{ asset('svg/2sViAPwvYhpvEIpWwI8S6SJgc7S.svg') }}" alt="Logo Hospimil" class="h-full w-full object-contain">
                             </a>
                         </div>
-                    
                         <!-- Título -->
                         <p class="text-lg font-semibold text-gray-900 dark:text-gray-200 mt-3">
                             Farmacia Hospitalaria
                         </p>
-                    
-                        <!-- Sección para login si es necesario -->
-                        {{-- @if (Route::has('login')) --}}
-                            {{-- Aquí puedes agregar un botón o enlace para iniciar sesión --}}
-                        {{-- @endif --}}
                     </header>
 
+                    <!-- Login -->
                     <main class="mt-6 flex justify-center min-h-[28rem]">
                         <div class=" bg-white/30 backdrop-blur-md shadow-lg shadow-stone-400/50 p-8 rounded-lg w-[24rem]">
                             <livewire:pages.auth.login />
@@ -48,6 +44,7 @@
                 </div>
             </div>
         </div>
+
         <footer class="bg-gray-200 pocition-fixet py-16 text-center text-sm text-black dark:text-white/70">
                 <div class="container mx-auto px-6">
                     <div class="flex flex-col md:flex-row justify-between items-center">
@@ -56,6 +53,7 @@
                                 <h2 class="text-lg font-semibold text-blakc ">UNEFA</h2>
                             </a>
                             <p class="text-sm text-gray-600">© {{ date('Y') }} Todos los derechos reservados.</p>
+                            <p class="text-sm text-gray-600">V 3.20 Eve Marín.</p>
                         </div>
                         <div class="flex space-x-4">
                             <a href="#" class="text-gray-600 hover:text-white transition">Inicio</a>

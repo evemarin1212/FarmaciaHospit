@@ -1,67 +1,69 @@
-<div class="p-6 mt-4 mx-4 rounded-lg shadow-lg bg-white/30 backdrop-blur-md dark:bg-gray-800 z-0">
-    <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
-        Medicamentos
-    </h2>
+<div>
+    <div class="p-6 mt-4 mx-4 rounded-lg shadow-lg bg-white/30 backdrop-blur-md dark:bg-gray-800 z-0">
+        <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+            Medicamentos
+        </h2>
 
-    <!-- Campo de búsqueda -->
-    <input
-        type="text"
-        wire:model.live="search"
+        <!-- Campo de búsqueda -->
+        <input
+            type="text"
+            wire:model.live="search"
+            class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+            placeholder="Buscar medicamentos..."
+        >
+        <select
+        wire:model.live="filter"
         class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
-        placeholder="Buscar medicamentos..."
-    >
-    <select
-    wire:model.live="filter"
-    class="mb-4 w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
-    >
-        <option value="todos">Todos</option>
-        <option value="por_agotar">Por Agotar (30 cantidades)</option>
-        <option value="agotados">Agotados</option>
-    </select>
+        >
+            <option value="todos">Todos</option>
+            <option value="por_agotar">Por Agotar (30 cantidades)</option>
+            <option value="agotados">Agotados</option>
+        </select>
 
-    <!-- Tabla -->
-    <table class="table-auto w-full border-collapse bg-gray-50 rounded-lg shadow-sm overflow-hidden dark:bg-gray-700">
-        <thead class="bg-cyan-900 text-white dark:bg-cyan-900">
-            <tr>
-                <th class="px-4 py-2 text-left">Nº</th>
-                <th class="px-4 py-2 text-left">Nombre</th>
-                <th class="px-4 py-2 text-left">Presentación</th>
-                <th class="px-4 py-2 text-left">Unidad</th>
-                <th class="px-4 py-2 text-left">Medida</th>
-                <th class="px-4 py-2 text-left">Cantidad Disponible</th>
-                <th class="px-4 py-2 text-left">Estado</th>
-                <th class="px-4 py-2 text-left">Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($medicamentos as $medicamento)
-            <tr class="border-t last:border-b hover:bg-blue-100 transition dark:border-gray-600 dark:hover:bg-gray-600">
-                <td class="px-4 py-2">{{ $loop->iteration }}</td>
-                <td class="px-4 py-2">{{ $medicamento->nombre }}</td>
-                <td class="px-4 py-2">{{ $medicamento->presentacion->tipo }}</td>
-                <td class="px-4 py-2">{{ $medicamento->unidad }}</td>
-                <td class="px-4 py-2">{{ $medicamento->medida }}</td>
-                <td class="px-4 py-2">{{ $medicamento->cantidad_disponible }}</td>
-                <td class="px-4 py-2">
-                    @if($medicamento->cantidad_disponible == 0)
-                        <h3 class="text-red-500 font-semibold"> Agotado </h3>
-                    @elseif($medicamento->cantidad_disponible <= 30)
-                        <h3 class="text-orange-500  font-semibold"> Por Agotar </h3>
-                    @else
-                        Disponible
-                    @endif
-                </td>
-                <td class="px-4 py-2">
-                    <button wire:click="ver({{ $medicamento->id }})" class="bg-yellow-500 text-white px-2 py-1 rounded">Ver</button>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+        <!-- Tabla -->
+        <table class="table-auto w-full border-collapse bg-gray-50 rounded-lg shadow-sm overflow-hidden dark:bg-gray-700">
+            <thead class="bg-cyan-900 text-white dark:bg-cyan-900">
+                <tr>
+                    <th class="px-4 py-2 text-left">Nº</th>
+                    <th class="px-4 py-2 text-left">Nombre</th>
+                    <th class="px-4 py-2 text-left">Presentación</th>
+                    <th class="px-4 py-2 text-left">Unidad</th>
+                    <th class="px-4 py-2 text-left">Medida</th>
+                    <th class="px-4 py-2 text-left">Cantidad Disponible</th>
+                    <th class="px-4 py-2 text-left">Estado</th>
+                    <th class="px-4 py-2 text-left">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($medicamentos as $medicamento)
+                <tr class="border-t last:border-b hover:bg-blue-100 transition dark:border-gray-600 dark:hover:bg-gray-600">
+                    <td class="px-4 py-2">{{ $loop->iteration }}</td>
+                    <td class="px-4 py-2">{{ $medicamento->nombre }}</td>
+                    <td class="px-4 py-2">{{ $medicamento->presentacion->tipo }}</td>
+                    <td class="px-4 py-2">{{ $medicamento->unidad }}</td>
+                    <td class="px-4 py-2">{{ $medicamento->medida }}</td>
+                    <td class="px-4 py-2">{{ $medicamento->cantidad_disponible }}</td>
+                    <td class="px-4 py-2">
+                        @if($medicamento->cantidad_disponible == 0)
+                            <h3 class="text-red-500 font-semibold"> Agotado </h3>
+                        @elseif($medicamento->cantidad_disponible <= 30)
+                            <h3 class="text-orange-500  font-semibold"> Por Agotar </h3>
+                        @else
+                            Disponible
+                        @endif
+                    </td>
+                    <td class="px-4 py-2">
+                        <button wire:click="ver({{ $medicamento->id }})" class="bg-yellow-500 text-white px-2 py-1 rounded">Ver</button>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
 
-    <!-- Paginación -->
-    <div class="mt-4">
-        {{ $medicamentos->links() }}
+        <!-- Paginación -->
+        <div class="mt-4">
+            {{ $medicamentos->links() }}
+        </div>
     </div>
 
     <!-- Modal para Ver-->
