@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Almacen;
 
+use session;
 use App\Models\Lote;
 use Livewire\Component;
 use App\Models\Medicamento;

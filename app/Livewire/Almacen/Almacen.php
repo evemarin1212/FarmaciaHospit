@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Medicamento;
 use App\Models\Presentacion;
 use Livewire\WithPagination;
+use Symfony\Component\Clock\now;
 use Illuminate\Support\Facades\Auth;
 
 class Almacen extends Component
